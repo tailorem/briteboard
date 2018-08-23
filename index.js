@@ -1,19 +1,20 @@
-var express = require('express'),
+const express = require('express'),
     app = express(),
     http = require('http'),
     socketIo = require('socket.io'),
     fabric = require('fabric').fabric;
 
 // start webserver on port 8080
-var server =  http.createServer(app);
-var io = socketIo.listen(server);
+const server =  http.createServer(app);
+const io = socketIo.listen(server);
 server.listen(3000);
 // add directory with our static files
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on 127.0.0.1:3000");
 
 // array of all lines drawn
-var line_history = [];
+const line_history = [];
+
 
 // event-handler for new incoming connections
 io.on('connection', function (socket) {
