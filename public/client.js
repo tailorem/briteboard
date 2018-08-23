@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-  let canvas = new fabric.Canvas('board')
+
+    let canvas = new fabric.Canvas('board');
+    canvas.setHeight(window.innerHeight);
+    canvas.setWidth(window.innerWidth);
+
+  // let socket = io.connect();
 
   let rect = new fabric.Rect({
     left: 100,
