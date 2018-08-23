@@ -1,7 +1,8 @@
 var express = require('express'),
     app = express(),
     http = require('http'),
-    socketIo = require('socket.io');
+    socketIo = require('socket.io'),
+    fabric = require('fabric').fabric;
 
 // start webserver on port 8080
 var server =  http.createServer(app);
