@@ -1,11 +1,43 @@
 * {
-   margin: 0;
-   padding: 0;
+  margin: 0;
+  padding: 0;
 }
+
 body, html{
-   width: 100%;
-   height: 100%;
+  height: 100%;
+  width: 100%;
 }
-canvas {
-   display: block;
+
+#canvas-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+#nav-top {
+  background-color: pink;
+  display: flex;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+}
+
+#nav-top h1 {
+  /*line-height: 100px;*/
+}
+
+#nav-left {
+  display: float;
+  left: 0;
+  margin: 0;
+  height: 100%;
+  width: 100px;
+}
+
+#board {
+  display: block;
+  border: solid black 1px;
+  align-items: center;
 }
