@@ -17,6 +17,25 @@ body, html{
   width: 100%;
 }
 
+button{
+  padding: 10px 10px 10px 10px;
+  color: white;
+  font-family: arial;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  background: #FF4136;
+  border-radius: 10px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+button:hover{
+ background: #E03A3A;
+}
+.selected {
+  background: #85144b;
+}s
 .nav-top h1 {
   /*line-height: 100px;*/
 }
@@ -44,13 +63,13 @@ body, html{
   width: 100%;
 }
 
-#board {
+#whiteboard {
   display: inline-block;
   align-items: center;
   max-width: 900px;
 }
 
-.nav-left, #board {
+.nav-left, #whiteboard {
   border: solid black 1px;
 }
 
@@ -60,3 +79,4 @@ body, html{
   height: 50px;
   width: 75px;
 }
+

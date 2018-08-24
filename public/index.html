@@ -5,9 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
   <title>Whiteboard</title>
+
   <link rel="stylesheet" href="styles/normalize.css" />
   <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+
 </head>
 
 <body>
@@ -22,33 +26,29 @@
 
   </header>
 
+  </body>
   <div class="container">
     <div class="nav-left">
-      <button>TOOL</button>
-      <button>TOOL</button>
-      <button>TOOL</button>
+      <button id="select">Select</button>
+      <button id="draw">Draw</button>
+      <button id="circle">Circle</button>
+      <button id="square">Square</button>
+      <button id="delete">Delete</button>
+      <input id="colorPicker" />
     </div>
 
     <div class="main">
-      <canvas id="board"></canvas>
+      <canvas id="whiteboard"></canvas>
     </div>
   </div>
-
-<!--   <aside id="nav-left">
-    <button>TOOL</button>
-    <button>TOOL</button>
-    <button>TOOL</button>
-  </aside>
-
-  <div id="canvas-container">
-    <canvas id="board"></canvas>
-  </div> -->
-
 
   <script src="socket.io/socket.io.js"></script>
   <script src="scripts/fabric.js"></script>
   <script src="scripts/client.js"></script>
   <script src="scripts/video.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+
 </body>
 
 </html>

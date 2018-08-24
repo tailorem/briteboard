@@ -13,22 +13,38 @@ app.use(express.static(__dirname + '/public'));
 console.log("Server running on 127.0.0.1:3000");
 
 // array of all lines drawn
-const line_history = [];
-
-
+var componentHistory = [];
+var client_count = 0;
 // event-handler for new incoming connections
+function updateComponentHistory(changes) {
+    history = componentHistory.find(each => each.id === changes.id);
+    if(history) {
+        history.left = changes.left;
+        history.top = changes.top,
+        history.scaleX = changes.scaleX,
+        history.scaleY = changes.scaleY,
+        history.angle = changes.angle
+    }
+}
 io.on('connection', function (socket) {
 
    // first send the history to the new client
-   for (let i in line_history) {
-      socket.emit('draw_line', { line: line_history[i] } );
-   }
+   for (let component of componentHistory) {
+        socket.emit('add_component', component.rawData);
+    }   
+    socket.emit('init_session', {nextObjID: client_count++ * 10000});
+//    }
 
-   // add handler for message type "draw_line".
-   socket.on('draw_line', function (data) {
-      // add received line to history
-      line_history.push(data.line);
-      // send line to all clients
-      io.emit('draw_line', { line: data.line });
-   });
+    // add handler for broadcast new component
+    socket.on('push_component', function (data) {
+        componentHistory.push(data)
+        console.log(data);
+        socket.broadcast.emit('add_component', data.rawData);
+    })
+    socket.on('modify_component', function (data) {
+        console.log(data);
+    socket.broadcast.emit('update_component', data);
+   })
+
+
 });
