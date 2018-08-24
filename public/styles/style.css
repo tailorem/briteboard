@@ -53,3 +53,10 @@ body, html{
 .nav-left, #board {
   border: solid black 1px;
 }
+
+.video-container, video {
+  background-color: white;
+  border-radius: 1em;
+  height: 50px;
+  width: 75px;
+}

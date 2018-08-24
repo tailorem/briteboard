@@ -8,9 +8,6 @@
   <title>Whiteboard</title>
   <link rel="stylesheet" href="styles/normalize.css" />
   <link rel="stylesheet" href="styles/style.css" />
-  <script src="socket.io/socket.io.js"></script>
-  <script src="scripts/fabric.js"></script>
-  <script src="scripts/client.js"></script>
 </head>
 
 <body>
@@ -18,7 +15,9 @@
     <h1>DRAWSTUFF</h1>
 
     <div class="video-container">
-      <canvas class="video" style="width: 75px; height: 50px; border-radius: 1em; background-color: white;"></canvas>
+      <video autoplay></video>
+      <canvas class="video"></canvas>
+
     </div>
 
   </header>
@@ -46,6 +45,10 @@
   </div> -->
 
 
+  <script src="socket.io/socket.io.js"></script>
+  <script src="scripts/fabric.js"></script>
+  <script src="scripts/client.js"></script>
+  <script src="scripts/video.js"></script>
 </body>
 
 </html>
