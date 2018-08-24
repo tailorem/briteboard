@@ -9,3 +9,23 @@ body, html{
 canvas {
    display: block;
 }
+
+button{
+  padding: 10px 10px 10px 10px;
+  color: white;
+  font-family: arial;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  background: #FF4136;
+  border-radius: 10px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+button:hover{
+ background: #E03A3A;
+}
+.selected {
+  background: #85144b;
+}s

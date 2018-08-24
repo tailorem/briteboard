@@ -10,10 +10,19 @@
   <script src="socket.io/socket.io.js"></script>
   <script src="scripts/fabric.js"></script>
   <script src="scripts/client.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 </head>
 
 <body>
-  <canvas id="board"></canvas>
-</body>
+    <button id="select">Select</button>
+    <button id="draw">Draw</button>
+    <button id="circle">Circle</button>
+    <button id="square">Square</button>
+    <button id="delete">Delete</button>
+    <input id="colorPicker" />
+    <canvas id="whiteboard"></canvas>
+  </body>
 
 </html>
