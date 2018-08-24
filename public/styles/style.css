@@ -8,14 +8,6 @@ body, html{
   width: 100%;
 }
 
-#canvas-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-}
-
 #nav-top {
   background-color: pink;
   display: flex;
@@ -34,6 +26,14 @@ body, html{
   margin: 0;
   height: 100%;
   width: 100px;
+}
+
+#canvas-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
 #board {
