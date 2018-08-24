@@ -1,4 +1,5 @@
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -8,36 +9,47 @@ body, html{
   width: 100%;
 }
 
-#nav-top {
-  background-color: pink;
+.nav-top {
+  background-color: grey;
   display: flex;
-  align-items: center;
+  /*align-items: center;*/
   height: 100px;
   width: 100%;
 }
 
-#nav-top h1 {
+.nav-top h1 {
   /*line-height: 100px;*/
 }
 
-#nav-left {
-  display: float;
-  left: 0;
-  margin: 0;
+.container {
+/*  align-items: center;*/
+  display: flex;
+  justify-content: left;
+  height: 100%;
+  width: 100%;
+}
+
+.nav-left {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  padding: 10px;
   height: 100%;
   width: 100px;
 }
 
-#canvas-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
+.main {
+  background-color: cornflowerblue;
   height: 100%;
   width: 100%;
 }
 
 #board {
-  display: block;
-  border: solid black 1px;
+  display: inline-block;
   align-items: center;
+  max-width: 900px;
+}
+
+.nav-left, #board {
+  border: solid black 1px;
 }

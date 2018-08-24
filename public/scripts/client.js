@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    let canvas = new fabric.Canvas('board');
-    canvas.setHeight(400);
-    canvas.setWidth(500);
-
+  let canvas = new fabric.Canvas('board');
+  canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
+  canvas.setHeight(600);
+  canvas.setWidth(800);
+  // canvas.setDimensions({width: '1000px', height: '1000px'}, {cssOnly: true})
   // let socket = io.connect();
 
   let rect = new fabric.Rect({
