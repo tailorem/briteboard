@@ -214,9 +214,8 @@ document.addEventListener("DOMContentLoaded", function() {
         // TBD
 
           // modifyingComponent(options.target)
-console.log("moving - options.target", options.target)
           setTimeout(function() {
-            modifyingComponent(options.target) }, 100);
+            modifyingComponent(options.target) }, 25);
       }
     })
   });
