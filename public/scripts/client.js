@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // console.log("Objects", canvas.getObjects())
   });
   // modify component received from server
-  socket.on('update_component', function(data) {
+  socket.on('update_component', function (data) {
     // console.log("receiving modifying data", data)
     let targetComponent = canvas.getObjects().find((each) => each.id === data.id)
     targetComponent.left = data.left;
