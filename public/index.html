@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>Whiteboard</title>
+  <title>Briteboard</title>
 
   <link rel="stylesheet" href="styles/normalize.css" />
   <link rel="stylesheet" href="styles/style.css" />
@@ -15,15 +15,15 @@
 </head>
 
 <body>
+
+<div class="main">
   <header class="nav-top">
     <h1>Whiteboard</h1>
 
     <div class="video-container">
-      <video autoplay></video>
-      <canvas class="video"></canvas>
-
+      <video id="video1" autoplay></video>
+      <canvas id="canvas1" class="video"></canvas>
     </div>
-
   </header>
 
   <div class="container">
@@ -36,10 +36,11 @@
       <input id="colorPicker" />
     </div>
 
-    <div class="main">
+    <div class="board">
       <canvas id="whiteboard"></canvas>
     </div>
   </div>
+</div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="socket.io/socket.io.js"></script>

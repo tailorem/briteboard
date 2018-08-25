@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 10;
   let currentColor = '#000000';
-  
+
   // Select Tool
   $('#select').on('click', function (e) {
     $(".selected").removeClass("selected");
@@ -100,14 +100,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var currentMoveTimeout;
   function modifyingComponent(component) {
-    let param = {id: component.id, 
+    let param = {id: component.id,
             left: component.left,
             top: component.top,
             scaleX: component.scaleX,
             scaleY: component.scaleY,
             angle: component.angle};
     socket.emit("modify_component", param)
-    console.log("Modify Component", param)
+    // console.log("Modify Component", param)
   };
 
   canvas.on('mouse:up', function(options) {
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
   canvas.on('mouse:down', function(options) {
-    canvas.on('mouse:move', function(options) {  
+    canvas.on('mouse:move', function(options) {
       if (options.target) {
         // console.log("component", options.target);
         // console.log("selected objects", canvas.getActiveObjects());
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     })
   });
-  
+
   var nextObjID;
   socket.on('init_session', function (data) {
     nextObjID = data.nextObjID;
@@ -138,24 +138,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // send component to server
   function send_to_server(component) {
-    console.log("sending data", component)
+    // console.log("sending data", component)
     socket.emit('push_component', {id: component.id, rawData: JSON.stringify(component.canvas)});
   }
-    
+
   // draw component received from server
   socket.on('add_component', function (data) {
-    console.log("receiving data", data)
+    // console.log("receiving data", data)
     canvas.loadFromJSON(data)
-    console.log("incoming data", data)
+    // console.log("incoming data", data)
     canvas.renderAll()
 
     // component.push(JSON.parse(data))
-    console.log("Canvas", canvas)
-    console.log("Objects", canvas.getObjects())
+    // console.log("Canvas", canvas)
+    // console.log("Objects", canvas.getObjects())
   });
   // modify component received from server
   socket.on('update_component', function (data) {
-    console.log("receiving modifying data", data)
+    // console.log("receiving modifying data", data)
     let targetComponent = canvas.getObjects().find((each) => each.id === data.id)
     targetComponent.left = data.left;
     targetComponent.top = data.top;
@@ -163,10 +163,10 @@ document.addEventListener("DOMContentLoaded", function() {
     targetComponent.scaleY = data.scaleY;
     targetComponent.angle = data.angle;
     canvas.renderAll();
- 
-    console.log("component", targetComponent)
-    console.log("components", canvas.getObjects())
-    console.log("component = id", canvas.getObjects()[0].id, data.id)
+
+    // console.log("component", targetComponent)
+    // console.log("components", canvas.getObjects())
+    // console.log("component = id", canvas.getObjects()[0].id, data.id)
   });
 
 });
