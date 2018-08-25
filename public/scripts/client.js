@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", function() {
 
   let canvas = new fabric.Canvas('whiteboard');
@@ -218,13 +216,13 @@ document.addEventListener("DOMContentLoaded", function() {
   // Remove component
   function removeComponent() {
     let currentSelection = canvas.getActiveObjects();
-      canvas.getActiveObjects().forEach(obj => {
-        canvas.remove(obj);
-        socket.emit("remove_component", {
-          id: obj.id
-        })
-      });
-    }
+    canvas.getActiveObjects().forEach(obj => {
+      canvas.remove(obj);
+      socket.emit("remove_component", {
+        id: obj.id
+      })
+    });
+  }
 
   var currentMoveTimeout;
 
@@ -253,10 +251,37 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.on('mouse:down', function(event) {
     canvas.on('object:moving', function(event) {
       if (event.target) {
-          setTimeout(function() {
-            modifyingComponent(event.target) }, 25);
+        setTimeout(function() {
+          modifyingComponent(event.target)
+        }, 25);
       }
     })
+  });
+
+  canvas.on('path:created', function(event) {
+    let path = event.path;
+    path.toObject = (function(toObject) {
+      return function() {
+        return fabric.util.object.extend(toObject.call(this), {
+          id: this.id
+        });
+      };
+    })(path.toObject);
+
+    path.id = uuidv4();
+    console.log("PATH CREATED:", path);
+    socket.emit("path_created", path.toJSON())
+
+  });
+
+  // path created received from server
+  socket.on('path_created', function(path) {
+    console.log('incoming', path);
+    fabric.util.enlivenObjects([path], function(objects) {
+      objects.forEach(function(p) {
+        canvas.add(p);
+      });
+    });
   });
 
   // draw component received from server
@@ -268,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // delete component request from server
-  socket.on('delete_component', function (data) {
+  socket.on('delete_component', function(data) {
     console.log("receiving data", data)
     let component = findComonent(data.id)
     if (component) {
