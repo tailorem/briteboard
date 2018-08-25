@@ -58,7 +58,7 @@ button:hover{
 }
 
 .main {
-  background-color: cornflowerblue;
+  background-color: rgb(238, 239, 230);
   height: 100%;
   width: 100%;
 }
@@ -66,7 +66,6 @@ button:hover{
 #whiteboard {
   display: inline-block;
   align-items: center;
-  max-width: 900px;
 }
 
 .nav-left, #whiteboard {

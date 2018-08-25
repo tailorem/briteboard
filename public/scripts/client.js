@@ -51,6 +51,23 @@ document.addEventListener("DOMContentLoaded", function() {
     }));
   });
 
+    // Text box
+    $('#textbox').on('click', function (e) {
+      $(".selected").removeClass("selected");
+      $('#select').addClass('selected');
+        canvas.isDrawingMode = false;
+        addComponent(new fabric.Textbox('MyText', {
+          width: 300,
+          height: 300,
+          top: 5,
+          left: 5,
+          hasControls: false,
+          fontSize: 30,
+          fixedWidth: 300,
+          fixedFontSize: 30
+        }))
+    });
+
   // Delete Tool
   $('#delete').on('click', function (e) {
     $(".selected").removeClass("selected");
@@ -94,8 +111,9 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 
   function removeComponent(component) {
+    console.log("Delete", component)
     canvas.remove(component);
-    socket.emit("remove_component", component.id)
+    socket.emit("remove_component", {id: component.id})
   }
 
   var currentMoveTimeout;
@@ -114,19 +132,20 @@ document.addEventListener("DOMContentLoaded", function() {
     if(currentMoveTimeout) {
       clearTimeout(currentMoveTimeout)
     }
+
   });
   canvas.on('mouse:down', function(options) {
-    canvas.on('mouse:move', function(options) {  
+    canvas.on('object:moving', function(options) {  
       if (options.target) {
         // console.log("component", options.target);
         // console.log("selected objects", canvas.getActiveObjects());
         // console.log("options.target.objects", options.target.objects)
         // TBD
 
-          modifyingComponent(options.target)
-
-          // setTimeout(function() {
-          //   modifyingComponent(options.target) }, 25);
+          // modifyingComponent(options.target)
+console.log("moving - options.target", options.target)
+          setTimeout(function() {
+            modifyingComponent(options.target) }, 100);
       }
     })
   });
@@ -153,20 +172,40 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("Canvas", canvas)
     console.log("Objects", canvas.getObjects())
   });
+  
+  // delete component request from server
+  socket.on('turf_component', function (data) {
+    console.log("receiving data", data)
+    let component = findComonent(data.id)
+    if(component) {
+      canvas.remove(component);
+      canvas.renderAll()
+    }
+  });
+
+  function findComonent(id) {
+    return canvas.getObjects().find((each) => each.id === id)
+  }
+
   // modify component received from server
   socket.on('update_component', function (data) {
     console.log("receiving modifying data", data)
-    let targetComponent = canvas.getObjects().find((each) => each.id === data.id)
-    targetComponent.left = data.left;
-    targetComponent.top = data.top;
-    targetComponent.scaleX = data.scaleX;
-    targetComponent.scaleY = data.scaleY;
-    targetComponent.angle = data.angle;
-    canvas.renderAll();
+    let targetComponent = findComonent(data.id)
+    if(targetComponent) {
+      targetComponent.left = data.left;
+      targetComponent.top = data.top;
+      targetComponent.scaleX = data.scaleX;
+      targetComponent.scaleY = data.scaleY;
+      targetComponent.angle = data.angle;
+      canvas.renderAll();
+    } else {
+      console.log("component", targetComponent)
+      console.log("components", canvas.getObjects())
+      console.log("component = id", canvas.getObjects()[0].id, data.id)
+      console.log("Update Component??", data) 
+    }
  
-    console.log("component", targetComponent)
-    console.log("components", canvas.getObjects())
-    console.log("component = id", canvas.getObjects()[0].id, data.id)
+
   });
 
 });
