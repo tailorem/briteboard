@@ -1,5 +1,5 @@
 $(function() {
-  console.log("i be ready");
+  // console.log("home.js says: document is ready");
   $( "#create" ).on('click', (e) => {
     e.preventDefault();
   });
