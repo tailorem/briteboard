@@ -108,7 +108,8 @@ document.addEventListener("DOMContentLoaded", function() {
           hasControls: false,
           fontSize: 30,
           fixedWidth: 300,
-          fixedFontSize: 30
+          fixedFontSize: 30,
+          fill: currentColor
         }))
     });
 
