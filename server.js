@@ -1,8 +1,11 @@
-const express = require('express'),
-  app = express(),
-  http = require('http'),
-  socketIo = require('socket.io'),
-  fabric = require('fabric').fabric;
+const express = require('express');
+const app = express();
+const http = require('http');
+const socketIo = require('socket.io');
+const fabric = require('fabric').fabric;
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.set('view engine', 'ejs');
 
