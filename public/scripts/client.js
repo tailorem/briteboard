@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let currentColor = '#000000';
 
   // Drag and drop to add image functionality
-  $('.main').on('drop', function(e) {
+  $('.board').on('drop', function(e) {
     console.log(e);
 
     let xpos = e.offsetX;
