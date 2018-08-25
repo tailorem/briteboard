@@ -11,15 +11,18 @@
   <link rel="stylesheet" type="text/css" href="/vendor/normalize.css" />
   <link rel="stylesheet" type="text/css" href="/styles/board.css" />
   <link rel="stylesheet" type="text/css" href="/vendor/spectrum.css">
-  <script src="http://wzrd.in/standalone/uuid%2Fv4@latest"></script>
 
 </head>
 
 <body>
 
+  <% if (!user) { %>
+  <p>nothin</p>
+  <% } %>
+
 <div class="main">
   <header class="nav-top">
-    <h1><%= name %></h1>
+    <h1><%= board.name %></h1>
 
     <div class="video-container">
       <video id="video1" autoplay></video>
@@ -52,6 +55,7 @@
 </div>
 
   <script src="../vendor/jquery-3.3.1.min.js"></script>
+  <script src="../vendor/uuidv4.min.js"></script>
   <script src="../socket.io/socket.io.js"></script>
   <script src="../vendor/fabric.js"></script>
   <script src="../scripts/client.js"></script>
