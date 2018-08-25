@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.setWidth(window.innerWidth);
 
   // Set default canvas values
-  canvas.isDrawingMode = true;
+  enableDrawingMode();
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 10;
   let currentColor = '#000000';
@@ -56,36 +56,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Select Tool
   $('#select').on('click', function(e) {
-    $(".selected").removeClass("selected");
-    $(this).addClass('selected');
-    canvas.isDrawingMode = false;
+    disableDrawingMode();
   });
 
   // Draw Tool
   $('#draw').on('click', function(e) {
-    $(".selected").removeClass("selected");
-    $(this).addClass('selected');
-    canvas.isDrawingMode = true;
+    enableDrawingMode();
   });
 
   // Circle Tool
   $('#circle').on('click', function(e) {
-    $(".selected").removeClass("selected");
-    $('#select').addClass('selected');
-    canvas.isDrawingMode = false;
     addComponent(new fabric.Circle({
       left: 100,
       top: 100,
       radius: 75,
       fill: currentColor
     }));
+    disableDrawingMode();
   });
 
   // Square Tool
   $('#square').on('click', function(e) {
-    $(".selected").removeClass("selected");
-    $('#select').addClass('selected');
-    canvas.isDrawingMode = false;
     addComponent(new fabric.Rect({
       left: 100,
       top: 100,
@@ -93,34 +84,31 @@ document.addEventListener("DOMContentLoaded", function() {
       height: 100,
       fill: currentColor
     }));
+    disableDrawingMode();
   });
 
-    // Text box
-    $('#textbox').on('click', function (e) {
-      $(".selected").removeClass("selected");
-      $('#select').addClass('selected');
-        canvas.isDrawingMode = false;
-        addComponent(new fabric.Textbox('MyText', {
-          width: 300,
-          height: 300,
-          top: 5,
-          left: 5,
-          hasControls: false,
-          fontSize: 30,
-          fixedWidth: 300,
-          fixedFontSize: 30,
-          fill: currentColor
-        }))
-    });
+  // Text box
+  $('#textbox').on('click', function(e) {
+    addComponent(new fabric.Textbox('MyText', {
+      width: 300,
+      height: 300,
+      top: 5,
+      left: 5,
+      hasControls: false,
+      fontSize: 30,
+      fixedWidth: 300,
+      fixedFontSize: 30,
+      fill: currentColor
+    }))
+    disableDrawingMode();
+  });
 
   // Delete Tool
   $('#delete').on('click', function(e) {
-    $(".selected").removeClass("selected");
-    $('#select').addClass('selected');
-    canvas.isDrawingMode = false;
     canvas.getActiveObjects().forEach(obj => {
       removeComponent(obj)
     });
+    disableDrawingMode();
   });
 
   // Add Image Tool
@@ -139,8 +127,8 @@ document.addEventListener("DOMContentLoaded", function() {
       };
     };
     reader.readAsDataURL(e.target.files[0]);
-    canvas.isDrawingMode = false;
     $("#add-image").val("");
+    disableDrawingMode();
   });
 
   // Color Picker
@@ -159,6 +147,36 @@ document.addEventListener("DOMContentLoaded", function() {
       canvas.freeDrawingBrush.color = currentColor;
     }
   });
+
+  // Change brush sizes
+  $('#small-brush').on('click', function(e) {
+    canvas.freeDrawingBrush.width = 3
+    canvas.isDrawingMode = true;
+    enableDrawingMode();
+  });
+  $('#medium-brush').on('click', function(e) {
+    canvas.freeDrawingBrush.width = 15
+    canvas.isDrawingMode = true;
+    enableDrawingMode();
+  });
+  $('#large-brush').on('click', function(e) {
+    canvas.freeDrawingBrush.width = 30
+    enableDrawingMode();
+  });
+
+  // Enable and disable drawing mode functions
+  function enableDrawingMode() {
+    canvas.isDrawingMode = true;
+    $(".selected").removeClass("selected");
+    $('#draw').addClass('selected');
+  }
+
+  function disableDrawingMode() {
+    canvas.isDrawingMode = false;
+    $(".selected").removeClass("selected");
+    $('#select').addClass('selected');
+  }
+
 
   var components = [];
   var socket = io.connect();
@@ -181,7 +199,9 @@ document.addEventListener("DOMContentLoaded", function() {
   function removeComponent(component) {
     console.log("Delete", component)
     canvas.remove(component);
-    socket.emit("remove_component", {id: component.id})
+    socket.emit("remove_component", {
+      id: component.id
+    })
   }
 
   var currentMoveTimeout;
@@ -213,10 +233,11 @@ document.addEventListener("DOMContentLoaded", function() {
         // console.log("options.target.objects", options.target.objects)
         // TBD
 
-          // modifyingComponent(options.target)
-console.log("moving - options.target", options.target)
-          setTimeout(function() {
-            modifyingComponent(options.target) }, 100);
+        // modifyingComponent(options.target)
+        console.log("moving - options.target", options.target)
+        setTimeout(function() {
+          modifyingComponent(options.target)
+        }, 100);
       }
     })
   });
@@ -248,10 +269,10 @@ console.log("moving - options.target", options.target)
   });
 
   // delete component request from server
-  socket.on('turf_component', function (data) {
+  socket.on('turf_component', function(data) {
     console.log("receiving data", data)
     let component = findComonent(data.id)
-    if(component) {
+    if (component) {
       canvas.remove(component);
       canvas.renderAll()
     }
@@ -262,10 +283,10 @@ console.log("moving - options.target", options.target)
   }
 
   // modify component received from server
-  socket.on('update_component', function (data) {
+  socket.on('update_component', function(data) {
     console.log("receiving modifying data", data)
     let targetComponent = findComonent(data.id)
-    if(targetComponent) {
+    if (targetComponent) {
       targetComponent.left = data.left;
       targetComponent.top = data.top;
       targetComponent.scaleX = data.scaleX;
