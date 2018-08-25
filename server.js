@@ -62,10 +62,12 @@ io.on('connection', function(socket) {
     // console.log(data);
     socket.broadcast.emit('add_component', data);
   })
+  
   socket.on('modify_component', function(data) {
     // console.log(data);
     socket.broadcast.emit('update_component', data);
   })
+
   socket.on('remove_component', function(data) {
     // console.log(data);
     socket.broadcast.emit('delete_component', data);
