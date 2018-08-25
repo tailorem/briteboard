@@ -6,54 +6,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Set default canvas values
   let eraserMode = false;
+  let rectangleMode = false;
   enableDrawingMode();
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
   let currentColor = '#000000';
 
-  // Drag and drop to add image functionality
-  $('.board').on('drop', function(e) {
-    console.log(e);
 
-    let xpos = e.offsetX;
-    let ypos = e.offsetY;
-    e = e || window.event;
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
-    let files = e.target.files || (dt && dt.files);
-    for (let i = 0; i < files.length; i++) {
-      let file = files[i];
-      let reader = new FileReader();
-
-      //attach event handlers here...
-      reader.onload = function(e) {
-        console.log('second event:', e);
-        let img = new Image();
-        img.src = e.target.result;
-
-        let image = new fabric.Image(img);
-        image.set({
-          left: xpos,
-          top: ypos,
-        }).scale(0.5);
-        canvas.add(image);
-      }
-      reader.readAsDataURL(file);
-    }
-
-    return false;
-  });
-  $('.main').on('dragover', cancel);
-  $('.main').on('dragenter', cancel);
-
-  function cancel(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    return false;
-  }
+  ////////////////////////////////////////////
+  //             TOOL BUTTONS               //
+  ////////////////////////////////////////////
 
   // Select Tool
   $('#select').on('click', function(e) {
@@ -76,16 +38,9 @@ document.addEventListener("DOMContentLoaded", function() {
     enableSelectMode();
   });
 
-  // Square Tool
-  $('#square').on('click', function(e) {
-    addComponent(new fabric.Rect({
-      left: 100,
-      top: 100,
-      width: 100,
-      height: 100,
-      fill: currentColor
-    }));
-    enableSelectMode();
+  // Draw Rectangle Tool
+  $('#draw-rect').on('click', function(e) {
+    enableRectMode();
   });
 
   // Text box
@@ -162,82 +117,101 @@ document.addEventListener("DOMContentLoaded", function() {
     enableDrawingMode();
   });
 
+
+  // Drag and drop to add image
+  $('.board').on('drop', function(e) {
+    console.log(e);
+
+    let xpos = e.offsetX;
+    let ypos = e.offsetY;
+    e = e || window.event;
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
+    let files = e.target.files || (dt && dt.files);
+    for (let i = 0; i < files.length; i++) {
+      let file = files[i];
+      let reader = new FileReader();
+
+      //attach event handlers here...
+      reader.onload = function(e) {
+        console.log('second event:', e);
+        let img = new Image();
+        img.src = e.target.result;
+
+        let image = new fabric.Image(img);
+        image.set({
+          left: xpos,
+          top: ypos,
+        }).scale(0.5);
+        canvas.add(image);
+      }
+      reader.readAsDataURL(file);
+    }
+
+    return false;
+  });
+  $('.main').on('dragover', cancel);
+  $('.main').on('dragenter', cancel);
+
+  function cancel(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    return false;
+  }
+
+  ////////////////////////////////////////////
+  //             TOOL MODES                 //
+  ////////////////////////////////////////////
+
+  // CLEAR ALL MODES
+  function clearModes() {
+    $(".selected").removeClass("selected");
+    canvas.isDrawingMode = false;
+    canvas.selection = true;
+    eraserMode = false;
+    rectangeMode = false;
+  }
+
   // DRAWING MODE
   function enableDrawingMode() {
+    clearModes();
     canvas.isDrawingMode = true;
-    $(".selected").removeClass("selected");
     $('#draw').addClass('selected');
-    eraserMode = false;
   }
 
   // SELECT MODE
   function enableSelectMode() {
-    canvas.isDrawingMode = false;
-    $(".selected").removeClass("selected");
+    clearModes();
     $('#select').addClass('selected');
-    eraserMode = false;
   }
 
   // ERASER MODE
-
   function enableEraserMode() {
     let currentSelection = canvas.getActiveObjects();
     if (currentSelection.length > 0) {
       removeComponent();
       enableSelectMode();
     } else {
-      $(".selected").removeClass("selected");
+      clearModes();
       $('#delete').addClass('selected');
-      canvas.isDrawingMode = false;
       eraserMode = true;
     }
   }
 
-  var components = [];
-  var socket = io.connect();
-
-  function addComponent(component) {
-    component.toObject = (function(toObject) {
-      return function() {
-        return fabric.util.object.extend(toObject.call(this), {
-          id: this.id
-        });
-      };
-    })(component.toObject);
-    component.id = uuidv4();
-    canvas.add(component);
-    components.push(component);
-    socket.emit('push_component', {
-      id: component.id,
-      rawData: JSON.stringify(component.canvas)
-    });
-  };
-
-  // Remove component
-  function removeComponent() {
-    let currentSelection = canvas.getActiveObjects();
-    canvas.getActiveObjects().forEach(obj => {
-      canvas.remove(obj);
-      socket.emit("remove_component", {
-        id: obj.id
-      })
-    });
+  // RECTANGLE MODE
+  function enableRectMode() {
+    clearModes()
+    $('#draw-rect').addClass('selected');
+    rectangeMode = true;
   }
 
-  var currentMoveTimeout;
 
-  function modifyingComponent(component) {
-    let param = {
-      id: component.id,
-      left: component.left,
-      top: component.top,
-      scaleX: component.scaleX,
-      scaleY: component.scaleY,
-      angle: component.angle
-    };
-    socket.emit("modify_component", param)
-    console.log("moving", param, component)
-  };
+  ////////////////////////////////////////////
+  //             CANVAS EVENTS              //
+  ////////////////////////////////////////////
 
   canvas.on('mouse:up', function(event) {
     if (currentMoveTimeout) {
@@ -246,8 +220,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (eraserMode) {
       removeComponent();
     }
-
   });
+
   canvas.on('mouse:down', function(event) {
     canvas.on('object:moving', function(event) {
       if (event.target) {
@@ -273,6 +247,120 @@ document.addEventListener("DOMContentLoaded", function() {
     socket.emit("path_created", path.toJSON())
 
   });
+
+  /// RECTANGLE DRAWING MODE
+  var rect, isDown, origX, origY;
+  canvas.on('mouse:down', function(o) {
+    if (rectangeMode) {
+      canvas.selection = false;
+      canvas.isDrawingMode = false;
+      isDown = true;
+      var pointer = canvas.getPointer(o.e);
+      origX = pointer.x;
+      origY = pointer.y;
+      var pointer = canvas.getPointer(o.e);
+      rect = new fabric.Rect({
+        selectable: true,
+        hasControls: true,
+        left: origX,
+        top: origY,
+        originX: 'left',
+        originY: 'top',
+        width: pointer.x - origX,
+        height: pointer.y - origY,
+        angle: 0,
+        fill: currentColor,
+        transparentCorners: false
+      });
+      canvas.add(rect).setActiveObject(rect);
+    }
+  });
+
+  canvas.on('mouse:move', function(o) {
+    if (rectangeMode) {
+      if (!isDown) return;
+      var pointer = canvas.getPointer(o.e);
+
+      if (origX > pointer.x) {
+        rect.set({
+          left: Math.abs(pointer.x)
+        });
+      }
+      if (origY > pointer.y) {
+        rect.set({
+          top: Math.abs(pointer.y)
+        });
+      }
+
+      rect.set({
+        width: Math.abs(origX - pointer.x)
+      });
+      rect.set({
+        height: Math.abs(origY - pointer.y)
+      });
+
+      canvas.renderAll();
+    }
+  });
+
+  canvas.on('mouse:up', function(o) {
+    if (rectangeMode) {
+      isDown = false;
+      enableSelectMode();
+    }
+  });
+
+
+  //////////////////////////////////////////
+  //              SOCKET IO               //
+  //////////////////////////////////////////
+
+
+    var components = [];
+    var socket = io.connect();
+
+    function addComponent(component) {
+      component.toObject = (function(toObject) {
+        return function() {
+          return fabric.util.object.extend(toObject.call(this), {
+            id: this.id
+          });
+        };
+      })(component.toObject);
+      component.id = uuidv4();
+      canvas.add(component);
+      components.push(component);
+      socket.emit('push_component', {
+        id: component.id,
+        rawData: JSON.stringify(component.canvas)
+      });
+    };
+
+    // Remove component
+    function removeComponent() {
+      let currentSelection = canvas.getActiveObjects();
+      canvas.getActiveObjects().forEach(obj => {
+        canvas.remove(obj);
+        socket.emit("remove_component", {
+          id: obj.id
+        })
+      });
+    }
+
+  var currentMoveTimeout;
+
+  function modifyingComponent(component) {
+    let param = {
+      id: component.id,
+      left: component.left,
+      top: component.top,
+      scaleX: component.scaleX,
+      scaleY: component.scaleY,
+      angle: component.angle
+    };
+    socket.emit("modify_component", param)
+    console.log("moving", param, component)
+  };
 
   // path created received from server
   socket.on('path_created', function(path) {
@@ -323,11 +411,62 @@ document.addEventListener("DOMContentLoaded", function() {
       console.log("component = id", canvas.getObjects()[0].id, data.id)
       console.log("Update Component??", data)
     }
-
-
   });
+
   canvas.on('mouse:up', function(event) {
     let objects = canvas.getActiveObjects();
     console.log("Current Objects", objects)
   })
+
+
+
+  $('#copy').on('click', function(e) {
+    if(canvas.getActiveObject())
+      Copy();
+  });
+  $('#paste').on('click', function(e) {
+    Paste();
+  });
+
+
+function Copy() {
+	// clone what are you copying since you
+	// may want copy and paste on different moment.
+	// and you do not want the changes happened
+	// later to reflect on the copy.
+	canvas.getActiveObject().clone(function(cloned) {
+		_clipboard = cloned;
+	});
+}
+
+function Paste() {
+  // clone again, so you can do multiple copies.
+  if(!_clipboard) return
+
+	_clipboard.clone(function(clonedObj) {
+		canvas.discardActiveObject();
+		clonedObj.set({
+			left: clonedObj.left + 10,
+			top: clonedObj.top + 10,
+			evented: true,
+		});
+		if (clonedObj.type === 'activeSelection') {
+			// active selection needs a reference to the canvas.
+			clonedObj.canvas = canvas;
+			clonedObj.forEachObject(function(obj) {
+				canvas.add(obj);
+			});
+			// this should solve the unselectability
+			clonedObj.setCoords();
+		} else {
+			canvas.add(clonedObj);
+		}
+		_clipboard.top += 10;
+		_clipboard.left += 10;
+		canvas.setActiveObject(clonedObj);
+		canvas.requestRenderAll();
+	});
+}
+
+
 });
