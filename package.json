@@ -12,6 +12,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "canvas": "^1.6.11",
+    "cookie-session": "^2.0.0-beta.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "fabric": "^2.3.6",
