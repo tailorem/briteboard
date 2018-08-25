@@ -11,9 +11,9 @@ function rando(){
 module.exports = function(DataHelpers) {
 
   // GET TEST BOARD (development only)
-  routes.get('/test', function(req, res) {
-    res.render('test-board');
-  });
+  // routes.get('/test', function(req, res) {
+  //   res.render('test-board');
+  // });
 
   // CREATE NEW BOARD
   routes.post('/new', function(req, res) {
