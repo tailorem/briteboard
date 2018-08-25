@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.setWidth(window.innerWidth);
 
   // Set default canvas values
+  let eraserMode = false;
   enableDrawingMode();
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
@@ -163,22 +164,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // DRAWING MODE
   function enableDrawingMode() {
-    eraserMode = false;
     canvas.isDrawingMode = true;
     $(".selected").removeClass("selected");
     $('#draw').addClass('selected');
+    eraserMode = false;
   }
 
   // SELECT MODE
   function enableSelectMode() {
-    eraserMode = false;
     canvas.isDrawingMode = false;
     $(".selected").removeClass("selected");
     $('#select').addClass('selected');
+    eraserMode = false;
   }
 
   // ERASER MODE
-  let eraserMode = false;
+
   function enableEraserMode() {
     let currentSelection = canvas.getActiveObjects();
     if (currentSelection.length > 0) {
