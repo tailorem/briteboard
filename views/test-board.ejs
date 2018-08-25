@@ -19,12 +19,13 @@
 
 <div class="main">
   <header class="nav-top">
-    <h1>Briteboard</h1>
+    <h1><%= name %></h1>
 
     <div class="video-container">
       <video id="video1" autoplay></video>
-      <canvas id="canvas1" class="video"></canvas>
+      <!-- <canvas id="canvas1" class="video"></canvas> -->
     </div>
+
 
   </header>
 
@@ -38,6 +39,8 @@
       <button id="delete">Delete</button>
       <label for="add-image" class="custom-file-upload">Add Image</label>
       <input id="add-image" type="file" />
+      <button id="copy">Copy</button>
+      <button id="paste">Paste</button>
       <button id="small-brush">Small</button>
       <button id="medium-brush">Medium</button>
       <button id="large-brush">Large</button>
