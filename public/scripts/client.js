@@ -188,6 +188,7 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
       $(".selected").removeClass("selected");
       $('#delete').addClass('selected');
+      canvas.isDrawingMode = false;
       eraserMode = true;
     }
   }
