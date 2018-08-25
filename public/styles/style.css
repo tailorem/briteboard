@@ -13,7 +13,7 @@ h1 {
   color: white;
 }
 
-button{
+button {
   padding: 10px 10px 10px 10px;
   color: white;
   font-family: arial;
@@ -28,7 +28,7 @@ button{
   outline: 0;
 }
 
-button:hover{
+button:hover {
  background: #E03A3A;
 }
 
@@ -69,7 +69,6 @@ button:hover{
 #whiteboard {
   display: inline-block;
   align-items: center;
-  max-width: 900px;
 }
 
 .video-container {
@@ -83,4 +82,27 @@ video, .video {
   border-radius: 1em;
   height: 60px;
   width: 85px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+  padding: 10px 10px 10px 10px;
+  color: white;
+  font-family: arial;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  background: #FF4136;
+  border-radius: 10px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  outline: 0;
+}
+
+.custom-file-upload:hover {
+ background: #E03A3A;
 }
