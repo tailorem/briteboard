@@ -5,23 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Whiteboard</title>
+
+  <title>Briteboard</title>
+
   <link rel="stylesheet" href="styles/normalize.css" />
   <link rel="stylesheet" href="styles/style.css" />
-  <script src="socket.io/socket.io.js"></script>
-  <script src="scripts/fabric.js"></script>
-  <script src="scripts/client.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+
 </head>
 
 <body>
+
+<div class="main">
   <header class="nav-top">
-    <h1>DRAWSTUFF</h1>
+    <h1>Whiteboard</h1>
+
+    <div class="video-container">
+      <video id="video1" autoplay></video>
+      <canvas id="canvas1" class="video"></canvas>
+    </div>
   </header>
 
-  </body>
   <div class="container">
     <div class="nav-left">
       <button id="select">Select</button>
@@ -33,10 +37,18 @@
       <input id="colorPicker" />
     </div>
 
-    <div class="main">
+    <div class="board">
       <canvas id="whiteboard"></canvas>
     </div>
   </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="socket.io/socket.io.js"></script>
+  <script src="scripts/fabric.js"></script>
+  <script src="scripts/client.js"></script>
+  <script src="scripts/video.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 
 </body>
 

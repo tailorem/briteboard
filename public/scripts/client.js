@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 10;
   let currentColor = '#000000';
-  
+
   // Select Tool
   $('#select').on('click', function (e) {
     $(".selected").removeClass("selected");
@@ -118,14 +118,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var currentMoveTimeout;
   function modifyingComponent(component) {
-    let param = {id: component.id, 
+    let param = {id: component.id,
             left: component.left,
             top: component.top,
             scaleX: component.scaleX,
             scaleY: component.scaleY,
             angle: component.angle};
     socket.emit("modify_component", param)
-    console.log("Modify Component", param)
+    // console.log("Modify Component", param)
   };
 
   canvas.on('mouse:up', function(options) {
@@ -149,7 +149,7 @@ console.log("moving - options.target", options.target)
       }
     })
   });
-  
+
   var nextObjID;
   socket.on('init_session', function (data) {
     nextObjID = data.nextObjID;
@@ -157,20 +157,20 @@ console.log("moving - options.target", options.target)
 
   // send component to server
   function send_to_server(component) {
-    console.log("sending data", component)
+    // console.log("sending data", component)
     socket.emit('push_component', {id: component.id, rawData: JSON.stringify(component.canvas)});
   }
-    
+
   // draw component received from server
   socket.on('add_component', function (data) {
-    console.log("receiving data", data)
+    // console.log("receiving data", data)
     canvas.loadFromJSON(data)
-    console.log("incoming data", data)
+    // console.log("incoming data", data)
     canvas.renderAll()
 
     // component.push(JSON.parse(data))
-    console.log("Canvas", canvas)
-    console.log("Objects", canvas.getObjects())
+    // console.log("Canvas", canvas)
+    // console.log("Objects", canvas.getObjects())
   });
   
   // delete component request from server
