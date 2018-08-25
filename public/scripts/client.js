@@ -333,13 +333,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-  $('#copy').on('click', function(e) {
-    Copy();
-    console.log("Copy")
+  $('#copy').on('click', function(e) {  
+    if(canvas.getActiveObject())
+      Copy();
   });
   $('#paste').on('click', function(e) {
     Paste();
-    console.log("Paste")
   });
 
 
@@ -354,7 +353,9 @@ function Copy() {
 }
 
 function Paste() {
-	// clone again, so you can do multiple copies.
+  // clone again, so you can do multiple copies.
+  if(!_clipboard) return
+
 	_clipboard.clone(function(clonedObj) {
 		canvas.discardActiveObject();
 		clonedObj.set({
