@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
-    console.log(e);
+    // console.log(e);
 
     let xpos = e.offsetX;
     let ypos = e.offsetY;
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       //attach event handlers here...
       reader.onload = function(e) {
-        console.log('second event:', e);
+        // console.log('second event:', e);
         let img = new Image();
         img.src = e.target.result;
 
@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function() {
       angle: component.angle
     };
     socket.emit("modify_component", param)
-    console.log("moving", param, component)
+    // console.log("moving", param, component)
   };
 
   // path created received from server
@@ -406,16 +406,16 @@ document.addEventListener("DOMContentLoaded", function() {
       targetComponent.angle = data.angle;
       canvas.renderAll();
     } else {
-      console.log("component", targetComponent)
-      console.log("components", canvas.getObjects())
-      console.log("component = id", canvas.getObjects()[0].id, data.id)
-      console.log("Update Component??", data)
+      // console.log("component", targetComponent)
+      // console.log("components", canvas.getObjects())
+      // console.log("component = id", canvas.getObjects()[0].id, data.id)
+      // console.log("Update Component??", data)
     }
   });
 
   canvas.on('mouse:up', function(event) {
     let objects = canvas.getActiveObjects();
-    console.log("Current Objects", objects)
+    // console.log("Current Objects", objects)
   })
 
 
