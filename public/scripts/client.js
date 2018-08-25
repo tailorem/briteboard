@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Set default canvas values
   enableDrawingMode();
   canvas.freeDrawingBrush.color = '#000000';
-  let currentWidth = canvas.freeDrawingBrush.width = 10;
+  let currentWidth = canvas.freeDrawingBrush.width = 15;
   let currentColor = '#000000';
 
   // Drag and drop to add image functionality
