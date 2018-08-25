@@ -10,17 +10,13 @@ function rando(){
 
 module.exports = function(DataHelpers) {
 
-  // GET TEST BOARD
+  // GET TEST BOARD (development only)
   routes.get('/test', function(req, res) {
-    // console.log('Get / req', req);
     res.render('test-board');
   });
 
   // CREATE NEW BOARD
   routes.post('/new', function(req, res) {
-    console.log('Post /boards/new');
-    // console.log(boards);
-    // console.log(req.body);
     const rNum = rando();
     boards[rNum] = {
       name: req.body.boardName,
@@ -31,8 +27,9 @@ module.exports = function(DataHelpers) {
 
   // GET SPECIFIC BOARD
   routes.get('/:boardId', function(req, res) {
-    if (boards[req.params.boardId]) {
-      res.render('test-board');
+    const board = boards[req.params.boardId];
+    if (board) {
+      res.render('test-board', board);
     } else {
       res.sendStatus(404);
     }
