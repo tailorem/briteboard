@@ -9,12 +9,8 @@ body, html{
   width: 100%;
 }
 
-.nav-top {
-  background-color: grey;
-  display: flex;
-  /*align-items: center;*/
-  height: 100px;
-  width: 100%;
+h1 {
+  color: white;
 }
 
 button{
@@ -29,19 +25,26 @@ button{
   border-radius: 10px;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
+  outline: 0;
 }
+
 button:hover{
  background: #E03A3A;
 }
+
 .selected {
   background: #85144b;
-}s
-.nav-top h1 {
-  /*line-height: 100px;*/
+}
+
+.nav-top {
+  align-items: center;
+  background-color: grey;
+  display: flex;
+  justify-content: space-between;
+  padding: .5em;
 }
 
 .container {
-/*  align-items: center;*/
   display: flex;
   justify-content: left;
   height: 100%;
@@ -58,7 +61,7 @@ button:hover{
 }
 
 .main {
-  background-color: cornflowerblue;
+  background-color: #f0f0f0;
   height: 100%;
   width: 100%;
 }
@@ -69,14 +72,16 @@ button:hover{
   max-width: 900px;
 }
 
-.nav-left, #whiteboard {
-  border: solid black 1px;
+.video-container {
+  background-color: black;
+  display: flex;
+  height: 100%;
 }
 
-.video-container, video {
+video, .video {
   background-color: white;
   border-radius: 1em;
-  height: 50px;
-  width: 75px;
+  height: 60px;
+  width: 85px;
 }
 
