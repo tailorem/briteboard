@@ -28,7 +28,6 @@ app.use("/boards", routes);
 // TODO: add 404 error handling
 
 
-
 // Cleanup step: move below to separate socket-io.js file
 // require ('socket-io.js')
 
