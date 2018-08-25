@@ -22,6 +22,10 @@ console.log("Server running on 127.0.0.1:3000");
 const routes = require("./routes/routes.js")();
 app.use("/boards", routes);
 
+// TODO: add 404 error handling
+
+
+
 // Cleanup step: move below to separate socket-io.js file
 // require ('socket-io.js')
 
