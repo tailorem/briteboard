@@ -189,8 +189,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
       };
     })(component.toObject);
-
-    component.id = nextObjID
+    nextObjID += 1;
+    component.id = nextObjID;
     canvas.add(component);
     components.push(component);
     send_to_server(component);
@@ -216,28 +216,19 @@ document.addEventListener("DOMContentLoaded", function() {
       angle: component.angle
     };
     socket.emit("modify_component", param)
-    // console.log("Modify Component", param)
   };
 
-  canvas.on('mouse:up', function(options) {
+  canvas.on('mouse:up', function(event) {
     if (currentMoveTimeout) {
       clearTimeout(currentMoveTimeout)
     }
 
   });
-  canvas.on('mouse:down', function(options) {
-    canvas.on('object:moving', function(options) {
-      if (options.target) {
-        // console.log("component", options.target);
-        // console.log("selected objects", canvas.getActiveObjects());
-        // console.log("options.target.objects", options.target.objects)
-        // TBD
-
-        // modifyingComponent(options.target)
-        console.log("moving - options.target", options.target)
-        setTimeout(function() {
-          modifyingComponent(options.target)
-        }, 100);
+  canvas.on('mouse:down', function(event) {
+    canvas.on('object:moving', function(event) {
+      if (event.target) {
+          setTimeout(function() {
+            modifyingComponent(event.target) }, 25);
       }
     })
   });
@@ -249,7 +240,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // send component to server
   function send_to_server(component) {
-    // console.log("sending data", component)
     socket.emit('push_component', {
       id: component.id,
       rawData: JSON.stringify(component.canvas)
@@ -258,18 +248,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // draw component received from server
   socket.on('add_component', function(data) {
-    // console.log("receiving data", data)
     canvas.loadFromJSON(data)
-    // console.log("incoming data", data)
     canvas.renderAll()
-
-    // component.push(JSON.parse(data))
-    // console.log("Canvas", canvas)
-    // console.log("Objects", canvas.getObjects())
   });
 
   // delete component request from server
-  socket.on('turf_component', function(data) {
+  socket.on('delete_component', function (data) {
     console.log("receiving data", data)
     let component = findComonent(data.id)
     if (component) {
