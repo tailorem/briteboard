@@ -60,8 +60,8 @@ button:hover {
   width: 100px;
 }
 
-.board {
-  background-color: #f0f0f0;
+.main {
+  background-color: rgb(238, 239, 230);
   height: 100%;
   width: 100%;
 }

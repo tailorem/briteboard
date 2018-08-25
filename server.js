@@ -45,6 +45,10 @@ io.on('connection', function (socket) {
         // console.log(data);
     socket.broadcast.emit('update_component', data);
    })
+    socket.on('remove_component', function (data) {
+        componentHistory.filter(each => each.id = data.id)
+        socket.broadcast.emit('turf_component', data);
+    })
 
 
 });
