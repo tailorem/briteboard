@@ -19,7 +19,7 @@ module.exports = function(DataHelpers) {
   // CREATE NEW BOARD
   routes.post('/new', function(req, res) {
     console.log('Post /boards/new');
-    console.log(boards);
+    // console.log(boards);
     // console.log(req.body);
     const rNum = rando();
     boards[rNum] = {
