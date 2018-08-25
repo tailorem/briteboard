@@ -1,7 +1,7 @@
 // Test boards
 
 const boards = {
-  "30av8Fc9": {
+  "test": {
     name: "Our Test Board",
     items: []
   },
