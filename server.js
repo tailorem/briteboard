@@ -71,4 +71,8 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('delete_component', data);
   })
 
+  socket.on('path_created', function(data) {
+    socket.broadcast.emit('path_created', data);
+  })
+
 });
