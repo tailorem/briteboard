@@ -5,8 +5,8 @@ const boards = {
     name: "Our Test Board",
     items: []
   },
-  "37sdj02k": {
-    name: "Our Test Board",
+  "n7sdj02k": {
+    name: "Another Board",
     items: []
   }
 }
