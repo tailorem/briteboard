@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Select Tool
   $('#select').on('click', function(e) {
-    disableDrawingMode();
+    enableSelectMode();
   });
 
   // Draw Tool
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
       radius: 75,
       fill: currentColor
     }));
-    disableDrawingMode();
+    enableSelectMode();
   });
 
   // Square Tool
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
       height: 100,
       fill: currentColor
     }));
-    disableDrawingMode();
+    enableSelectMode();
   });
 
   // Text box
@@ -100,15 +100,12 @@ document.addEventListener("DOMContentLoaded", function() {
       fixedFontSize: 30,
       fill: currentColor
     }))
-    disableDrawingMode();
+    enableSelectMode();
   });
 
   // Delete Tool
   $('#delete').on('click', function(e) {
-    canvas.getActiveObjects().forEach(obj => {
-      removeComponent(obj)
-    });
-    disableDrawingMode();
+    enableEraserMode();
   });
 
   // Add Image Tool
@@ -128,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     reader.readAsDataURL(e.target.files[0]);
     $("#add-image").val("");
-    disableDrawingMode();
+    enableSelectMode();
   });
 
   // Color Picker
@@ -164,19 +161,35 @@ document.addEventListener("DOMContentLoaded", function() {
     enableDrawingMode();
   });
 
-  // Enable and disable drawing mode functions
+  // DRAWING MODE
   function enableDrawingMode() {
+    eraserMode = false;
     canvas.isDrawingMode = true;
     $(".selected").removeClass("selected");
     $('#draw').addClass('selected');
   }
 
-  function disableDrawingMode() {
+  // SELECT MODE
+  function enableSelectMode() {
+    eraserMode = false;
     canvas.isDrawingMode = false;
     $(".selected").removeClass("selected");
     $('#select').addClass('selected');
   }
 
+  // ERASER MODE
+  let eraserMode = false;
+  function enableEraserMode() {
+    let currentSelection = canvas.getActiveObjects();
+    if (currentSelection.length > 0) {
+      removeComponent();
+      enableSelectMode();
+    } else {
+      $(".selected").removeClass("selected");
+      $('#delete').addClass('selected');
+      eraserMode = true;
+    }
+  }
 
   var components = [];
   var socket = io.connect();
@@ -196,13 +209,16 @@ document.addEventListener("DOMContentLoaded", function() {
     send_to_server(component);
   };
 
-  function removeComponent(component) {
-    console.log("Delete", component)
-    canvas.remove(component);
-    socket.emit("remove_component", {
-      id: component.id
-    })
-  }
+  // Remove component
+  function removeComponent() {
+    let currentSelection = canvas.getActiveObjects();
+      canvas.getActiveObjects().forEach(obj => {
+        canvas.remove(obj);
+        socket.emit("remove_component", {
+          id: obj.id
+        })
+      });
+    }
 
   var currentMoveTimeout;
 
@@ -221,6 +237,9 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.on('mouse:up', function(event) {
     if (currentMoveTimeout) {
       clearTimeout(currentMoveTimeout)
+    }
+    if (eraserMode) {
+      removeComponent();
     }
 
   });
