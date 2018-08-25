@@ -8,7 +8,7 @@
   <title>Briteboard</title>
   <link rel="stylesheet" href="styles/normalize.css" />
   <script src="vendor/jquery-3.3.1.min.js"></script>
-  <script src="scripts/home.js"></script>
+  <script src="scripts/index.js"></script>
 </head>
 <body>
 
@@ -20,7 +20,7 @@
   <div class="container">
     <p><a href="/boards/test">Test Board</a></p>
 
-    <form>
+    <form action="/boards/new" method="POST">
       <input type="text" name="new-board">
       <button id="create">CREATE</button>
     </form>

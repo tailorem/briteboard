@@ -49,7 +49,8 @@ io.on('connection', function(socket) {
   for (let component of componentHistory) {
     socket.emit('add_component', component.rawData);
   }
-  socket.emit('init_session', { nextObjID: client_count++ * 10000 });
+  client_count += 1;
+  socket.emit('init_session', {nextObjID: client_count * 10000});
   //    }
 
   // add handler for broadcast new component
