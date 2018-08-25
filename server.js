@@ -49,20 +49,26 @@ io.on('connection', function(socket) {
   for (let component of componentHistory) {
     socket.emit('add_component', component.rawData);
   }
+<<<<<<< HEAD
   client_count += 1;
   socket.emit('init_session', {nextObjID: client_count * 10000});
+=======
+>>>>>>> add-copy-paste
   //    }
 
   // add handler for broadcast new component
   socket.on('push_component', function(data) {
     componentHistory.push(data)
     // console.log(data);
-    socket.broadcast.emit('add_component', data.rawData);
+    socket.broadcast.emit('add_component', data);
   })
   socket.on('modify_component', function(data) {
     // console.log(data);
     socket.broadcast.emit('update_component', data);
   })
-
+  socket.on('remove_component', function(data) {
+    // console.log(data);
+    socket.broadcast.emit('delete_component', data);
+  })
 
 });

@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function() {
 
   let canvas = new fabric.Canvas('whiteboard');
@@ -204,11 +206,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
       };
     })(component.toObject);
-    nextObjID += 1;
-    component.id = nextObjID;
+    component.id = uuidv4();
     canvas.add(component);
     components.push(component);
-    send_to_server(component);
+    socket.emit('push_component', {
+      id: component.id,
+      rawData: JSON.stringify(component.canvas)
+    });
   };
 
   // Remove component
@@ -234,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function() {
       angle: component.angle
     };
     socket.emit("modify_component", param)
+    console.log("moving", param, component)
   };
 
   canvas.on('mouse:up', function(event) {
@@ -254,22 +259,11 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   });
 
-  var nextObjID;
-  socket.on('init_session', function(data) {
-    nextObjID = data.nextObjID;
-  });
-
-  // send component to server
-  function send_to_server(component) {
-    socket.emit('push_component', {
-      id: component.id,
-      rawData: JSON.stringify(component.canvas)
-    });
-  }
-
   // draw component received from server
   socket.on('add_component', function(data) {
-    canvas.loadFromJSON(data)
+    console.log("incomding add", JSON.parse(data.rawData))
+    components.push(JSON.parse(data.rawData));
+    canvas.loadFromJSON(data.rawData)
     canvas.renderAll()
   });
 
@@ -307,5 +301,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   });
-
+  canvas.on('mouse:up', function(event) {
+    let objects = canvas.getActiveObjects();
+    console.log("Current Objects", objects)
+  })
 });

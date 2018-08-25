@@ -14,7 +14,8 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "fabric": "^2.3.6",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.3"
