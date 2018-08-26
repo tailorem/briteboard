@@ -129,6 +129,14 @@ document.addEventListener("DOMContentLoaded", function() {
     enableDrawingMode();
   });
 
+  // Save canvas to image
+  $('#save-image').on('click', function(e) {
+    canvas.discardActiveObject();
+    $('#whiteboard').get(0).toBlob(function(blob){
+      saveAs(blob, 'whiteboard.png');
+    });
+  });
+
 
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
@@ -185,6 +193,9 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.selection = true;
     eraserMode = false;
     rectangeMode = false;
+    canvas.forEachObject(function(o) {
+      o.set({selectable: true}).setCoords();
+    })
   }
 
   // DRAWING MODE
@@ -341,10 +352,15 @@ document.addEventListener("DOMContentLoaded", function() {
       component.id = uuidv4();
       canvas.add(component);
       components.push(component);
-      socket.emit('create_component', {
-        id: component.id,
-        rawData: JSON.stringify(component.canvas)
-      });
+// <<<<<<< HEAD
+//       socket.emit('create_component', {
+//         id: component.id,
+//         rawData: JSON.stringify(component.canvas)
+//       });
+// =======
+      // console.log("Create Comp", component.toJSON())
+      // console.log("Create Comp", JSON.stringify(component))
+      socket.emit('create_component',component.toJSON());
     };
 
     // Remove component
@@ -384,15 +400,17 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // draw component received from server
-  socket.on('add_component', function(data) {
-    console.log("incomding add", JSON.parse(data.rawData))
-    components.push(JSON.parse(data.rawData));
-    canvas.loadFromJSON(data.rawData)
-    canvas.renderAll()
+  socket.on('create_component', function(data) {
+    // console.log("incomding add", data)
+   fabric.util.enlivenObjects([data], function(objects) {
+      objects.forEach(function(p) {
+        canvas.add(p);
+      });
+    })
   });
 
   // delete component request from server
-  socket.on('delete_component', function(data) {
+  socket.on('remove_component', function(data) {
     console.log("receiving data", data)
     let component = findComonent(data.id)
     if (component) {
@@ -406,12 +424,13 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // modify component received from server
-  socket.on('update_component', function(data) {
+  socket.on('modify_component', function(data) {
     console.log("receiving modifying data", data)
     let targetComponent = findComonent(data.id)
     if (targetComponent) {
       targetComponent.left = data.left;
       targetComponent.top = data.top;
+      targetComponent.height = data.height;
       targetComponent.scaleX = data.scaleX;
       targetComponent.scaleY = data.scaleY;
       targetComponent.angle = data.angle;
