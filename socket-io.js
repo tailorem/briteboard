@@ -42,6 +42,10 @@ module.exports = (io/*, dataHelpers*/) => {
 
   io.on('connection', function(socket) {
 
+  ////////////////////////////////////////////
+  //             CLIENT INFO                //
+  ////////////////////////////////////////////
+
     // socket.emit('select username');
 
     const board = (socket.request.headers.referer).split('/').reverse()[0];
@@ -56,6 +60,10 @@ module.exports = (io/*, dataHelpers*/) => {
     // console.log(socket.id, board);
     // socket.broadcast.emit('user connected', socket.id);
 
+
+  ////////////////////////////////////////////
+  //             CAVAS EVENTS               //
+  ////////////////////////////////////////////
 
     if (DEBUG) console.log(boards);
     // console.log("SOCKET", socket);
