@@ -1,10 +1,10 @@
 const boards = require('./db/boards');
+const clients = [];
 
 module.exports = (io/*, dataHelpers*/) => {
 
   // array of all lines drawn
   const componentHistory = [];
-  const client_count = 0;
 
   // update component history with incoming changes
   // event-handler for new incoming connections
@@ -20,10 +20,11 @@ module.exports = (io/*, dataHelpers*/) => {
   }
 
   io.on('connection', function(socket) {
+    clients.push(socket.id);
+
     console.log(boards);
     // console.log("SOCKET", socket);
-    const referer = (socket.request.headers.referer).split('/').reverse()[0];
-    console.log("referer", referer);
+    // const referer = (socket.request.headers.referer).split('/').reverse()[0];
 
     // first send the history to the new client
     for (let component of componentHistory) {
@@ -31,7 +32,7 @@ module.exports = (io/*, dataHelpers*/) => {
     }
 
     // add handler for broadcast new component
-    socket.on('push_component', function(data) {
+    socket.on('create_component', function(data) {
       componentHistory.push(data)
       // console.log(data);
       socket.broadcast.emit('add_component', data);
@@ -50,7 +51,8 @@ module.exports = (io/*, dataHelpers*/) => {
     socket.on('path_created', function(data) {
       socket.broadcast.emit('path_created', data);
     })
-
   });
+
+
 
 }
