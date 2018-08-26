@@ -3,11 +3,11 @@
 const boards = {
   "test": {
     name: "Our Test Board",
-    items: []
+    componentHistory: []
   },
   "n7sdj02k": {
     name: "Another Board",
-    items: []
+    componentHistory: []
   }
 }
 

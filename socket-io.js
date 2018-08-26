@@ -1,8 +1,12 @@
+const boards = require('./db/boards');
+
 module.exports = (io/*, dataHelpers*/) => {
 
   // array of all lines drawn
-  var componentHistory = [];
-  var client_count = 0;
+  const componentHistory = [];
+  const client_count = 0;
+
+  // update component history with incoming changes
   // event-handler for new incoming connections
   function updateComponentHistory(changes) {
     history = componentHistory.find(each => each.id === changes.id);
@@ -14,7 +18,12 @@ module.exports = (io/*, dataHelpers*/) => {
         history.angle = changes.angle
     }
   }
+
   io.on('connection', function(socket) {
+    console.log(boards);
+    // console.log("SOCKET", socket);
+    const referer = (socket.request.headers.referer).split('/').reverse()[0];
+    console.log("referer", referer);
 
     // first send the history to the new client
     for (let component of componentHistory) {
