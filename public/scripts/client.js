@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Set default canvas values
   let eraserMode = false;
   let rectangleMode = false;
+  let handMode = false;
   enableDrawingMode();
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
@@ -34,6 +35,12 @@ document.addEventListener("DOMContentLoaded", function() {
   $('#select').on('click', function(e) {
     enableSelectMode();
   });
+
+  // Hand Tool (Move canvas)
+  $('#hand').on('click', function(e) {
+    enableHandMode();
+  });
+
 
   // Draw Tool
   $('#draw').on('click', function(e) {
@@ -133,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Save canvas to image
   $('#save-image').on('click', function(e) {
     canvas.discardActiveObject();
-    $('#whiteboard').get(0).toBlob(function(blob){
+    $('#whiteboard').get(0).toBlob(function(blob) {
       saveAs(blob, 'whiteboard.png');
     });
   });
@@ -194,8 +201,11 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.selection = true;
     eraserMode = false;
     rectangeMode = false;
+    handMode = false;
     canvas.forEachObject(function(o) {
-      o.set({selectable: true}).setCoords();
+      o.set({
+        selectable: true
+      }).setCoords();
     })
   }
 
@@ -211,6 +221,19 @@ document.addEventListener("DOMContentLoaded", function() {
     clearModes();
     $('#select').addClass('selected');
   }
+
+  // HAND MODE
+  function enableHandMode() {
+    clearModes();
+    canvas.discardActiveObject();
+    $('#hand').addClass('selected');
+    handMode = true;
+    canvas.forEachObject(function(o) {
+      o.set({
+        selectable: false
+      });
+    });
+}
 
   // ERASER MODE
   function enableEraserMode() {
@@ -232,24 +255,16 @@ document.addEventListener("DOMContentLoaded", function() {
     $('#draw-rect').addClass('selected');
     rectangeMode = true;
     canvas.forEachObject(function(o) {
-      o.set({selectable: false})
-    })
+      o.set({
+        selectable: false
+      });
+    });
   }
 
 
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
-
-  canvas.on('mouse:up', function(event) {
-    if (currentMoveTimeout) {
-      clearTimeout(currentMoveTimeout)
-    }
-    if (eraserMode) {
-      removeComponent();
-    }
-  });
-
 
   canvas.on('object:moving', function(event) {
     if (event.target) {
@@ -274,12 +289,11 @@ document.addEventListener("DOMContentLoaded", function() {
     socket.emit("path_created", path.toJSON())
   });
 
-  /// RECTANGLE DRAWING MODE
-  var rect, isDown, origX, origY;
+  /// MOUSE DOWN EVENT
+  let rect, isDown, origX, origY;
   canvas.on('mouse:down', function(o) {
     if (rectangeMode) {
       canvas.selection = false;
-      canvas.isDrawingMode = false;
       isDown = true;
       var pointer = canvas.getPointer(o.e);
       origX = pointer.x;
@@ -300,13 +314,23 @@ document.addEventListener("DOMContentLoaded", function() {
       });
       canvas.add(rect).setActiveObject(rect);
     }
+
+    if (handMode) {
+      canvas.selection = false;
+      let evt = o.e;
+      this.isDragging = true;
+      this.selection = false;
+      this.lastPosX = evt.clientX;
+      this.lastPosY = evt.clientY;
+    }
+
   });
 
+  // MOUSE MOVE EVENT
   canvas.on('mouse:move', function(o) {
     if (rectangeMode) {
       if (!isDown) return;
-      var pointer = canvas.getPointer(o.e);
-
+      let pointer = canvas.getPointer(o.e);
       if (origX > pointer.x) {
         rect.set({
           left: Math.abs(pointer.x)
@@ -317,24 +341,44 @@ document.addEventListener("DOMContentLoaded", function() {
           top: Math.abs(pointer.y)
         });
       }
-
       rect.set({
         width: Math.abs(origX - pointer.x)
       });
       rect.set({
         height: Math.abs(origY - pointer.y)
       });
-
       canvas.renderAll();
+    }
+    if (handMode) {
+      if (this.isDragging) {
+        var e = o.e;
+        this.viewportTransform[4] += e.clientX - this.lastPosX;
+        this.viewportTransform[5] += e.clientY - this.lastPosY;
+        this.requestRenderAll();
+        this.lastPosX = e.clientX;
+        this.lastPosY = e.clientY;
+      }
     }
   });
 
-  canvas.on('mouse:up', function(o) {
+  // MOUSE UP EVENT
+  canvas.on('mouse:up', function(e) {
     if (rectangeMode) {
       isDown = false;
       enableSelectMode();
     }
+    if (handMode) {
+      this.isDragging = false;
+      this.selection = true;
+    }
+    if (eraserMode) {
+      removeComponent();
+    }
+    if (currentMoveTimeout) {
+      clearTimeout(currentMoveTimeout)
+    }
   });
+
 
   // Object modified after resize
   canvas.on('object:scaled', function(event) {
@@ -346,10 +390,13 @@ document.addEventListener("DOMContentLoaded", function() {
     var delta = opt.e.deltaY;
     var pointer = canvas.getPointer(opt.e);
     var zoom = canvas.getZoom();
-    zoom = zoom + delta/200;
+    zoom = zoom + delta / 200;
     if (zoom > 5) zoom = 5;
     if (zoom < 0.5) zoom = 0.5;
-    canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+    canvas.zoomToPoint({
+      x: opt.e.offsetX,
+      y: opt.e.offsetY
+    }, zoom);
     opt.e.preventDefault();
     opt.e.stopPropagation();
   });
@@ -359,29 +406,29 @@ document.addEventListener("DOMContentLoaded", function() {
   //////////////////////////////////////////
 
 
-    function addComponent(component) {
-      component.toObject = (function(toObject) {
-        return function() {
-          return fabric.util.object.extend(toObject.call(this), {
-            id: this.id
-          });
-        };
-      })(component.toObject);
-      component.id = uuidv4();
-      canvas.add(component);
-      socket.emit('create_component',component.toJSON());
-    };
+  function addComponent(component) {
+    component.toObject = (function(toObject) {
+      return function() {
+        return fabric.util.object.extend(toObject.call(this), {
+          id: this.id
+        });
+      };
+    })(component.toObject);
+    component.id = uuidv4();
+    canvas.add(component);
+    socket.emit('create_component', component.toJSON());
+  };
 
-    // Remove component
-    function removeComponent() {
-      let currentSelection = canvas.getActiveObjects();
-      canvas.getActiveObjects().forEach(obj => {
-        canvas.remove(obj);
-        socket.emit("remove_component", {
-          id: obj.id
-        })
-      });
-    }
+  // Remove component
+  function removeComponent() {
+    let currentSelection = canvas.getActiveObjects();
+    canvas.getActiveObjects().forEach(obj => {
+      canvas.remove(obj);
+      socket.emit("remove_component", {
+        id: obj.id
+      })
+    });
+  }
 
   var currentMoveTimeout;
 
@@ -412,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // draw component received from server
   socket.on('create_component', function(data) {
     if (DEBUG) console.log("incomding add", data)
-   fabric.util.enlivenObjects([data], function(objects) {
+    fabric.util.enlivenObjects([data], function(objects) {
       objects.forEach(function(p) {
         canvas.add(p);
       });
@@ -455,49 +502,53 @@ document.addEventListener("DOMContentLoaded", function() {
   //              COPY PASTE              //
   //////////////////////////////////////////
 
-
-  $('#copy').on('click', function(e) {
-    if(canvas.getActiveObject())
+  $('#duplicate').on('click', function(e) {
+    if (canvas.getActiveObject())
       Copy();
-  });
-  $('#paste').on('click', function(e) {
     Paste();
   });
 
+  // $('#copy').on('click', function(e) {
+  //   if(canvas.getActiveObject())
+  //     Copy();
+  // });
+  // $('#paste').on('click', function(e) {
+  //   Paste();
+  // });
 
-function Copy() {
-	canvas.getActiveObject().clone(function(cloned) {
-		_clipboard = cloned;
-	});
-}
+  function Copy() {
+    canvas.getActiveObject().clone(function(cloned) {
+      _clipboard = cloned;
+    });
+  }
 
-function Paste() {
-  // clone again, so you can do multiple copies.
-  if(!_clipboard) return
+  function Paste() {
+    // clone again, so you can do multiple copies.
+    if (!_clipboard) return
 
-	_clipboard.clone(function(clonedObj) {
-		canvas.discardActiveObject();
-		clonedObj.set({
-			left: clonedObj.left + 10,
-			top: clonedObj.top + 10,
-			evented: true,
-		});
-		if (clonedObj.type === 'activeSelection') {
-			// active selection needs a reference to the canvas.
-			clonedObj.canvas = canvas;
-			clonedObj.forEachObject(function(obj) {
-				addComponent(obj);
-			});
-			// this should solve the unselectability
-			clonedObj.setCoords();
-		} else {
-			addComponent(clonedObj);
-		}
-		_clipboard.top += 10;
-		_clipboard.left += 10;
-		canvas.setActiveObject(clonedObj);
-		canvas.requestRenderAll();
-	});
-}
+    _clipboard.clone(function(clonedObj) {
+      canvas.discardActiveObject();
+      clonedObj.set({
+        left: clonedObj.left + 10,
+        top: clonedObj.top + 10,
+        evented: true,
+      });
+      if (clonedObj.type === 'activeSelection') {
+        // active selection needs a reference to the canvas.
+        clonedObj.canvas = canvas;
+        clonedObj.forEachObject(function(obj) {
+          addComponent(obj);
+        });
+        // this should solve the unselectability
+        clonedObj.setCoords();
+      } else {
+        addComponent(clonedObj);
+      }
+      _clipboard.top += 10;
+      _clipboard.left += 10;
+      canvas.setActiveObject(clonedObj);
+      canvas.requestRenderAll();
+    });
+  }
 
 });
