@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let eraserMode = false;
   let rectangleMode = false;
   let handMode = false;
-  enableDrawingMode();
+  enableSelectMode()
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
   let currentColor = '#000000';
