@@ -117,6 +117,14 @@ document.addEventListener("DOMContentLoaded", function() {
     enableDrawingMode();
   });
 
+  // Save canvas to image
+  $('#save-image').on('click', function(e) {
+    canvas.discardActiveObject();
+    $('#whiteboard').get(0).toBlob(function(blob){
+      saveAs(blob, 'whiteboard.png');
+    });
+  });
+
 
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
@@ -173,6 +181,9 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.selection = true;
     eraserMode = false;
     rectangeMode = false;
+    canvas.forEachObject(function(o) {
+      o.set({selectable: true}).setCoords();
+    })
   }
 
   // DRAWING MODE
