@@ -20,7 +20,8 @@ module.exports = (io/*, dataHelpers*/) => {
       history.height = changes.height;
       history.scaleX = changes.scaleX,
       history.scaleY = changes.scaleY,
-      history.angle = changes.angle
+      history.angle = changes.angle,
+      history.text = changes.text
     }
   }
   function remvoeFromHistory(id) {
