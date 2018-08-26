@@ -48,16 +48,23 @@ module.exports = (io/*, dataHelpers*/) => {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
-    // socket.emit('select username');
-
     const board = (socket.request.headers.referer).split('/').reverse()[0];
     const client = { name: 'Anon', boardId: board };
     clients[socket.id] = client;
+
     io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
+
+    socket.on('username selected', (username) => {
+      clients[socket.id].name = username;
+      io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
+      console.log("username selected");
+    });
+
 
     socket.on('disconnect', (reason) => {
       delete clients[socket.id];
       io/*socket.broadcast.to(board)*/.emit('user disconnected', getCurrentUsers(board));
+      console.log("client disconnected")
     });
     // console.log(socket.id, board);
     // socket.broadcast.emit('user connected', socket.id);

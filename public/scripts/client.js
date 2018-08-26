@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+$(document).ready(function () {
 
   let canvas = new fabric.Canvas('whiteboard');
   canvas.setHeight(window.innerHeight);
@@ -22,39 +22,52 @@ document.addEventListener("DOMContentLoaded", function() {
   ////////////////////////////////////////////
 
   function listUsers(users) {
+    console.log(users);
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
-    users.forEach(function(user, index) {
+    users.forEach(function(user) {
       userId = Object.keys(user)[0];
       user = user[Object.keys(user)[0]];
       $("<h3>").text(user.name).appendTo($users);
     });
   }
 
-  socket.on('select username', function() {
-    $(`<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
+  // On connection, user is prompted to select a username
+  (function() {
+    $(`<div id="username-form" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
         <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
-          <form>
+          <form id="select-username">
             <p>Select a username:</p>
             <input type="text" style="outline: none;" />
             <button>GO</button>
           </form>
         </div>
       </div>`).prependTo(document.body);
-  });
+
+    // Once username is selected, the username is sent to the server and the username form/div is removed
+    $("#select-username").on('submit', function(e){
+      e.preventDefault();
+      $username = $('#select-username input').val();
+      socket.emit('username selected', $username);
+      $('#username-form').remove();
+    });
+  })();
+
 
   // boardId = (window.location.pathname).split('/').reverse()[0];
   // console.log(boardId);
 
-  // socket.on('new connection', function(currentUsers) {
-  //   listUsers(currentUsers);
-  // });
+  socket.on('new connection', function(currentUsers) {
+    console.log('users after connection', currentUsers);
+    listUsers(currentUsers);
+  });
 
   // socket.on('update username', function(currentUsers) {
   //   // listUsers(currentUsers);
   // });
 
   socket.on('user disconnected', function(currentUsers) {
+    console.log('users after disconnect', currentUsers);
     listUsers(currentUsers);
   });
 
