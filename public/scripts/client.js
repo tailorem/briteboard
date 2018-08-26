@@ -229,6 +229,9 @@ document.addEventListener("DOMContentLoaded", function() {
     clearModes()
     $('#draw-rect').addClass('selected');
     rectangeMode = true;
+    canvas.forEachObject(function(o) {
+      o.set({selectable: false})
+    })
   }
 
 
