@@ -2,7 +2,7 @@ const boards = require('./db/boards');
 const clients = {};
 
 getCurrentUsers = (board) => {
-  let currentUsers = [];
+  const currentUsers = [];
   for (let client in clients) {
     // console.log(clients[client].boardId, board)
     if (clients[client].boardId === board) {
