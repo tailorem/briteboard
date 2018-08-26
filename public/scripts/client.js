@@ -445,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var delta = opt.e.deltaY;
     var pointer = canvas.getPointer(opt.e);
     var zoom = canvas.getZoom();
-    zoom = zoom + delta / 200;
+    zoom = zoom - delta / 200;
     if (zoom > 5) zoom = 5;
     if (zoom < 0.5) zoom = 0.5;
     canvas.zoomToPoint({

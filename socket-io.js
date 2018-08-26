@@ -2,7 +2,7 @@ const boards = require('./db/boards');
 const clients = {};
 
 getCurrentUsers = (board) => {
-  const currentUsers = [];
+  let currentUsers = [];
   for (let client in clients) {
     // console.log(clients[client].boardId, board)
     if (clients[client].boardId === board) {
@@ -15,7 +15,7 @@ getCurrentUsers = (board) => {
 module.exports = (io/*, dataHelpers*/) => {
 
   // array of all lines drawn
-  const componentHistory = [];
+  let componentHistory = [];
 
   let DEBUG = false;
 
