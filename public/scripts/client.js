@@ -21,9 +21,42 @@ document.addEventListener("DOMContentLoaded", function() {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
-  // socket.
-  boardId = (window.location.pathname).split('/').reverse()[0];
-  console.log(window.location.pathname);
+  function listUsers(users) {
+    $users = $('#users');
+    $users.empty(); // improve this by removing user by id?
+    users.forEach(function(user, index) {
+      userId = Object.keys(user)[0];
+      user = user[Object.keys(user)[0]];
+      $("<h3>").text(user.name).appendTo($users);
+    });
+  }
+
+  socket.on('select username', function() {
+    $(`<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
+        <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
+          <form>
+            <p>Select a username:</p>
+            <input type="text" style="outline: none;" />
+            <button>GO</button>
+          </form>
+        </div>
+      </div>`).prependTo(document.body);
+  });
+
+  // boardId = (window.location.pathname).split('/').reverse()[0];
+  // console.log(boardId);
+
+  // socket.on('new connection', function(currentUsers) {
+  //   listUsers(currentUsers);
+  // });
+
+  // socket.on('update username', function(currentUsers) {
+  //   // listUsers(currentUsers);
+  // });
+
+  socket.on('user disconnected', function(currentUsers) {
+    listUsers(currentUsers);
+  });
 
 
 

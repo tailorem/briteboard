@@ -1,10 +1,21 @@
 const boards = require('./db/boards');
-const clients = [];
+const clients = {};
+
+getCurrentUsers = (board) => {
+  const currentUsers = [];
+  for (let client in clients) {
+    // console.log(clients[client].boardId, board)
+    if (clients[client].boardId === board) {
+      currentUsers.push({ [client]: clients[client] });
+    }
+  }
+  return currentUsers;
+}
 
 module.exports = (io/*, dataHelpers*/) => {
 
   // array of all lines drawn
-  var componentHistory = [];
+  const componentHistory = [];
 
   let DEBUG = false;
 
@@ -24,16 +35,30 @@ module.exports = (io/*, dataHelpers*/) => {
       history.text = changes.text
     }
   }
-  function remvoeFromHistory(id) {
+
+  function removeFromHistory(id) {
     componentHistory = componentHistory.filter(each => each.id !== id)
   }
 
   io.on('connection', function(socket) {
-    clients.push(socket.id);
+
+    // socket.emit('select username');
+
+    const board = (socket.request.headers.referer).split('/').reverse()[0];
+    const client = { name: 'Anon', boardId: board };
+    clients[socket.id] = client;
+    io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
+
+    socket.on('disconnect', (reason) => {
+      delete clients[socket.id];
+      io/*socket.broadcast.to(board)*/.emit('user disconnected', getCurrentUsers(board));
+    });
+    // console.log(socket.id, board);
+    // socket.broadcast.emit('user connected', socket.id);
+
 
     if (DEBUG) console.log(boards);
     // console.log("SOCKET", socket);
-    // const referer = (socket.request.headers.referer).split('/').reverse()[0];
 
     // first send the history to the new client
     for (let data of componentHistory) {
@@ -52,7 +77,7 @@ module.exports = (io/*, dataHelpers*/) => {
     })
 
     socket.on('remove_component', function(data) {
-      remvoeFromHistory(data.id)
+      removeFromHistory(data.id)
       socket.broadcast.emit('remove_component', data);
     })
 
@@ -61,7 +86,4 @@ module.exports = (io/*, dataHelpers*/) => {
       socket.broadcast.emit('path_created', data);
     })
   });
-
-
-
 }

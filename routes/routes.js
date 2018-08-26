@@ -27,10 +27,10 @@ module.exports = function(DataHelpers) {
 
   // GET SPECIFIC BOARD
   routes.get('/:boardId', function(req, res) {
-    let user = null;
+    // let user = null;
     const board = boards[req.params.boardId];
     if (board) {
-      res.render('test-board', { board, user });
+      res.render('test-board', { board });
     } else {
       res.sendStatus(404);
     }
