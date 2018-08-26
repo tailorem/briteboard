@@ -228,6 +228,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // RECTANGLE MODE
   function enableRectMode() {
     clearModes()
+    canvas.discardActiveObject();
     $('#draw-rect').addClass('selected');
     rectangeMode = true;
     canvas.forEachObject(function(o) {
