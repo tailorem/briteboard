@@ -3,7 +3,7 @@ const boards = require('./db/boards');
 module.exports = (io/*, dataHelpers*/) => {
 
   // array of all lines drawn
-  const componentHistory = [];
+  var componentHistory = [];
   const client_count = 0;
 
   // update component history with incoming changes
@@ -20,6 +20,9 @@ module.exports = (io/*, dataHelpers*/) => {
       history.scaleY = changes.scaleY,
       history.angle = changes.angle
     }
+  }
+  function remvoeFromHistory(id) {
+    componentHistory = componentHistory.filter(each => each.id !== id)
   }
 
   io.on('connection', function(socket) {
@@ -43,6 +46,7 @@ module.exports = (io/*, dataHelpers*/) => {
     })
 
     socket.on('remove_component', function(data) {
+      remvoeFromHistory(data.id)
       socket.broadcast.emit('remove_component', data);
     })
 

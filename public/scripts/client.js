@@ -233,14 +233,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  canvas.on('mouse:down', function(event) {
-    canvas.on('object:moving', function(event) {
-      if (event.target) {
-        setTimeout(function() {
-          modifyingComponent(event.target)
-        }, 25);
-      }
-    })
+
+  canvas.on('object:moving', function(event) {
+    if (event.target) {
+      setTimeout(function() {
+        modifyingComponent(event.target)
+      }, 25);
+    }
   });
 
   canvas.on('path:created', function(event) {
@@ -256,7 +255,6 @@ document.addEventListener("DOMContentLoaded", function() {
     path.id = uuidv4();
     console.log("PATH CREATED:", path);
     socket.emit("path_created", path.toJSON())
-
   });
 
   /// RECTANGLE DRAWING MODE
@@ -321,13 +319,16 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  // Object modified after resize
+  canvas.on('object:scaled', function(event) {
+    modifyingComponent(event.target)
+  });
 
   //////////////////////////////////////////
   //              SOCKET IO               //
   //////////////////////////////////////////
 
 
-    var components = [];
     var socket = io.connect();
 
     function addComponent(component) {
@@ -340,9 +341,6 @@ document.addEventListener("DOMContentLoaded", function() {
       })(component.toObject);
       component.id = uuidv4();
       canvas.add(component);
-      components.push(component);
-      console.log("Create Comp", component.toJSON())
-      console.log("Create Comp", JSON.stringify(component))
       socket.emit('create_component',component.toJSON());
     };
 
@@ -368,6 +366,7 @@ document.addEventListener("DOMContentLoaded", function() {
       scaleY: component.scaleY,
       angle: component.angle
     };
+    console.log("Modify", component)
     socket.emit("modify_component", param)
     // console.log("moving", param, component)
   };
@@ -398,7 +397,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let component = findComonent(data.id)
     if (component) {
       canvas.remove(component);
-      canvas.renderAll()
     }
   });
 
@@ -412,25 +410,22 @@ document.addEventListener("DOMContentLoaded", function() {
     let targetComponent = findComonent(data.id)
     if (targetComponent) {
       targetComponent.left = data.left;
-      targetComponent.top = data.top;
-      targetComponent.height = data.height;      
+      targetComponent.top = data.top; 
       targetComponent.scaleX = data.scaleX;
       targetComponent.scaleY = data.scaleY;
       targetComponent.angle = data.angle;
       canvas.renderAll();
     } else {
-      // console.log("component", targetComponent)
-      // console.log("components", canvas.getObjects())
-      // console.log("component = id", canvas.getObjects()[0].id, data.id)
-      // console.log("Update Component??", data)
+      console.log("Unknown Component Modified.", data)
     }
   });
 
-  canvas.on('mouse:up', function(event) {
-    let objects = canvas.getActiveObjects();
-    // console.log("Current Objects", objects)
-  })
 
+
+
+  //////////////////////////////////////////
+  //              COPY PASTE              //
+  //////////////////////////////////////////
 
 
   $('#copy').on('click', function(e) {
@@ -443,10 +438,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function Copy() {
-	// clone what are you copying since you
-	// may want copy and paste on different moment.
-	// and you do not want the changes happened
-	// later to reflect on the copy.
 	canvas.getActiveObject().clone(function(cloned) {
 		_clipboard = cloned;
 	});
@@ -467,12 +458,12 @@ function Paste() {
 			// active selection needs a reference to the canvas.
 			clonedObj.canvas = canvas;
 			clonedObj.forEachObject(function(obj) {
-				canvas.add(obj);
+				addComponent(obj);
 			});
 			// this should solve the unselectability
 			clonedObj.setCoords();
 		} else {
-			canvas.add(clonedObj);
+			addComponent(clonedObj);
 		}
 		_clipboard.top += 10;
 		_clipboard.left += 10;
@@ -480,6 +471,9 @@ function Paste() {
 		canvas.requestRenderAll();
 	});
 }
+
+
+
 
 
 });
