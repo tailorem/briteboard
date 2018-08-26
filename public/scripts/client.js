@@ -336,6 +336,19 @@ document.addEventListener("DOMContentLoaded", function() {
     modifyingComponent(event.target)
   });
 
+  // Zoom in/out with mousewheel
+  canvas.on('mouse:wheel', function(opt) {
+    var delta = opt.e.deltaY;
+    var pointer = canvas.getPointer(opt.e);
+    var zoom = canvas.getZoom();
+    zoom = zoom + delta/200;
+    if (zoom > 5) zoom = 5;
+    if (zoom < 0.5) zoom = 0.5;
+    canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+    opt.e.preventDefault();
+    opt.e.stopPropagation();
+  });
+
   //////////////////////////////////////////
   //              SOCKET IO               //
   //////////////////////////////////////////
@@ -420,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let targetComponent = findComonent(data.id)
     if (targetComponent) {
       targetComponent.left = data.left;
-      targetComponent.top = data.top; 
+      targetComponent.top = data.top;
       targetComponent.scaleX = data.scaleX;
       targetComponent.scaleY = data.scaleY;
       targetComponent.angle = data.angle;
