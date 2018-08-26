@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let canvas = new fabric.Canvas('whiteboard');
   canvas.setHeight(window.innerHeight);
   canvas.setWidth(window.innerWidth);
-
+  canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
   // Set default canvas values
   let eraserMode = false;
   let rectangleMode = false;
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Text box
   $('#textbox').on('click', function(e) {
-    addComponent(new fabric.Textbox('MyText', {
+    addComponent(new fabric.IText('MyText', {
       width: 300,
       height: 300,
       top: 5,
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {
           left: 50,
           top: 50,
         }).scale(0.5);
-        canvas.add(image);
+        addComponent(image);
       };
     };
     reader.readAsDataURL(e.target.files[0]);
@@ -298,14 +298,35 @@ document.addEventListener("DOMContentLoaded", function() {
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
+  canvas.on('text:changed', function(event) {
+    // debouncing not required.
+    modifyingComponent(event.target)
+  });
 
-  canvas.on('object:moving', function(event) {
-    if (event.target) {
-      setTimeout(function() {
-        modifyingComponent(event.target)
-      }, 25);
+  canvas.on('dragleave', function(event) {
+    // debouncing not required.
+    console.log("Object Scaled", event.target)
+  });
+
+  canvas.on('mouse:up', function(event) {
+    if (currentMoveTimeout) {
+      clearTimeout(currentMoveTimeout)
+    }
+    if (eraserMode) {
+      removeComponent();
     }
   });
+
+  canvas.on('object:dragover', function(event) {
+    console.log("Object dragover Event", event.target)
+  });
+
+  ['object:rotating', 'object:moving', 'object:scaling', 'object:modified']
+    .forEach(function(eventType) {
+      canvas.on(eventType, function(event) {
+        componentChanged(event)
+      });
+    })
 
   canvas.on('path:created', function(event) {
     let path = event.path;
@@ -399,6 +420,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (rectangeMode) {
       isDown = false;
       enableSelectMode();
+      addComponent(rect);
     }
     if (handMode) {
       this.isDragging = false;
@@ -434,6 +456,19 @@ document.addEventListener("DOMContentLoaded", function() {
     opt.e.stopPropagation();
   });
 
+  function componentChanged(event) {
+    // tbd multi selection
+    if (event.target) {
+      if (event.type === 'activeSelection') {
+        event.forEachObject(function(obj) {
+          setTimeout(function() {
+            modifyingComponent(obj)
+          }, 25); });
+      } else {
+          setTimeout(function() { modifyingComponent(event.target) }, 25);
+      }
+    }
+  }
   //////////////////////////////////////////
   //              SOCKET IO               //
   //////////////////////////////////////////
@@ -468,11 +503,13 @@ document.addEventListener("DOMContentLoaded", function() {
   function modifyingComponent(component) {
     let param = {
       id: component.id,
+      type: component.type,
       left: component.left,
       top: component.top,
       scaleX: component.scaleX,
       scaleY: component.scaleY,
-      angle: component.angle
+      angle: component.angle,
+      text: component.text
     };
     if (DEBUG) console.log("Modify", component)
     socket.emit("modify_component", param)
@@ -516,12 +553,14 @@ document.addEventListener("DOMContentLoaded", function() {
   socket.on('modify_component', function(data) {
     if (DEBUG) console.log("receiving modifying data", data)
     let targetComponent = findComonent(data.id)
+    if (DEBUG) console.log("receiving modifying on comp", targetComponent)
     if (targetComponent) {
       targetComponent.left = data.left;
       targetComponent.top = data.top;
       targetComponent.scaleX = data.scaleX;
       targetComponent.scaleY = data.scaleY;
       targetComponent.angle = data.angle;
+      targetComponent.set("text",data.text);
       canvas.renderAll();
     } else {
       if (DEBUG) console.log("Unknown Component Modified.", data)
