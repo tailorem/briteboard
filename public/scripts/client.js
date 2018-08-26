@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
 
   let canvas = new fabric.Canvas('whiteboard');
-  canvas.setHeight(window.innerHeight);
-  canvas.setWidth(window.innerWidth);
+  canvas.setHeight(800);
+  canvas.setWidth(1200);
   canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
   // Set default canvas values
   let eraserMode = false;
