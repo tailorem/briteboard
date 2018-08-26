@@ -13,6 +13,18 @@ document.addEventListener("DOMContentLoaded", function() {
   let currentColor = '#000000';
 
 
+  const socket = io.connect();
+
+  ////////////////////////////////////////////
+  //             CLIENT INFO                //
+  ////////////////////////////////////////////
+
+  // socket.
+  boardId = (window.location.pathname).split('/').reverse()[0];
+  console.log(window.location.pathname);
+
+
+
   ////////////////////////////////////////////
   //             TOOL BUTTONS               //
   ////////////////////////////////////////////
@@ -329,8 +341,6 @@ document.addEventListener("DOMContentLoaded", function() {
   //////////////////////////////////////////
 
 
-    var socket = io.connect();
-
     function addComponent(component) {
       component.toObject = (function(toObject) {
         return function() {
@@ -471,9 +481,5 @@ function Paste() {
 		canvas.requestRenderAll();
 	});
 }
-
-
-
-
 
 });

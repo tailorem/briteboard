@@ -11,13 +11,15 @@ const io = socketIo.listen(server);
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-const cookieSession = require('cookie-session')
-app.use(cookieSession({
-  name: 'session',
-  keys: ['secret', 'key']
-}));
+// Use cookie session for persisting user sessions?
+// const cookieSession = require('cookie-session')
+// app.use(cookieSession({
+//   name: 'session',
+//   keys: ['secret', 'key']
+// }));
 
-const fabric = require('fabric').fabric;
+// Server-side fabric
+// const fabric = require('fabric').fabric;
 
 app.set('view engine', 'ejs');
 
