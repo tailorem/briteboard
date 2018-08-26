@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let canvas = new fabric.Canvas('whiteboard');
   canvas.setHeight(window.innerHeight);
   canvas.setWidth(window.innerWidth);
-
+  canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
   // Set default canvas values
   let eraserMode = false;
   let rectangleMode = false;
