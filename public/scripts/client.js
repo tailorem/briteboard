@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Text box
   $('#textbox').on('click', function(e) {
-    addComponent(new fabric.Textbox('MyText', {
+    addComponent(new fabric.IText('MyText', {
       width: 300,
       height: 300,
       top: 5,
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
           left: 50,
           top: 50,
         }).scale(0.5);
-        canvas.add(image);
+        addComponent(image);
       };
     };
     reader.readAsDataURL(e.target.files[0]);
@@ -239,6 +239,15 @@ document.addEventListener("DOMContentLoaded", function() {
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
+  canvas.on('text:changed', function(event) {
+    // debouncing not required.
+    modifyingComponent(event.target)
+  });
+
+  canvas.on('dragleave', function(event) {
+    // debouncing not required.
+    console.log("Object Scaled", event.target)
+  });
 
   canvas.on('mouse:up', function(event) {
     if (currentMoveTimeout) {
@@ -249,14 +258,16 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-
-  canvas.on('object:moving', function(event) {
-    if (event.target) {
-      setTimeout(function() {
-        modifyingComponent(event.target)
-      }, 25);
-    }
+  canvas.on('object:dragover', function(event) {
+    console.log("Object dragover Event", event.target)
   });
+
+  ['object:rotating', 'object:moving', 'object:scaling', 'object:modified']
+    .forEach(function(eventType) {
+      canvas.on(eventType, function(event) {
+        componentChanged(event)
+      });
+    })
 
   canvas.on('path:created', function(event) {
     let path = event.path;
@@ -332,6 +343,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (rectangeMode) {
       isDown = false;
       enableSelectMode();
+      addComponent(rect);
     }
   });
 
@@ -353,12 +365,25 @@ document.addEventListener("DOMContentLoaded", function() {
     opt.e.stopPropagation();
   });
 
+  function componentChanged(event) {
+    // tbd multi selection
+    if (event.target) {
+      if (event.type === 'activeSelection') {
+        event.forEachObject(function(obj) {
+          setTimeout(function() {
+            modifyingComponent(obj)
+          }, 25); });
+      } else {
+          setTimeout(function() { modifyingComponent(event.target) }, 25);
+      }
+    }
+  }
   //////////////////////////////////////////
   //              SOCKET IO               //
   //////////////////////////////////////////
 
 
-    function addComponent(component) {
+    function addComponent(component, ignoreCanvas) {
       component.toObject = (function(toObject) {
         return function() {
           return fabric.util.object.extend(toObject.call(this), {
@@ -367,8 +392,11 @@ document.addEventListener("DOMContentLoaded", function() {
         };
       })(component.toObject);
       component.id = uuidv4();
-      canvas.add(component);
+      if(!ignoreCanvas) {
+        canvas.add(component);
+      }
       socket.emit('create_component',component.toJSON());
+      canvas.setActiveObject(component);
     };
 
     // Remove component
@@ -387,11 +415,13 @@ document.addEventListener("DOMContentLoaded", function() {
   function modifyingComponent(component) {
     let param = {
       id: component.id,
+      type: component.type,
       left: component.left,
       top: component.top,
       scaleX: component.scaleX,
       scaleY: component.scaleY,
-      angle: component.angle
+      angle: component.angle,
+      text: component.text
     };
     if (DEBUG) console.log("Modify", component)
     socket.emit("modify_component", param)
@@ -435,12 +465,14 @@ document.addEventListener("DOMContentLoaded", function() {
   socket.on('modify_component', function(data) {
     if (DEBUG) console.log("receiving modifying data", data)
     let targetComponent = findComonent(data.id)
+    if (DEBUG) console.log("receiving modifying on comp", targetComponent)
     if (targetComponent) {
       targetComponent.left = data.left;
       targetComponent.top = data.top;
       targetComponent.scaleX = data.scaleX;
       targetComponent.scaleY = data.scaleY;
       targetComponent.angle = data.angle;
+      targetComponent.set("text",data.text);
       canvas.renderAll();
     } else {
       if (DEBUG) console.log("Unknown Component Modified.", data)
@@ -470,8 +502,14 @@ function Copy() {
 	});
 }
 
+function absComponent(component) {
+  if (component.group === 'activeSelection') {
+
+  }
+}
 function Paste() {
   // clone again, so you can do multiple copies.
+  let comps = [];
   if(!_clipboard) return
 
 	_clipboard.clone(function(clonedObj) {
@@ -485,17 +523,29 @@ function Paste() {
 			// active selection needs a reference to the canvas.
 			clonedObj.canvas = canvas;
 			clonedObj.forEachObject(function(obj) {
-				addComponent(obj);
+        canvas.add(obj);
+        comps.push(obj);
 			});
 			// this should solve the unselectability
 			clonedObj.setCoords();
 		} else {
-			addComponent(clonedObj);
-		}
+      canvas.add(clonedObj);
+      comps.push(clonedObj);
+    }
+
 		_clipboard.top += 10;
 		_clipboard.left += 10;
 		canvas.setActiveObject(clonedObj);
-		canvas.requestRenderAll();
+    canvas.requestRenderAll();
+    console.log("cloned for each", comps)
+
+    // canvas.discardActiveObject();
+    comps.forEach(function(each) {
+      each.canvas.calcOffset();
+      console.log("Clones...", canvas.getObjects())
+      addComponent(each, true)
+      console.log("cloning...each", each.aCoords)
+      console.log("clone...group", each.group)});
 	});
 }
 
