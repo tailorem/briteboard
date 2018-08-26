@@ -22,21 +22,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function listUsers(users) {
     $users = $('#users');
+    console.log(users);
     $users.empty(); // improve this by removing user by id?
-    users.forEach(function(user) {
+    users.forEach(function(user, index) {
+      userId = Object.keys(user)[0];
+      user = user[Object.keys(user)[0]];
       $("<h3>").text(user.name).appendTo($users);
     });
   }
 
+  let displayedUsers = [];
+
   boardId = (window.location.pathname).split('/').reverse()[0];
   // console.log(boardId);
 
-  socket.on('new connection', function(currentUsers) {
-    listUsers(currentUsers);
+  socket.on('new connection', function(user) {
+    console.log(user);
+    // listUsers(currentUsers);
   });
 
-  socket.on('user disconnected', function(currentUsers) {
-    listUsers(currentUsers);
+  socket.on('user disconnected', function(user) {
+    console.log(user);
+    // listUsers(currentUsers);
   });
 
 

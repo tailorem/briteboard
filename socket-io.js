@@ -1,16 +1,16 @@
 const boards = require('./db/boards');
 const clients = {};
 
-getCurrentUsers = (board) => {
-  const currentUsers = [];
-  for (let client in clients) {
-    // console.log(clients[client].boardId, board)
-    if (clients[client].boardId === board) {
-      currentUsers.push(clients[client]);
-    }
-  }
-  return currentUsers;
-}
+// getCurrentUsers = (board) => {
+//   const currentUsers = [];
+//   for (let client in clients) {
+//     // console.log(clients[client].boardId, board)
+//     if (clients[client].boardId === board) {
+//       currentUsers.push({ [client]: clients[client] });
+//     }
+//   }
+//   return currentUsers;
+// }
 
 module.exports = (io/*, dataHelpers*/) => {
 
@@ -43,7 +43,7 @@ module.exports = (io/*, dataHelpers*/) => {
     const board = (socket.request.headers.referer).split('/').reverse()[0];
     const client = { name: 'Anon', boardId: board };
     clients[socket.id] = client;
-    io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
+    io/*socket.broadcast.to(board)*/.emit('new connection', { [socket.id]: clients[socket.id], action: "join" } /* getCurrentUsers(board) */);
 
     socket.on('disconnect', (reason) => {
       // if (reason === 'io server disconnect') {
@@ -51,8 +51,8 @@ module.exports = (io/*, dataHelpers*/) => {
       //   socket.connect();
       // }
       // else the socket will automatically try to reconnect
+      io/*socket.broadcast.to(board)*/.emit('user disconnected', { [socket.id]: clients[socket.id], action: "leave" } /* getCurrentUsers(board) */);
       delete clients[socket.id];
-      io/*socket.broadcast.to(board)*/.emit('user disconnected', getCurrentUsers(board));
     });
     // console.log(socket.id, board);
     // socket.broadcast.emit('user connected', socket.id);
