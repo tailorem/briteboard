@@ -44,7 +44,7 @@ module.exports = (io/*, dataHelpers*/) => {
     socket.emit('select username');
 
     const board = (socket.request.headers.referer).split('/').reverse()[0];
-    const client = { name: 'Anon', boardId: board };
+    const client = { boardId: board };
     clients[socket.id] = client;
     io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
 

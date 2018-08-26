@@ -10,10 +10,6 @@ html, body, .main{
   overflow: hidden;
 }
 
-h1 {
-  color: white;
-}
-
 button {
   padding: 10px 10px 10px 10px;
   color: white;
@@ -43,7 +39,7 @@ button:hover {
 
 .nav-top {
   align-items: center;
-  background-color: grey;
+  background-color: lightgrey;
   display: flex;
   justify-content: space-between;
   padding: .5em;

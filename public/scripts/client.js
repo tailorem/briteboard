@@ -21,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
+  const individual = {
+    name: "anon"
+  };
+
   function listUsers(users) {
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
