@@ -12,10 +12,8 @@ getCurrentUsers = (board) => {
   return currentUsers;
 }
 
-module.exports = (io/*, dataHelpers*/) => {
-
   // array of all lines drawn
-  const componentHistory = [];
+  let componentHistory = [];
 
   let DEBUG = false;
 
@@ -38,6 +36,10 @@ module.exports = (io/*, dataHelpers*/) => {
   function removeFromHistory(id) {
     componentHistory = componentHistory.filter(each => each.id !== id)
   }
+
+
+// Export socket events to server.js
+module.exports = (io/*, dataHelpers*/) => {
 
   io.on('connection', function(socket) {
 
