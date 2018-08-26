@@ -6,13 +6,15 @@ module.exports = (io/*, dataHelpers*/) => {
   // array of all lines drawn
   var componentHistory = [];
 
+  let DEBUG = false;
+
   // update component history with incoming changes
   // event-handler for new incoming connections
   function updateComponentHistory(changes) {
     history = componentHistory.find(each => each.id === changes.id);
     if (history) {
-      console.log("History changes", changes);
-      console.log("History: before", history.comp)
+      if (DEBUG) console.log("History changes", changes);
+      if (DEBUG) console.log("History: before", history.comp)
       history.left = changes.left;
       history.top = changes.top,
       history.height = changes.height;
@@ -28,7 +30,7 @@ module.exports = (io/*, dataHelpers*/) => {
   io.on('connection', function(socket) {
     clients.push(socket.id);
 
-    console.log(boards);
+    if (DEBUG) console.log(boards);
     // console.log("SOCKET", socket);
     // const referer = (socket.request.headers.referer).split('/').reverse()[0];
 

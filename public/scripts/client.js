@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   const socket = io.connect();
+  let DEBUG = false;
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -140,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
-    // console.log(e);
+    if (DEBUG) console.log(e);
 
     let xpos = e.offsetX;
     let ypos = e.offsetY;
@@ -156,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       //attach event handlers here...
       reader.onload = function(e) {
-        // console.log('second event:', e);
+        if (DEBUG) console.log('second event:', e);
         let img = new Image();
         img.src = e.target.result;
 
@@ -268,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })(path.toObject);
 
     path.id = uuidv4();
-    console.log("PATH CREATED:", path);
+    if (DEBUG) console.log("PATH CREATED:", path);
     socket.emit("path_created", path.toJSON())
   });
 
@@ -392,14 +393,14 @@ document.addEventListener("DOMContentLoaded", function() {
       scaleY: component.scaleY,
       angle: component.angle
     };
-    console.log("Modify", component)
+    if (DEBUG) console.log("Modify", component)
     socket.emit("modify_component", param)
-    // console.log("moving", param, component)
+    if (DEBUG) console.log("moving", param, component)
   };
 
   // path created received from server
   socket.on('path_created', function(path) {
-    console.log('incoming', path);
+    if (DEBUG) console.log('incoming', path);
     fabric.util.enlivenObjects([path], function(objects) {
       objects.forEach(function(p) {
         canvas.add(p);
@@ -409,7 +410,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // draw component received from server
   socket.on('create_component', function(data) {
-    // console.log("incomding add", data)
+    if (DEBUG) console.log("incomding add", data)
    fabric.util.enlivenObjects([data], function(objects) {
       objects.forEach(function(p) {
         canvas.add(p);
@@ -419,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // delete component request from server
   socket.on('remove_component', function(data) {
-    console.log("receiving data", data)
+    if (DEBUG) console.log("receiving data", data)
     let component = findComonent(data.id)
     if (component) {
       canvas.remove(component);
@@ -432,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // modify component received from server
   socket.on('modify_component', function(data) {
-    console.log("receiving modifying data", data)
+    if (DEBUG) console.log("receiving modifying data", data)
     let targetComponent = findComonent(data.id)
     if (targetComponent) {
       targetComponent.left = data.left;
@@ -442,7 +443,7 @@ document.addEventListener("DOMContentLoaded", function() {
       targetComponent.angle = data.angle;
       canvas.renderAll();
     } else {
-      console.log("Unknown Component Modified.", data)
+      if (DEBUG) console.log("Unknown Component Modified.", data)
     }
   });
 
