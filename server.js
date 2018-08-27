@@ -5,8 +5,13 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 
+const mongoose = require('mongoose');
+
 const socketIo = require('socket.io');
 const io = socketIo.listen(server);
+
+io.set('heartbeat timeout', 4000);
+io.set('heartbeat interval', 2000);
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -23,10 +28,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set('view engine', 'ejs');
 
-const PORT = 3000;
+// DB Config
+const db = require('./db/config/keys').mongoURI;
+
+// Connect to MongoDB
+mongoose.connect(db, { useNewUrlParser: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
+
+const PORT = process.env.PORT || 3000;
 
 // start web server
-server.listen(PORT);
+server.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+});
 
 // add directory with our static files
 app.use(express.static(__dirname + '/public'));

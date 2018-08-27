@@ -11,6 +11,7 @@
   <link rel="stylesheet" type="text/css" href="/vendor/normalize.css" />
   <link rel="stylesheet" type="text/css" href="/styles/board.css" />
   <link rel="stylesheet" type="text/css" href="/vendor/spectrum.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
 </head>
 
@@ -19,6 +20,7 @@
 <div class="main">
   <header class="nav-top">
     <h1><%= board.name %></h1>
+    <h2><%= board.id %></h2>
 
     <div id="users"></div>
 
@@ -31,21 +33,23 @@
 
   <div class="container">
     <div class="nav-left">
-      <button id="select">Select</button>
-      <button id="hand">Hand</button>
-      <button id="draw">Draw</button>
-      <button id="circle">Circle</button>
-      <button id="draw-rect">Draw Square</button>
-      <button id="textbox">Text</button>
-      <button id="delete">Delete</button>
-      <label for="add-image" class="custom-file-upload">Add Image</label>
+      <button id="select"><i class="fas fa-mouse-pointer"></i></button>
+      <button id="hand"><i class="fas fa-hand-paper"></i></button>
+      <button id="draw"><i class="fas fa-pen"></i></button>
+      <button id="circle"><i class="far fa-circle"></i></button>
+      <button id="draw-rect"><i class="far fa-square"></i></button>
+      <button id="textbox"><i class="fas fa-font"></i></button>
+      <button id="delete"><i class="fas fa-trash-alt"></i></button>
+      <label for="add-image" class="custom-file-upload"><i class="far fa-images"></i></label>
       <input id="add-image" type="file" />
-      <button id="duplicate">Duplicate</button>
-      <button id="small-brush">Small</button>
-      <button id="medium-brush">Medium</button>
-      <button id="large-brush">Large</button>
+      <button id="duplicate"><i class="far fa-copy"></i></button>
+      <button id="small-brush">Sml</button>
+      <button id="medium-brush">Med</button>
+      <button id="large-brush">Lrg</button>
       <input id="colorPicker" />
-      <button id="save-image">Save Image</button>
+      <button id="save-image"><i class="fas fa-file-download"></i></button>
+      <label for="add-background" class="custom-file-upload"><i class="far fa-images"></i></label>
+      <input id="add-background" type="file" />
     </div>
 
     <div class="board">
@@ -56,7 +60,7 @@
 
   <script src="../vendor/jquery-3.3.1.min.js"></script>
   <script src="../vendor/uuidv4.min.js"></script>
-  <script src="../socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
   <script src="../vendor/fabric.js"></script>
   <script src="../scripts/client.js"></script>
   <script src="../scripts/video.js"></script>

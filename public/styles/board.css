@@ -23,6 +23,7 @@ button {
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   outline: 0;
+  font-size: 14px;
 }
 
 button:hover {
@@ -62,7 +63,7 @@ button:hover {
 }
 
 .main {
-  background-color: rgb(238, 239, 230);
+  background-color: white;
   height: 100%;
   width: 100%;
 }
@@ -92,7 +93,7 @@ input[type="file"] {
   padding: 10px 10px 10px 10px;
   color: white;
   font-family: arial;
-  font-size: 10px;
+  font-size: 14px;
   letter-spacing: 1px;
   text-transform: uppercase;
   text-align: center;
