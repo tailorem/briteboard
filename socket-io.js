@@ -1,5 +1,17 @@
 const boards = require('./db/boards');
 const clients = {};
+const Board = require('./db/models/Board.js');
+
+// UPDATE DATABASE
+// Board.update(
+//  { 'id': 'erjb0tx8' },
+//  { "$push": { "componentHistory": {test: 'test'} } },
+//  function(err,callback) {
+//  });
+//
+// Board.findOne({ 'id': 'erjb0tx8'  }, function(err, targetBoard) {
+//   console.log(targetBoard);
+// });
 
 getCurrentUsers = (board) => {
   const currentUsers = [];
