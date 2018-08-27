@@ -15,7 +15,7 @@ getCurrentUsers = (board) => {
 module.exports = (io/*, dataHelpers*/) => {
 
   // array of all lines drawn
-  const componentHistory = [];
+  let componentHistory = [];
 
   let DEBUG = false;
 
