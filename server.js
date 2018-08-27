@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 
@@ -16,6 +15,7 @@ io.set('heartbeat interval', 2000);
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 // Use cookie session for persisting user sessions?
 // const cookieSession = require('cookie-session')
 // app.use(cookieSession({
@@ -26,6 +26,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Server-side fabric
 // const fabric = require('fabric').fabric;
 
+
 app.set('view engine', 'ejs');
 
 // DB Config
@@ -33,7 +34,11 @@ const db = require('./db/config/keys').mongoURI;
 
 // Connect to MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
-  .then(() => console.log('MongoDB connected'))
+  .then(() => {
+    console.log('MongoDB connected')
+    /* load all boards into memory from db */
+    /* server.listen */
+  })
   .catch(err => console.log(err));
 
 const PORT = process.env.PORT || 3000;

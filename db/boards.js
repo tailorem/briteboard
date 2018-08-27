@@ -11,4 +11,13 @@ const boards = {
   }
 }
 
-module.exports = boards;
+module.exports = {
+  initializeBoard(id, data) {
+  },
+  getBoard(id) {
+    return boards[id]
+  },
+  updateBoard(id, data) {
+
+  }
+}
