@@ -23,33 +23,36 @@ app.use(bodyParser.urlencoded({extended: true}));
 //   keys: ['secret', 'key']
 // }));
 
-// Server-side fabric
-// const fabric = require('fabric').fabric;
-
+// Set view engine
 app.set('view engine', 'ejs');
 
 // DB Config
 const db = require('./db/config/keys').mongoURI;
+const PORT = process.env.PORT || 3000;
+const routes = require("./routes/routes.js")();
+
 
 // Connect to MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .then(() => {
+    console.log('MongoDB connected!');
 
-const PORT = process.env.PORT || 3000;
+  // start web server
+  server.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+  });
 
-// start web server
-server.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+  // add directory with our static files
+  app.use(express.static(__dirname + '/public'));
+  console.log("Server running on 127.0.0.1:3000");
 
-// add directory with our static files
-app.use(express.static(__dirname + '/public'));
-console.log("Server running on 127.0.0.1:3000");
+  app.use("/boards", routes);
 
-const routes = require("./routes/routes.js")();
-app.use("/boards", routes);
+  // TODO: add 404 error handling
 
-// TODO: add 404 error handling
+  require('./socket-io')(io/*, dataHelpers*/)
+})
+  .catch(err => {
+    throw(err);
+  });
 
-require('./socket-io')(io/*, dataHelpers*/)
