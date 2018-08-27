@@ -10,6 +10,9 @@ const mongoose = require('mongoose');
 const socketIo = require('socket.io');
 const io = socketIo.listen(server);
 
+io.set('heartbeat timeout', 4000);
+io.set('heartbeat interval', 2000);
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 

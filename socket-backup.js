@@ -12,17 +12,12 @@ getCurrentUsers = (board) => {
   return currentUsers;
 }
 
-module.exports = (io/*, dataHelpers*/) => {
-
-  // array of all lines drawn
-  let componentHistory = [];
-
   let DEBUG = false;
 
   // update component history with incoming changes
   // event-handler for new incoming connections
-  function updateComponentHistory(changes) {
-    history = componentHistory.find(each => each.id === changes.id);
+  function updateComponentHistory(changes, board) {
+    history = boards[board].componentHistory.find(each => each.id === changes.id);
     if (history) {
       if (DEBUG) console.log("History changes", changes);
       if (DEBUG) console.log("History: before", history.comp)
@@ -36,13 +31,15 @@ module.exports = (io/*, dataHelpers*/) => {
     }
   }
 
-  function removeFromHistory(id) {
-    componentHistory = componentHistory.filter(each => each.id !== id)
+  function removeFromHistory(id, board) {
+    boards[board].componentHistory = boards[board].componentHistory.filter(each => each.id !== id)
   }
 
-  io.on('connection', function(socket) {
-    console.log("client connected")
 
+// Export socket events to server.js
+module.exports = (io/*, dataHelpers*/) => {
+
+  io.on('connection', function(socket) {
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -56,25 +53,21 @@ module.exports = (io/*, dataHelpers*/) => {
     const client = { name: 'Anon', boardId: board };
     clients[socket.id] = client;
 
-    // Send connection message to client
-    socket.emit('connected', { currentUsers: getCurrentUsers(board), notification: "You've successfully connected!" });
+    io.in(board).emit('new connection', 'Someone has joined the room!');
+    // io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
 
-    // Send connection message to other clients in the room
-    socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
-
-    //
     // socket.on('username selected', (username) => {
     //   clients[socket.id].name = username;
     //   io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
     //   console.log("username selected");
     // });
 
-    // Send disconnect message to everyone in the room
-    socket.on('disconnect', (reason) => {
-      delete clients[socket.id];
-      io.in(board).emit('user disconnected', { currentUsers: getCurrentUsers(board), notification: "Someone has left the room!" });
-      console.log("client disconnected")
-    });
+
+    // socket.on('disconnect', (reason) => {
+    //   delete clients[socket.id];
+    //   io/*socket.broadcast.to(board)*/.emit('user disconnected', getCurrentUsers(board));
+    //   console.log("client disconnected")
+    // });
     // console.log(socket.id, board);
     // socket.broadcast.emit('user connected', socket.id);
 
@@ -83,33 +76,41 @@ module.exports = (io/*, dataHelpers*/) => {
   //             CAVAS EVENTS               //
   ////////////////////////////////////////////
 
-    if (DEBUG) console.log(boards);
+    console.log(boards);
     // console.log("SOCKET", socket);
 
     // first send the history to the new client
-    for (let data of componentHistory) {
-      socket.emit('create_component', data);
-    }
+
+    // try {
+    //   for (let data of boards[board].componentHistory) {
+    //     socket.emit('create_component', data);
+    //   }
+    // } catch(error) {
+    //   console.error(error);
+    //   // expected output: SyntaxError: unterminated string literal
+    //   // Note - error messages will vary depending on browser
+    // }
+
 
     // add handler for broadcast new component
     socket.on('create_component', function(data) {
-      componentHistory.push(data)
-      socket.broadcast.emit('create_component', data);
+      boards[board].componentHistory.push(data)
+      io.to(board).emit('create_component', data);
     })
 
     socket.on('modify_component', function(data) {
-      updateComponentHistory(data);
-      socket.broadcast.emit('modify_component', data);
+      updateComponentHistory(data, board);
+      io.to(board).emit('modify_component', data);
     })
 
     socket.on('remove_component', function(data) {
-      removeFromHistory(data.id)
-      socket.broadcast.emit('remove_component', data);
+      removeFromHistory(data.id, board)
+      io.to(board).emit('remove_component', data);
     })
 
     socket.on('path_created', function(data) {
-      componentHistory.push(data)
-      socket.broadcast.emit('path_created', data);
+      boards[board].componentHistory.push(data)
+      io.to(board).emit('path_created', data);
     })
   });
 }

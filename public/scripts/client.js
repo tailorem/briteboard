@@ -48,6 +48,8 @@ $(document).ready(function () {
     $("#select-username").on('submit', function(e){
       e.preventDefault();
       $username = $('#select-username input').val();
+
+      // Send username to server
       socket.emit('username selected', $username);
       $('#username-form').remove();
 
@@ -55,7 +57,15 @@ $(document).ready(function () {
     });
   })();
 
+  socket.on('connected', function(msg) {
+    console.log(msg);
+  });
+
   socket.on('new connection', function(msg) {
+    console.log(msg);
+  });
+
+  socket.on('user disconnected', function(msg) {
     console.log(msg);
   });
 
