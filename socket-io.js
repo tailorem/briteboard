@@ -8,10 +8,21 @@ const Board = require('./db/models/Board.js');
 //  { "$push": { "componentHistory": {test: 'test'} } },
 //  function(err,callback) {
 //  });
-//
-// Board.findOne({ 'id': 'erjb0tx8'  }, function(err, targetBoard) {
-//   console.log(targetBoard);
-// });
+
+function getBoard(boardId){
+  Board.findOne({ 'id': boardId }, function(err, targetBoard) {
+     console.log(targetBoard.componentHistory);
+  });
+}
+
+function updateBoard(boardId, dataObj){
+ Board.update(
+  { 'id': boardId },
+  { "componentHistory": dataObj } ,
+  function(err,callback) {
+  });
+  console.log('updated DB!');
+}
 
 getCurrentUsers = (board) => {
   const currentUsers = [];
@@ -63,6 +74,7 @@ module.exports = (io/*, dataHelpers*/) => {
     const board = (socket.request.headers.referer).split('/').reverse()[0];
     // boards[board].componentHistory = []; // this line will overwrite board history, should be assigned on creation
 
+
     socket.join(board);
 
     const client = { name: 'Anon', boardId: board };
@@ -106,21 +118,25 @@ module.exports = (io/*, dataHelpers*/) => {
     // add handler for broadcast new component
     socket.on('create_component', function(data) {
       componentHistory.push(data)
+      updateBoard(board, componentHistory);
       socket.broadcast.emit('create_component', data);
     })
 
     socket.on('modify_component', function(data) {
       updateComponentHistory(data);
+      updateBoard(board, componentHistory);
       socket.broadcast.emit('modify_component', data);
     })
 
     socket.on('remove_component', function(data) {
       removeFromHistory(data.id)
+      updateBoard(board, componentHistory);
       socket.broadcast.emit('remove_component', data);
     })
 
     socket.on('path_created', function(data) {
       componentHistory.push(data)
+      updateBoard(board, componentHistory);
       socket.broadcast.emit('path_created', data);
     })
   });
