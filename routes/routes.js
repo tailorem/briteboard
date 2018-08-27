@@ -20,7 +20,7 @@ module.exports = function(DataHelpers) {
     const rNum = rando();
     boards[rNum] = {
       name: req.body.boardName,
-      items: []
+      componentHistory: []
     }
     res.redirect(`/boards/${rNum}`);
   });

@@ -50,26 +50,32 @@ $(document).ready(function () {
       $username = $('#select-username input').val();
       socket.emit('username selected', $username);
       $('#username-form').remove();
+
+      console.log('Username submitted:', $username)
     });
   })();
+
+  socket.on('new connection', function(msg) {
+    console.log(msg);
+  });
 
 
   // boardId = (window.location.pathname).split('/').reverse()[0];
   // console.log(boardId);
 
-  socket.on('new connection', function(currentUsers) {
-    console.log('users after connection', currentUsers);
-    listUsers(currentUsers);
-  });
+  // socket.on('new connection', function(currentUsers) {
+  //   console.log('users after connection', currentUsers);
+  //   listUsers(currentUsers);
+  // });
 
   // socket.on('update username', function(currentUsers) {
   //   // listUsers(currentUsers);
   // });
 
-  socket.on('user disconnected', function(currentUsers) {
-    console.log('users after disconnect', currentUsers);
-    listUsers(currentUsers);
-  });
+  // socket.on('user disconnected', function(currentUsers) {
+  //   console.log('users after disconnect', currentUsers);
+  //   listUsers(currentUsers);
+  // });
 
 
 
