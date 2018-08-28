@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 
@@ -16,12 +15,14 @@ io.set('heartbeat interval', 2000);
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 // Use cookie session for persisting user sessions?
 // const cookieSession = require('cookie-session')
 // app.use(cookieSession({
 //   name: 'session',
 //   keys: ['secret', 'key']
 // }));
+
 
 // Set view engine
 app.set('view engine', 'ejs');

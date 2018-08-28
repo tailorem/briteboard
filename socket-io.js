@@ -1,6 +1,4 @@
-// const boards = require('./db/boards');
 const clients = {};
-// const Board = require('./db/models/Board.js');
 
 // UPDATE DATABASE
 // Board.update(
@@ -9,15 +7,15 @@ const clients = {};
 //  function(err,callback) {
 //  });
 
-// function getBoard(boardId){
-//   Board.findOne({ 'id': boardId }, function(err, targetBoard) {
+// function getBoard(board){
+//   Board.findOne({ 'id': board }, function(err, targetBoard) {
 //      console.log(targetBoard.componentHistory);
 //   });
 // }
 
-// function updateBoard(boardId, dataObj){
+// function updateBoard(board, dataObj){
 //  Board.update(
-//   { 'id': boardId },
+//   { 'id': board },
 //   { "componentHistory": dataObj } ,
 //   function(err,callback) {
 //   });
@@ -35,34 +33,41 @@ getCurrentUsers = (board) => {
   return currentUsers;
 }
 
-module.exports = (io, boards) => {
 
+// update component history with incoming changes
+// event-handler for new incoming connections
+
+function updateboardHistory(changes) {
+  history = boardHistory.find(each => each.id === changes.id);
+  if (history) {
+    if (DEBUG) console.log("History changes", changes);
+    if (DEBUG) console.log("History: before", history.comp)
+    history.left = changes.left;
+    history.top = changes.top,
+    history.height = changes.height;
+    history.scaleX = changes.scaleX,
+    history.scaleY = changes.scaleY,
+    history.angle = changes.angle,
+    history.text = changes.text
+  }
+}
+
+function removeFromHistory(id) {
+  boardHistory = boardHistory.filter(each => each.id !== id)
+}
+
+// Export to server.js
+module.exports = (io, boards) => {
   // array of all lines drawn
-  let componentHistory = [];
+  // let boardHistory = [];
+  // let allBoardsData = boards.getAllBoards();
+  // console.log("ALL BOARDS DATA", allBoardsData);
+
 
   let DEBUG = false;
 
-  // update component history with incoming changes
-  // event-handler for new incoming connections
-  function updateComponentHistory(changes) {
-    history = componentHistory.find(each => each.id === changes.id);
-    if (history) {
-      if (DEBUG) console.log("History changes", changes);
-      if (DEBUG) console.log("History: before", history.comp)
-      history.left = changes.left;
-      history.top = changes.top,
-      history.height = changes.height;
-      history.scaleX = changes.scaleX,
-      history.scaleY = changes.scaleY,
-      history.angle = changes.angle,
-      history.text = changes.text
-    }
-  }
 
-  function removeFromHistory(id) {
-    componentHistory = componentHistory.filter(each => each.id !== id)
-  }
-
+  // SOCKET CONNECTION RECEIVED
   io.on('connection', function(socket) {
     console.log("client connected")
 
@@ -73,18 +78,18 @@ module.exports = (io, boards) => {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
-
-    console.log("all board ids (BEFORE):", boards.getAllBoardIds());
+    // console.log("all board ids (BEFORE):", boards.getAllBoardIds());
 
     const client = { boardId: board };
     // boards[board].componentHistory = []; // this line will overwrite board history, should be assigned on creation
 
 
     // const client = { name: 'Anon', boardId: board };
+
     clients[socket.id] = client;
 
     // Send connection message to client
-    socket.emit('connected', { currentUsers: getCurrentUsers(board), notification: "You've successfully connected!" });
+    socket.emit('connected', { currentUsers: getCurrentUsers(board), notification: "You've successfully connected!", data: boards.getBoard(board) });
 
     // Send connection message to other clients in the room
     socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
@@ -113,34 +118,40 @@ module.exports = (io, boards) => {
     if (DEBUG) console.log(boards);
     // console.log("SOCKET", socket);
 
+    const boardHistory = boards.getBoardHistory(board);
+    if (DEBUG) console.log("BOARD HISTORY", boardHistory);
+
     // first send the history to the new client
-    for (let data of componentHistory) {
+    for (let data of boardHistory) {
       socket.emit('create_component', data);
     }
 
     // add handler for broadcast new component
-    socket.on('create_component', function(data) {
-      componentHistory.push(data)
-      updateBoard(board, componentHistory);
-      socket.broadcast.emit('create_component', data);
+    socket.on('create_component', function(objectData) {
+      // boardHistory.push(objectData)
+      // console.log(objectData);
+      boards.updateBoard(board, objectData, boardHistory);
+      socket.broadcast.emit('create_component', objectData);
     })
 
-    socket.on('modify_component', function(data) {
-      updateComponentHistory(data);
-      updateBoard(board, componentHistory);
-      socket.broadcast.emit('modify_component', data);
-    })
+    // // Delete previous object (removeFromHistory) and re-add it...?
+    // socket.on('modify_component', function(objectData) {
+    //   updateboardHistory(objectData);
+    //   boards.updateBoard(board, boardHistory);
+    //   socket.broadcast.emit('modify_component', objectData);
+    // })
 
-    socket.on('remove_component', function(data) {
-      removeFromHistory(data.id)
-      updateBoard(board, componentHistory);
-      socket.broadcast.emit('remove_component', data);
-    })
+    // // Remember to use a separate function for this... (not updateBoard)?
+    // socket.on('remove_component', function(objectData) {
+    //   removeFromHistory(objectData.id)
+    //   boards.updateBoard(board, boardHistory);
+    //   socket.broadcast.emit('remove_component', objectData);
+    // })
 
-    socket.on('path_created', function(data) {
-      componentHistory.push(data)
-      updateBoard(board, componentHistory);
-      socket.broadcast.emit('path_created', data);
-    })
+    socket.on('path_created', function(objectData) {
+      boards.updateBoard(board, objectData, boardHistory);
+      socket.broadcast.emit('path_created', objectData);
+    });
+
   });
 }

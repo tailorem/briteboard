@@ -15,12 +15,9 @@ let boards = [
   }
 ];
 
-
-
 module.exports = {
   init: (success_cb) => {
     // before DB working, do nothing because global boards is already dummy-initialized.
-
 
     /* load all boards into memory from db */
     Board.find({}, (err, dbBoardsData) => {
@@ -30,7 +27,6 @@ module.exports = {
       boards = dbBoardsData;    // or maybe something else?
       if (success_cb) { success_cb(); }
     });
-
 
     // // Promise-y alternative.  Not tested!  May not work!
     // Board.find({}).exec()
@@ -42,12 +38,14 @@ module.exports = {
     //   console.log("holy cow, could not init data");
     // });
 
-
   },
   getBoard: (id) => {
     return boards.filter(b => b.id === id)[0];
   },
-  addObject: (boardId, newObject) => {
+  getBoardHistory: (id) => {
+    return boards.find(b => b.id === id).componentHistory;
+  },
+  addObject: (id, newObject) => {
     // 1) add it to in-memory `boards`
     // 2) add it to the database (for backup)
   },
@@ -57,7 +55,22 @@ module.exports = {
   getAllBoardIds: () => {
     return boards.map(b => b.id);
   },
+  // TODO: Separate this into different functions
+  updateBoard: (id, objectData, boardHistory) => {
+    // add objectData to appropriate board history
+    boards.find(b => b.id === id).componentHistory.push(objectData);
 
+    Board.updateOne(
+    { 'id': id },
+    // { "$push": { "componentHistory": dataObj } },
+    { "componentHistory": boardHistory } ,
+    function(err, callback) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated MongoDB!")
+      }
+    });
+    console.log('updated in memory DB!');
+  }
 }
-
-
