@@ -47,7 +47,7 @@ mongoose.connect(DB_URI, { useNewUrlParser: true })
       console.log(`Server started on port ${PORT}`);
     });
 
-    require('./socket-io')(io, boards);
+    require('./socket-events')(io, boards);
   });
 
 })
