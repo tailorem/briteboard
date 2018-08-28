@@ -1,14 +1,18 @@
-// Test boards
+// In memory array of boards loaded from MongoDB
 
-const boards = {
-  "test": {
+let boards = [
+  {
     name: "Our Test Board",
+    id: "test",
     componentHistory: []
   },
-  "n7sdj02k": {
+  {
     name: "Another Board",
+    id: "n7sdj02k",
     componentHistory: []
   }
-}
+];
 
-module.exports = boards;
+module.exports = {
+
+};
