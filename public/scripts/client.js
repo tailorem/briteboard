@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+$(document).ready(function() {
 
   let canvas = new fabric.Canvas('whiteboard');
   canvas.setHeight(800);
@@ -27,32 +27,64 @@ document.addEventListener("DOMContentLoaded", function() {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
+  const individual = {
+    name: "anon"
+  };
+
   function listUsers(users) {
+    console.log(users);
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
-    users.forEach(function(user, index) {
+    users.forEach(function(user) {
       userId = Object.keys(user)[0];
       user = user[Object.keys(user)[0]];
       $("<h3>").text(user.name).appendTo($users);
     });
   }
 
-  socket.on('select username', function() {
-    $(`<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
+  // On connection, user is prompted to select a username
+  (function() {
+    $(`<div id="username-form" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
         <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
-          <form>
+          <form id="select-username">
             <p>Select a username:</p>
             <input type="text" style="outline: none;" />
             <button>GO</button>
           </form>
         </div>
       </div>`).prependTo(document.body);
+
+    // Once username is selected, the username is sent to the server and the username form/div is removed
+    $("#select-username").on('submit', function(e) {
+      e.preventDefault();
+      $username = $('#select-username input').val();
+
+      // Send username to server
+      socket.emit('username selected', $username);
+      $('#username-form').remove();
+
+      console.log('Username submitted:', $username)
+    });
+  })();
+
+  socket.on('connected', function(msg) {
+    console.log(msg);
   });
+
+  socket.on('new connection', function(msg) {
+    console.log(msg);
+  });
+
+  socket.on('user disconnected', function(msg) {
+    console.log(msg);
+  });
+
 
   // boardId = (window.location.pathname).split('/').reverse()[0];
   // console.log(boardId);
 
   // socket.on('new connection', function(currentUsers) {
+  //   console.log('users after connection', currentUsers);
   //   listUsers(currentUsers);
   // });
 
@@ -60,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function() {
   //   // listUsers(currentUsers);
   // });
 
-  socket.on('user disconnected', function(currentUsers) {
-    listUsers(currentUsers);
-  });
-
+  // socket.on('user disconnected', function(currentUsers) {
+  //   console.log('users after disconnect', currentUsers);
+  //   listUsers(currentUsers);
+  // });
 
 
   ////////////////////////////////////////////
@@ -131,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
       canvas.freeDrawingBrush.color = currentColor;
     }
   });
-  
+
 
   // Change brush sizes
   $('#small-brush').on('click', function(e) {
@@ -219,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function() {
     $("#add-background").val("");
     enableSelectMode();
   });
-  
+
   ////////////////////////////////////////////
   //             TOOL MODES                 //
   ////////////////////////////////////////////
@@ -290,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
     }
-  
+
   // CIRCLE MODE
   function enableCircleMode() {
     clearModes()
@@ -299,7 +331,7 @@ document.addEventListener("DOMContentLoaded", function() {
     $('#circle').addClass('selected');
     makeObjectsSelectable(false);
   }
-  
+
   // RECTANGLE MODE
   function enableRectMode() {
     clearModes()
@@ -398,7 +430,7 @@ document.addEventListener("DOMContentLoaded", function() {
 // console.log("Object Created", event)
 //   });
 
-  
+
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
     isMouseDown = true;
@@ -430,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function() {
   if(DEBUG) console.log(event, event.keyCode);
   if(DEBUG) console.log("control key, meta key", event.ctrlKey, event.metaKey)
   });
-  
+
   // MOUSE UP EVENT
   canvas.on('mouse:up', function(event) {
     isMouseDown = false;
@@ -587,7 +619,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // HANDLE PANNING
     function handlePanning(event) {
       if(mode !== HAND) return;
-  
+
       if(event.e.type === "mousemove") {
         if (this.isDragging) {
           var e = event.e;
@@ -603,7 +635,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.selection = true;
       }
     }
-  
+
   // Zoom in/out with mousewheel
   canvas.on('mouse:wheel', function(opt) {
     var delta = opt.e.deltaY;
