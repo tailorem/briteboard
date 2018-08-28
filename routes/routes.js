@@ -30,15 +30,14 @@ module.exports = function(DataHelpers) {
       console.log('New board added to db:', JSON.stringify(board));
       res.redirect(`/boards/${id}`);
     });
-
   });
 
   // GET SPECIFIC BOARD
   routes.get('/:boardId', function(req, res) {
     const boardId = req.params.boardId;
     Board.findOne({ 'id': boardId }, function(err, board) {
-      if (err) return handleError(err);
-      console.log('Loading board from db:', board);
+      if (err) console.log(err);
+      console.log('Loading board from db:'/*, board*/);
       if (board) {
         res.render('test-board', { board: board });
       } else {

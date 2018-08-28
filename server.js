@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 
@@ -10,8 +9,12 @@ const mongoose = require('mongoose');
 const socketIo = require('socket.io');
 const io = socketIo.listen(server);
 
+io.set('heartbeat timeout', 4000);
+io.set('heartbeat interval', 2000);
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
+
 
 // Use cookie session for persisting user sessions?
 // const cookieSession = require('cookie-session')
@@ -20,33 +23,48 @@ app.use(bodyParser.urlencoded({extended: true}));
 //   keys: ['secret', 'key']
 // }));
 
-// Server-side fabric
-// const fabric = require('fabric').fabric;
 
+// Set view engine
 app.set('view engine', 'ejs');
 
 // DB Config
-const db = require('./db/config/keys').mongoURI;
+const DB_URI = require('./db/config/keys').mongoURI;
+const PORT = process.env.PORT || 3000;
+const routes = require("./routes/routes.js")();
+
 
 // Connect to MongoDB
-mongoose.connect(db, { useNewUrlParser: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+mongoose.connect(DB_URI, { useNewUrlParser: true })
+.then((db) => {
+  console.log('MongoDB connected!');
 
-const PORT = process.env.PORT || 3000;
+  // add directory with our static files
+  app.use(express.static(__dirname + '/public'));
+  console.log("Server running on 127.0.0.1:3000");
 
-// start web server
-server.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  app.use("/boards", routes);
+
+  // TODO: add 404 error handling
+
+  const boards = require('./db/boards');
+
+  // console.log("all board ids (BEFORE):", boards.getAllBoardIds());
+
+  boards.init(() => {
+    console.log("Of a certainty, good friends, I am not dehydrated, let us party");
+
+    // start web server
+    server.listen(PORT, () => {
+      console.log(`Server started on port ${PORT}`);
+    });
+
+    // console.log("all board ids (AFTER):", boards.getAllBoardIds());
+
+    require('./socket-io')(io, boards);
+  });
+
+})
+.catch(err => {
+  throw(err);
 });
 
-// add directory with our static files
-app.use(express.static(__dirname + '/public'));
-console.log("Server running on 127.0.0.1:3000");
-
-const routes = require("./routes/routes.js")();
-app.use("/boards", routes);
-
-// TODO: add 404 error handling
-
-require('./socket-io')(io/*, dataHelpers*/)

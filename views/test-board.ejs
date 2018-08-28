@@ -20,7 +20,7 @@
 <div class="main">
   <header class="nav-top">
     <h1><%= board.name %></h1>
-    <h2><%= board.id %></h2>
+    <!-- <h2><%= board.id %></h2> -->
 
     <div id="users"></div>
 
@@ -53,6 +53,8 @@
         <input type="range" id="border" value="0" min="0" max="10" style="display: block">
       </label>
       <button id="save-image"><i class="fas fa-file-download"></i></button>
+      <label for="add-background" class="custom-file-upload"><i class="far fa-images"></i></label>
+      <input id="add-background" type="file" />
     </div>
 
     <div class="board">
@@ -63,7 +65,7 @@
 
   <script src="../vendor/jquery-3.3.1.min.js"></script>
   <script src="../vendor/uuidv4.min.js"></script>
-  <script src="../socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
   <script src="../vendor/fabric.js"></script>
   <script src="../scripts/client.js"></script>
   <script src="../scripts/video.js"></script>
