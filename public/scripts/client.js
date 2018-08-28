@@ -531,6 +531,7 @@ $(document).ready(function() {
     if(mode !== CIRCLE) return;
 
     if(event.e.type === "mousedown") {
+      canvas.selection = false;
       isDown = true;
       let pointer = canvas.getPointer(event.e);
       origX = pointer.x;
@@ -568,6 +569,7 @@ $(document).ready(function() {
     if(mode !== LINE) return;
 
     if(event.e.type === "mousedown") {
+      canvas.selection = false;
       var pointer = canvas.getPointer(event.e);
       var points = [pointer.x, pointer.y, pointer.x, pointer.y];
       line = new fabric.Line(points, {
@@ -620,7 +622,6 @@ $(document).ready(function() {
     // HANDLE PANNING
     function handlePanning(event) {
       if(mode !== HAND) return;
-
       if(event.e.type === "mousemove") {
         if (this.isDragging) {
           var e = event.e;
@@ -629,6 +630,27 @@ $(document).ready(function() {
           this.requestRenderAll();
           this.lastPosX = e.clientX;
           this.lastPosY = e.clientY;
+
+          // panning code added by Aaron:
+          let delta = new fabric.Point(o.e.movementX, o.e.movementY);
+          canvas.relativePan(delta);
+
+          let canvasViewPort = canvas.viewportTransform;
+
+          let imageHeight = canvas.height * canvasViewPort[0];
+          let imageWidth = canvas.width * canvasViewPort[0];
+
+          let bottomEndPoint = canvas.height * (canvasViewPort[0] - 1);
+          if (canvasViewPort[5] >= 0 || -bottomEndPoint > canvasViewPort[5]) {
+            canvasViewPort[5] = (canvasViewPort[5] >= 0) ? 0 : -bottomEndPoint;
+          }
+
+          let rightEndPoint = canvas.width * (canvasViewPort[0] - 1);
+          if (canvasViewPort[4] >= 0 || -rightEndPoint > canvasViewPort[4]) {
+            canvasViewPort[4] = (canvasViewPort[4] >= 0) ? 0 : -rightEndPoint;
+          }
+          /// End of code added by Aaron
+
         }
       }
       if(event.e.type === "mouseup") {
