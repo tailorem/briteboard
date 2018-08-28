@@ -26,11 +26,15 @@ module.exports = function(DataHelpers) {
       componentHistory: []
     });
 
-    newBoard.save().then(board => {
-      console.log('New board added to db:', JSON.stringify(board));
-      res.redirect(`/boards/${id}`);
-    });
-  });
+    newBoard.save()
+      .then(board => { boards.init() })
+      .then(board => { res.redirect(`/boards/${id}`) });
+
+    //console.log('New board added to db:', JSON.stringify(board));
+
+});
+
+
 
   // GET SPECIFIC BOARD
   routes.get('/:boardId', function(req, res) {

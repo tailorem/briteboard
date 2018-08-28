@@ -43,7 +43,8 @@ module.exports = {
     return boards.filter(b => b.id === id)[0];
   },
   getBoardHistory: (id) => {
-    return boards.find(b => b.id === id).componentHistory;
+    let data = boards.find(b => b.id === id);
+    return data ? data.componentHistory : [];
   },
   deleteObject: (id, boardHistory) => {
     Board.updateOne(
