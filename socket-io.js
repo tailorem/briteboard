@@ -112,8 +112,8 @@ module.exports = (io, boards) => {
     // TODO: update database ON MODIFIED
     // On modified, delete previous object (removeFromHistory) and re-add it...?
     socket.on('modify_component', function(objectData) {
-      updateboardHistory(boardHistory, objectData);
-      boards.updateBoard(board, objectData, boardHistory);
+      // updateboardHistory(boardHistory, objectData);
+      // boards.updateBoard(board, objectData, boardHistory);
       socket.broadcast.emit('modify_component', objectData);
     });
 
