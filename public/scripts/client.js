@@ -530,6 +530,7 @@ $(document).ready(function() {
     if(mode !== CIRCLE) return;
 
     if(event.e.type === "mousedown") {
+      canvas.selection = false;
       isDown = true;
       let pointer = canvas.getPointer(event.e);
       origX = pointer.x;
@@ -567,6 +568,7 @@ $(document).ready(function() {
     if(mode !== LINE) return;
 
     if(event.e.type === "mousedown") {
+      canvas.selection = false;
       var pointer = canvas.getPointer(event.e);
       var points = [pointer.x, pointer.y, pointer.x, pointer.y];
       line = new fabric.Line(points, {
@@ -647,7 +649,7 @@ $(document).ready(function() {
             canvasViewPort[4] = (canvasViewPort[4] >= 0) ? 0 : -rightEndPoint;
           }
           /// End of code added by Aaron
-          
+
         }
       }
       if(event.e.type === "mouseup") {
