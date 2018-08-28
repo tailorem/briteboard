@@ -5,9 +5,15 @@ document.addEventListener("DOMContentLoaded", function() {
   canvas.setWidth(1200);
   canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
   // Set default canvas values
-  let eraserMode = false;
-  let rectangleMode = false;
-  let handMode = false;
+  const ERASE = 0;
+  const LINE = 1;
+  const RECT = 2;
+  const CIRCLE = 3;
+  const HAND = 4;
+  const SELECT = 5;
+  const TEXTBOX = 6;
+  const DRAW = 7
+  let mode = SELECT;
   enableSelectMode();
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
@@ -65,57 +71,28 @@ document.addEventListener("DOMContentLoaded", function() {
   ////////////////////////////////////////////
 
   // Select Tool
-  $('#select').on('click', function(e) {
-    enableSelectMode();
-  });
+  $('#select').on('click', function(e) { enableSelectMode() });
 
   // Hand Tool (Move canvas)
-  $('#hand').on('click', function(e) {
-    enableHandMode();
-  });
-
+  $('#hand').on('click', function(e) { enableHandMode() });
 
   // Draw Tool
-  $('#draw').on('click', function(e) {
-    enableDrawingMode();
-  });
+  $('#draw').on('click', function(e) { enableDrawingMode() });
+
+  // Line Tool
+  $('#line').on('click', function(e) { enableLineMode() });
 
   // Circle Tool
-  $('#circle').on('click', function(e) {
-    addComponent(new fabric.Circle({
-      left: 100,
-      top: 100,
-      radius: 75,
-      fill: currentColor
-    }));
-    enableSelectMode();
-  });
+  $('#circle').on('click', function(e) { enableCircleMode() });
 
   // Draw Rectangle Tool
-  $('#draw-rect').on('click', function(e) {
-    enableRectMode();
-  });
+  $('#draw-rect').on('click', function(e) { enableRectMode() });
 
   // Text box
-  $('#textbox').on('click', function(e) {
-    addComponent(new fabric.IText('MyText', {
-      width: 300,
-      height: 300,
-      top: 5,
-      left: 5,
-      hasControls: false,
-      fontSize: 30,
-      fixedWidth: 300,
-      fixedFontSize: 30,
-      fill: currentColor
-    }))
-    enableSelectMode();
-  });
+  $('#textbox').on('click', function(e) { enableTxtBoxMode() });
 
   // Delete Tool
-  $('#delete').on('click', function(e) {
-    enableEraserMode();
-  });
+  $('#delete').on('click', function(e) { enableEraserMode() });
 
   // Add Image Tool
   $('#add-image').on('change', function(e) {
@@ -146,13 +123,15 @@ document.addEventListener("DOMContentLoaded", function() {
       ['#FF4136', '#0074D9'],
       ['#2ECC40', '#f9f878'],
       ['#be50b7', '#FF851B'],
-      ['#39CCCC', '#AAAAAA']
+      ['#39CCCC', '#AAAAAA'],
+      ['transparent']
     ],
     change: function(color) {
       currentColor = color.toHexString()
       canvas.freeDrawingBrush.color = currentColor;
     }
   });
+  
 
   // Change brush sizes
   $('#small-brush').on('click', function(e) {
@@ -227,73 +206,90 @@ document.addEventListener("DOMContentLoaded", function() {
   //             TOOL MODES                 //
   ////////////////////////////////////////////
 
+  // Make Objects Selectable
+  function makeObjectsSelectable(boolean) {
+    canvas.forEachObject(function(o) {
+      o.set({
+        selectable: boolean
+      }).setCoords();
+    })
+  }
+
+
   // CLEAR ALL MODES
   function clearModes() {
     $(".selected").removeClass("selected");
     canvas.isDrawingMode = false;
     canvas.selection = true;
-    eraserMode = false;
-    rectangeMode = false;
-    handMode = false;
-    canvas.forEachObject(function(o) {
-      o.set({
-        selectable: true
-      }).setCoords();
-    })
+    mode = SELECT;
+    makeObjectsSelectable(true);
   }
 
   // DRAWING MODE
   function enableDrawingMode() {
     clearModes();
     canvas.isDrawingMode = true;
+    mode = DRAW;
     $('#draw').addClass('selected');
+  }
+
+  // LINE MODE
+  function enableLineMode() {
+    clearModes();
+    mode = LINE;
+    makeObjectsSelectable(false);
+    $('#line').addClass('selected');
+  }
+
+  // TEXTBOX MODE
+  function enableTxtBoxMode() {
+    clearModes();
+    mode = TEXTBOX;
+    makeObjectsSelectable(false);
+    $('#textbox').addClass('selected');
   }
 
   // SELECT MODE
   function enableSelectMode() {
     clearModes();
+    mode = SELECT;
     $('#select').addClass('selected');
   }
 
   // HAND MODE
   function enableHandMode() {
     clearModes();
+    mode = HAND;
     canvas.discardActiveObject();
     $('#hand').addClass('selected');
-    handMode = true;
-    canvas.forEachObject(function(o) {
-      o.set({
-        selectable: false
-      });
-    });
-}
+    makeObjectsSelectable(false);
+  }
 
   // ERASER MODE
   function enableEraserMode() {
-    let currentSelection = canvas.getActiveObjects();
-    if (currentSelection.length > 0) {
-      removeComponent();
-      enableSelectMode();
-    } else {
-      clearModes();
-      $('#delete').addClass('selected');
-      eraserMode = true;
+    clearModes();
+    mode = ERASE;
+    canvas.discardActiveObject();
+    $('#delete').addClass('selected');
     }
+  
+  // CIRCLE MODE
+  function enableCircleMode() {
+    clearModes()
+    mode = CIRCLE;
+    canvas.discardActiveObject();
+    $('#circle').addClass('selected');
+    makeObjectsSelectable(false);
   }
-
+  
   // RECTANGLE MODE
   function enableRectMode() {
     clearModes()
+    mode = RECT;
     canvas.discardActiveObject();
     $('#draw-rect').addClass('selected');
-    rectangeMode = true;
-    canvas.forEachObject(function(o) {
-      o.set({
-        selectable: false
-      });
-    });
+    makeObjectsSelectable(false);
   }
-
 
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
@@ -307,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (currentMoveTimeout) {
       clearTimeout(currentMoveTimeout)
     }
-    if (eraserMode) {
+    if (mode === ERASE) {
       removeComponent();
     }
   });
@@ -320,6 +316,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
   canvas.on('path:created', function(event) {
+    console.log("path event", event)
     let path = event.path;
     path.toObject = (function(toObject) {
       return function() {
@@ -334,16 +331,117 @@ document.addEventListener("DOMContentLoaded", function() {
     socket.emit("path_created", path.toJSON())
   });
 
+  let rect, line, circle, isMouseDown, origX, origY;
+  // TOOLS EVENT HANDLING
+  ['mouse:down', 'mouse:move', 'mouse:up']
+    .forEach(function(eventType) {
+      canvas.on(eventType, function(event) {
+        handleDrawRect(event);
+        handleDrawCircle(event);
+        handleDrawLine(event);
+        handleDropTextBox(event);
+        handlePanning(event);
+    });
+  })
+
+  //////////////////
+  // TOUCH EVENTS //
+  //////////////////
+// canvas.addEventListener("touchstart", function (e) {
+//   e.preventDefault();
+//   var mousePos = getTouchPos(canvas, e);
+//   var touch = e.touches[0];
+//   console.log("touch start", e, mousePos)
+//   // do_mouse_click_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
+// }, false);
+
+// canvas.addEventListener("touchend", function (e) {
+//   e.preventDefault();
+//   var mousePos = getTouchPos(canvas, e);
+//   console.log("touch end", e, mousePos)
+//   // do_mouse_up_logic(mousePos.x, mousePos.y);
+// }, false);
+
+// canvas.addEventListener("touchmove", function (e) {
+//   e.preventDefault();
+//   var mousePos = getTouchPos(canvas, e);
+//   var touch = e.touches[0];
+//   console.log("touch move", e, mousePos)
+//   // do_mouse_move_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
+// }, false);
+
+// function getTouchPos(canvasDom, touchEvent) {
+//   var rect = canvasDom.getBoundingClientRect();
+//   return {
+//     x: touchEvent.touches[0].clientX - rect.left,
+//     y: touchEvent.touches[0].clientY - rect.top
+//   };
+// }
+ ////////////////////////////
+
+//   canvas.on('object:added', function(event) {
+// console.log("Object Created", event)
+//   });
+
+  
   /// MOUSE DOWN EVENT
-  let rect, isDown, origX, origY;
-  canvas.on('mouse:down', function(o) {
-    if (rectangeMode) {
+  canvas.on('mouse:down', function(event) {
+    isMouseDown = true;
+    if (mode === HAND) {
       canvas.selection = false;
-      isDown = true;
-      var pointer = canvas.getPointer(o.e);
+      let evt = event.e;
+      this.isDragging = true;
+      this.selection = false;
+      this.lastPosX = evt.clientX;
+      this.lastPosY = evt.clientY;
+    }
+  });
+
+  document.addEventListener('keydown', function(event){
+    var char = event.keyCode;
+    var ctrlMetaDown = event.ctrlKey || event.metaKey;
+    console.log("event shift", event.shiftKey)
+    if(ctrlMetaDown && char === 67) Copy();
+    if(ctrlMetaDown && char === 86) Paste();
+    if(!ctrlMetaDown && char === 8) {
+
+      let currentSelection = canvas.getActiveObjects();
+      if (currentSelection.length > 0) {
+        removeComponent();
+        enableSelectMode();
+      }
+    }
+
+  if(DEBUG) console.log(event, event.keyCode);
+  if(DEBUG) console.log("control key, meta key", event.ctrlKey, event.metaKey)
+  });
+  
+  // MOUSE UP EVENT
+  canvas.on('mouse:up', function(event) {
+    isMouseDown = false;
+
+    if (mode === ERASE) {
+      removeComponent();
+    }
+    if (currentMoveTimeout) {
+      clearTimeout(currentMoveTimeout)
+    }
+  });
+
+  /////////////
+  /// Tools ///
+  /////////////
+
+  // DRAW RECTANGLE
+  function handleDrawRect(event) {
+    if(mode !== RECT) return;
+
+    if(event.e.type === "mousedown") {
+      canvas.selection = false;
+      let pointer = canvas.getPointer(event.e);
       origX = pointer.x;
       origY = pointer.y;
-      var pointer = canvas.getPointer(o.e);
+      pointer = canvas.getPointer(event.e);
       rect = new fabric.Rect({
         selectable: true,
         hasControls: true,
@@ -355,76 +453,143 @@ document.addEventListener("DOMContentLoaded", function() {
         height: pointer.y - origY,
         angle: 0,
         fill: currentColor,
+        // stroke: "black",
+        // strokeWidth: 2,
         transparentCorners: false
       });
       canvas.add(rect).setActiveObject(rect);
     }
+    if(event.e.type === "mousemove") {
+      if (!isMouseDown) return;
 
-    if (handMode) {
-      canvas.selection = false;
-      let evt = o.e;
-      this.isDragging = true;
-      this.selection = false;
-      this.lastPosX = evt.clientX;
-      this.lastPosY = evt.clientY;
-    }
-
-  });
-
-  // MOUSE MOVE EVENT
-  canvas.on('mouse:move', function(o) {
-    if (rectangeMode) {
-      if (!isDown) return;
-      let pointer = canvas.getPointer(o.e);
+      let pointer = canvas.getPointer(event.e);
       if (origX > pointer.x) {
-        rect.set({
-          left: Math.abs(pointer.x)
-        });
+        rect.set({ left: Math.abs(pointer.x) });s
       }
       if (origY > pointer.y) {
-        rect.set({
-          top: Math.abs(pointer.y)
-        });
+        rect.set({ top: Math.abs(pointer.y) });
       }
-      rect.set({
-        width: Math.abs(origX - pointer.x)
+      rect.set({ width: Math.abs(origX - pointer.x) });
+      rect.set({ height: Math.abs(origY - pointer.y) });
+      canvas.renderAll();
+    }
+    if(event.e.type === "mouseup") {
+      enableSelectMode();
+      addComponent(rect, true);
+    }
+  }
+
+   // DRAW CIRCLE
+   function handleDrawCircle(event) {
+    if(mode !== CIRCLE) return;
+
+    if(event.e.type === "mousedown") {
+      isDown = true;
+      let pointer = canvas.getPointer(event.e);
+      origX = pointer.x;
+      origY = pointer.y;
+      circle = new fabric.Circle({
+        left: pointer.x,
+        top: pointer.y,
+        radius: 1,
+        strokeWidth: 1,
+        stroke: 'black',
+        fill: currentColor,
+        transparentCorners: false,
+        selectable: false,
+        originX: 'center',
+        originY: 'center'
       });
-      rect.set({
-        height: Math.abs(origY - pointer.y)
+      canvas.add(circle).setActiveObject(circle);
+    }
+    if(event.e.type === "mousemove") {
+      if (!isMouseDown) return;
+      let pointer = canvas.getPointer(event.e);
+      circle.set({
+        radius: Math.abs(origX - pointer.x)
       });
       canvas.renderAll();
     }
-    if (handMode) {
-      if (this.isDragging) {
-        var e = o.e;
-        this.viewportTransform[4] += e.clientX - this.lastPosX;
-        this.viewportTransform[5] += e.clientY - this.lastPosY;
-        this.requestRenderAll();
-        this.lastPosX = e.clientX;
-        this.lastPosY = e.clientY;
+    if(event.e.type === "mouseup") {
+      enableSelectMode();
+      addComponent(circle, true);
+    }
+  }
+
+  // DRAW LINE
+  function handleDrawLine(event) {
+    if(mode !== LINE) return;
+
+    if(event.e.type === "mousedown") {
+      var pointer = canvas.getPointer(event.e);
+      var points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      line = new fabric.Line(points, {
+        strokeWidth: 5,
+        stroke: currentColor,
+        originX: 'center',
+        originY: 'center',
+        selectable: false
+      });
+      canvas.add(line);
+    };
+    if(event.e.type === "mousemove") {
+      if (!isMouseDown) return;
+      var pointer = canvas.getPointer(event.e);
+      line.set({
+        x2: pointer.x,
+        y2: pointer.y
+      });
+      canvas.renderAll();
+    }
+    if(event.e.type === "mouseup") {
+      enableSelectMode();
+      addComponent(line, true);
+    }
+  }
+
+  // TEXTBOX
+  function handleDropTextBox(event) {
+    if(mode !== TEXTBOX) return;
+
+    if(event.e.type === "mouseup") {
+      var pointer = canvas.getPointer(event.e);
+      var textbox = new fabric.IText('MyText', {
+        width: 300,
+        height: 300,
+        top: pointer.y,
+        left: pointer.x,
+        hasControls: false,
+        fontSize: 30,
+        fixedWidth: 300,
+        fixedFontSize: 30,
+        fill: currentColor
+      });
+      canvas.add(textbox).setActiveObject(textbox);
+      enableSelectMode();
+      addComponent(textbox, true);
+    }
+  }
+
+    // HANDLE PANNING
+    function handlePanning(event) {
+      if(mode !== HAND) return;
+  
+      if(event.e.type === "mousemove") {
+        if (this.isDragging) {
+          var e = event.e;
+          this.viewportTransform[4] += e.clientX - this.lastPosX;
+          this.viewportTransform[5] += e.clientY - this.lastPosY;
+          this.requestRenderAll();
+          this.lastPosX = e.clientX;
+          this.lastPosY = e.clientY;
+        }
+      }
+      if(event.e.type === "mouseup") {
+        this.isDragging = false;
+        this.selection = true;
       }
     }
-  });
-
-  // MOUSE UP EVENT
-  canvas.on('mouse:up', function(e) {
-    if (rectangeMode) {
-      isDown = false;
-      enableSelectMode();
-      addComponent(rect);
-    }
-    if (handMode) {
-      this.isDragging = false;
-      this.selection = true;
-    }
-    if (eraserMode) {
-      removeComponent();
-    }
-    if (currentMoveTimeout) {
-      clearTimeout(currentMoveTimeout)
-    }
-  });
-
+  
   // Zoom in/out with mousewheel
   canvas.on('mouse:wheel', function(opt) {
     var delta = opt.e.deltaY;
@@ -451,7 +616,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  // selection group changend
   function groupUpdate(group, method) {
     var ids = group.getObjects().map(e => e.id);
     group.clone(function(clonedObj) {
@@ -459,20 +623,15 @@ document.addEventListener("DOMContentLoaded", function() {
       clonedObj.getObjects().forEach(function(each, i) {
         let cloned = each;
         cloned.id = ids[i];   // restore custom IDs
-        if(method === "modify") modifyingComponent(cloned)
-        if(method === "create") addComponent(cloned, true)
-      })
+        if(method === "modify") modifyingComponent(cloned);
+        if(method === "create") addComponent(cloned, true, true);      })
     })
   }
-
-
 
 
   //////////////////////////////////////////
   //              SOCKET IO               //
   //////////////////////////////////////////
-
-
   function addComponent(component, ignoreCanvas) {
     component.toObject = (function(toObject) {
       return function() {
@@ -481,7 +640,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
       };
     })(component.toObject);
-    component.id = uuidv4();
+    if(!component.id) component.id = uuidv4();
+    component.setCoords();
     if (!ignoreCanvas) canvas.add(component);
     socket.emit('create_component', component.toJSON());
   };
