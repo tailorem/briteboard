@@ -15,15 +15,6 @@ io.set('heartbeat interval', 2000);
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-
-// Use cookie session for persisting user sessions?
-// const cookieSession = require('cookie-session')
-// app.use(cookieSession({
-//   name: 'session',
-//   keys: ['secret', 'key']
-// }));
-
-
 // Set view engine
 app.set('view engine', 'ejs');
 
@@ -48,23 +39,18 @@ mongoose.connect(DB_URI, { useNewUrlParser: true })
 
   const boards = require('./db/boards');
 
-  // console.log("all board ids (BEFORE):", boards.getAllBoardIds());
-
   boards.init(() => {
-    console.log("Of a certainty, good friends, I am not dehydrated, let us party");
+    console.log("In memory database rehydrated");
 
     // start web server
     server.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });
 
-    // console.log("all board ids (AFTER):", boards.getAllBoardIds());
-
-    require('./socket-io')(io, boards);
+    require('./socket-events')(io, boards);
   });
 
 })
 .catch(err => {
   throw(err);
 });
-

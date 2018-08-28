@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+$(document).ready(function() {
 
   let canvas = new fabric.Canvas('whiteboard');
   canvas.setHeight(800);
@@ -27,43 +27,79 @@ document.addEventListener("DOMContentLoaded", function() {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
+  let selectedUsername = null;
+
   function listUsers(users) {
+    console.log(users);
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
-    users.forEach(function(user, index) {
+    users.forEach(function(user) {
       userId = Object.keys(user)[0];
       user = user[Object.keys(user)[0]];
       $("<h3>").text(user.name).appendTo($users);
     });
   }
 
-  socket.on('select username', function() {
-    $(`<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
+  // On connection, user is prompted to select a username
+  (function() {
+    $(`<div id="username-form" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
         <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
-          <form>
+          <form id="select-username">
             <p>Select a username:</p>
-            <input type="text" style="outline: none;" />
+            <input type="text" style="outline: none;" autofocus onfocus="this.select()" />
             <button>GO</button>
           </form>
         </div>
       </div>`).prependTo(document.body);
+
+    // Once username is selected, the username is sent to the server and the username form/div is removed
+    $("#select-username").on('submit', function(e) {
+      e.preventDefault();
+      $username = $('#select-username input').val();
+      if ($username.trim().length < 1) return;
+
+      // Save username for reconnection
+      selectedUsername = $username;
+      console.log(selectedUsername);
+
+      // Send username to server
+      socket.emit('username selected', $username);
+      $('#username-form').remove();
+
+      console.log('Username submitted:', $username)
+    });
+  })();
+
+  socket.on('connected', function(msg) {
+    console.log(msg);
   });
+
+  socket.on('new connection', function(msg) {
+    console.log(msg);
+  });
+
+  socket.on('user disconnected', function(msg) {
+    console.log(msg);
+  });
+
 
   // boardId = (window.location.pathname).split('/').reverse()[0];
   // console.log(boardId);
 
-  // socket.on('new connection', function(currentUsers) {
-  //   listUsers(currentUsers);
-  // });
-
-  // socket.on('update username', function(currentUsers) {
-  //   // listUsers(currentUsers);
-  // });
-
-  socket.on('user disconnected', function(currentUsers) {
+  socket.on('new connection', function(currentUsers) {
+    console.log('users after connection', currentUsers);
     listUsers(currentUsers);
   });
 
+  // socket.on('update username', function(currentUsers) {
+  //   console.log("CURRENT USERS", currentUsers);
+  //   listUsers(currentUsers);
+  // });
+
+  // socket.on('user disconnected', function(currentUsers) {
+  //   console.log('users after disconnect', currentUsers);
+  //   listUsers(currentUsers);
+  // });
 
 
   ////////////////////////////////////////////
@@ -131,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
       canvas.freeDrawingBrush.color = currentColor;
     }
   });
-  
+
 
   // Change brush sizes
   $('#small-brush').on('click', function(e) {
@@ -219,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function() {
     $("#add-background").val("");
     enableSelectMode();
   });
-  
+
   ////////////////////////////////////////////
   //             TOOL MODES                 //
   ////////////////////////////////////////////
@@ -290,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
     }
-  
+
   // CIRCLE MODE
   function enableCircleMode() {
     clearModes()
@@ -299,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
     $('#circle').addClass('selected');
     makeObjectsSelectable(false);
   }
-  
+
   // RECTANGLE MODE
   function enableRectMode() {
     clearModes()
@@ -401,7 +437,7 @@ function getTouchPos(canvasDom, touchEvent) {
 console.log("Object Created", event)
 //   });
 
-  
+
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
     isMouseDown = true;
@@ -433,7 +469,7 @@ console.log("Object Created", event)
   if(DEBUG) console.log(event, event.keyCode);
   if(DEBUG) console.log("control key, meta key", event.ctrlKey, event.metaKey)
   });
-  
+
   // MOUSE UP EVENT
   canvas.on('mouse:up', function(event) {
     isMouseDown = false;
@@ -501,6 +537,7 @@ console.log("Object Created", event)
     if(mode !== CIRCLE) return;
 
     if(event.e.type === "mousedown") {
+      canvas.selection = false;
       isDown = true;
       let pointer = canvas.getPointer(event.e);
       origX = pointer.x;
@@ -538,6 +575,7 @@ console.log("Object Created", event)
     if(mode !== LINE) return;
 
     if(event.e.type === "mousedown") {
+      canvas.selection = false;
       var pointer = canvas.getPointer(event.e);
       var points = [pointer.x, pointer.y, pointer.x, pointer.y];
       line = new fabric.Line(points, {
@@ -590,7 +628,6 @@ console.log("Object Created", event)
     // HANDLE PANNING
     function handlePanning(event) {
       if(mode !== HAND) return;
-  
       if(event.e.type === "mousemove") {
         if (this.isDragging) {
           var e = event.e;
@@ -599,6 +636,27 @@ console.log("Object Created", event)
           this.requestRenderAll();
           this.lastPosX = e.clientX;
           this.lastPosY = e.clientY;
+
+          // panning code added by Aaron:
+          let delta = new fabric.Point(o.e.movementX, o.e.movementY);
+          canvas.relativePan(delta);
+
+          let canvasViewPort = canvas.viewportTransform;
+
+          let imageHeight = canvas.height * canvasViewPort[0];
+          let imageWidth = canvas.width * canvasViewPort[0];
+
+          let bottomEndPoint = canvas.height * (canvasViewPort[0] - 1);
+          if (canvasViewPort[5] >= 0 || -bottomEndPoint > canvasViewPort[5]) {
+            canvasViewPort[5] = (canvasViewPort[5] >= 0) ? 0 : -bottomEndPoint;
+          }
+
+          let rightEndPoint = canvas.width * (canvasViewPort[0] - 1);
+          if (canvasViewPort[4] >= 0 || -rightEndPoint > canvasViewPort[4]) {
+            canvasViewPort[4] = (canvasViewPort[4] >= 0) ? 0 : -rightEndPoint;
+          }
+          /// End of code added by Aaron
+
         }
       }
       if(event.e.type === "mouseup") {
@@ -606,7 +664,7 @@ console.log("Object Created", event)
         this.selection = true;
       }
     }
-  
+
   // Zoom in/out with mousewheel
   canvas.on('mouse:wheel', function(opt) {
     var delta = opt.e.deltaY;

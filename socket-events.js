@@ -1,6 +1,10 @@
 let DEBUG = false;
 const clients = {};
 
+////////////////////////////////////////////
+//             USER HELPERS               //
+////////////////////////////////////////////
+
 getCurrentUsers = (board) => {
   const currentUsers = [];
   for (let client in clients) {
@@ -11,6 +15,10 @@ getCurrentUsers = (board) => {
   }
   return currentUsers;
 }
+
+////////////////////////////////////////////
+//            CANVAS HELPERS              //
+////////////////////////////////////////////
 
 // update component history with incoming changes
 // event-handler for new incoming connections
@@ -36,11 +44,6 @@ function removeFromHistory(id, boardHistory) {
 
 // Export to server.js
 module.exports = (io, boards) => {
-  // array of all lines drawn
-  // let boardHistory = [];
-  // let allBoardsData = boards.getAllBoards();
-  // console.log("ALL BOARDS DATA", allBoardsData);
-
 
   // SOCKET CONNECTION RECEIVED
   io.on('connection', function(socket) {
@@ -53,14 +56,7 @@ module.exports = (io, boards) => {
   //              USER EVENTS               //
   ////////////////////////////////////////////
 
-    // console.log("all board ids (BEFORE):", boards.getAllBoardIds());
-
     const client = { boardId: board };
-    // boards[board].componentHistory = []; // this line will overwrite board history, should be assigned on creation
-
-
-    // const client = { name: 'Anon', boardId: board };
-
     clients[socket.id] = client;
 
     // Send connection message to client
@@ -69,12 +65,11 @@ module.exports = (io, boards) => {
     // Send connection message to other clients in the room
     socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
 
-    //
-    // socket.on('username selected', (username) => {
-    //   clients[socket.id].name = username;
-    //   io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
-    //   console.log("username selected");
-    // });
+    socket.on('username selected', (username) => {
+      clients[socket.id].name = username;
+      io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
+      console.log("username selected");
+    });
 
     // Send disconnect message to everyone in the room
     socket.on('disconnect', (reason) => {
@@ -103,27 +98,27 @@ module.exports = (io, boards) => {
 
     // add handler for broadcast new component
     socket.on('create_component', function(objectData) {
-      // boardHistory.push(objectData)
+      boardHistory.push(objectData)
       // console.log(objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.broadcast.emit('create_component', objectData);
     });
 
-    // TODO: update database ON MODIFIED
-    // On modified, delete previous object (removeFromHistory) and re-add it...?
-    socket.on('modify_component', function(objectData) {
-      updateboardHistory(boardHistory, objectData);
-      boards.updateBoard(board, objectData, boardHistory);
-      socket.broadcast.emit('modify_component', objectData);
-    });
+    // // TODO: update database ON MODIFIED
+    // // On modified, delete previous object (removeFromHistory) and re-add it...?
+    // socket.on('modify_component', function(objectData) {
+    //   updateboardHistory(boardHistory, objectData);
+    //   boards.updateBoard(board, objectData, boardHistory);
+    //   socket.broadcast.emit('modify_component', objectData);
+    // });
 
-    // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
-    // Remember to use a separate function for this... (not updateBoard)?
-    socket.on('remove_component', function(objectData) {
-      removeFromHistory(objectData.id, boardHistory);
-      boards.deleteObject(board, boardHistory);
-      socket.broadcast.emit('remove_component', objectData);
-    });
+    // // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
+    // // Remember to use a separate function for this... (not updateBoard)?
+    // socket.on('remove_component', function(objectData) {
+    //   removeFromHistory(objectData.id, boardHistory);
+    //   boards.deleteObject(board, boardHistory);
+    //   socket.broadcast.emit('remove_component', objectData);
+    // });
 
     socket.on('path_created', function(objectData) {
       boards.updateBoard(board, objectData, boardHistory);
