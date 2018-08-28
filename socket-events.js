@@ -1,6 +1,10 @@
 let DEBUG = false;
 const clients = {};
 
+////////////////////////////////////////////
+//             USER HELPERS               //
+////////////////////////////////////////////
+
 getCurrentUsers = (board) => {
   const currentUsers = [];
   for (let client in clients) {
@@ -11,6 +15,10 @@ getCurrentUsers = (board) => {
   }
   return currentUsers;
 }
+
+////////////////////////////////////////////
+//            CANVAS HELPERS              //
+////////////////////////////////////////////
 
 // update component history with incoming changes
 // event-handler for new incoming connections
@@ -36,11 +44,6 @@ function removeFromHistory(id, boardHistory) {
 
 // Export to server.js
 module.exports = (io, boards) => {
-  // array of all lines drawn
-  // let boardHistory = [];
-  // let allBoardsData = boards.getAllBoards();
-  // console.log("ALL BOARDS DATA", allBoardsData);
-
 
   // SOCKET CONNECTION RECEIVED
   io.on('connection', function(socket) {
