@@ -56,14 +56,7 @@ module.exports = (io, boards) => {
   //              USER EVENTS               //
   ////////////////////////////////////////////
 
-    // console.log("all board ids (BEFORE):", boards.getAllBoardIds());
-
     const client = { boardId: board };
-    // boards[board].componentHistory = []; // this line will overwrite board history, should be assigned on creation
-
-
-    // const client = { name: 'Anon', boardId: board };
-
     clients[socket.id] = client;
 
     // Send connection message to client
