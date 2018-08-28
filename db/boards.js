@@ -45,19 +45,24 @@ module.exports = {
   getBoardHistory: (id) => {
     return boards.find(b => b.id === id).componentHistory;
   },
-  addObject: (id, newObject) => {
-    // 1) add it to in-memory `boards`
-    // 2) add it to the database (for backup)
-  },
-  countBoards: () => {
-    return boards.length;
-  },
-  getAllBoardIds: () => {
-    return boards.map(b => b.id);
+  deleteObject: (id, boardHistory) => {
+    Board.updateOne(
+    { 'id': id },
+    // { "$push": { "componentHistory": dataObj } },
+    { "componentHistory": boardHistory } ,
+    function(err, callback) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("DELETED FROM MongoDB!")
+      }
+    });
   },
   // TODO: Separate this into different functions
   updateBoard: (id, objectData, boardHistory) => {
     // add objectData to appropriate board history
+    // 1) add it to in-memory `boards`
+    // 2) add it to the database (for backup)
     boards.find(b => b.id === id).componentHistory.push(objectData);
 
     Board.updateOne(
@@ -73,4 +78,5 @@ module.exports = {
     });
     console.log('updated in memory DB!');
   }
+
 }
