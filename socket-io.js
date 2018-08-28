@@ -1,6 +1,6 @@
-const boards = require('./db/boards');
+// const boards = require('./db/boards');
 const clients = {};
-const Board = require('./db/models/Board.js');
+// const Board = require('./db/models/Board.js');
 
 // UPDATE DATABASE
 // Board.update(
@@ -9,20 +9,20 @@ const Board = require('./db/models/Board.js');
 //  function(err,callback) {
 //  });
 
-function getBoard(boardId){
-  Board.findOne({ 'id': boardId }, function(err, targetBoard) {
-     console.log(targetBoard.componentHistory);
-  });
-}
+// function getBoard(boardId){
+//   Board.findOne({ 'id': boardId }, function(err, targetBoard) {
+//      console.log(targetBoard.componentHistory);
+//   });
+// }
 
-function updateBoard(boardId, dataObj){
- Board.update(
-  { 'id': boardId },
-  { "componentHistory": dataObj } ,
-  function(err,callback) {
-  });
-  console.log('updated DB!');
-}
+// function updateBoard(boardId, dataObj){
+//  Board.update(
+//   { 'id': boardId },
+//   { "componentHistory": dataObj } ,
+//   function(err,callback) {
+//   });
+//   console.log('updated DB!');
+// }
 
 getCurrentUsers = (board) => {
   const currentUsers = [];
@@ -35,7 +35,7 @@ getCurrentUsers = (board) => {
   return currentUsers;
 }
 
-module.exports = (io/*, dataHelpers*/) => {
+module.exports = (io, boards) => {
 
   // array of all lines drawn
   let componentHistory = [];
@@ -74,9 +74,10 @@ module.exports = (io/*, dataHelpers*/) => {
   ////////////////////////////////////////////
 
 
+    console.log("all board ids (BEFORE):", boards.getAllBoardIds());
+
     const client = { boardId: board };
     // boards[board].componentHistory = []; // this line will overwrite board history, should be assigned on creation
-
 
 
     // const client = { name: 'Anon', boardId: board };

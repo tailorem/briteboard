@@ -27,20 +27,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 // DB Config
-const db = require('./db/config/keys').mongoURI;
+const DB_URI = require('./db/config/keys').mongoURI;
 const PORT = process.env.PORT || 3000;
 const routes = require("./routes/routes.js")();
 
 
 // Connect to MongoDB
-mongoose.connect(db, { useNewUrlParser: true })
-  .then(() => {
-    console.log('MongoDB connected!');
-
-  // start web server
-  server.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-  });
+mongoose.connect(DB_URI, { useNewUrlParser: true })
+.then((db) => {
+  console.log('MongoDB connected!');
 
   // add directory with our static files
   app.use(express.static(__dirname + '/public'));
@@ -50,9 +45,25 @@ mongoose.connect(db, { useNewUrlParser: true })
 
   // TODO: add 404 error handling
 
-  require('./socket-io')(io/*, dataHelpers*/)
-})
-  .catch(err => {
-    throw(err);
+  const boards = require('./db/boards');
+
+  // console.log("all board ids (BEFORE):", boards.getAllBoardIds());
+
+  boards.init(() => {
+    console.log("Of a certainty, good friends, I am not dehydrated, let us party");
+
+    // start web server
+    server.listen(PORT, () => {
+      console.log(`Server started on port ${PORT}`);
+    });
+
+    // console.log("all board ids (AFTER):", boards.getAllBoardIds());
+
+    require('./socket-io')(io, boards);
   });
+
+})
+.catch(err => {
+  throw(err);
+});
 
