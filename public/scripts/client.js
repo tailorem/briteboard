@@ -394,9 +394,9 @@ document.addEventListener("DOMContentLoaded", function() {
 // }
  ////////////////////////////
 
-  canvas.on('object:added', function(event) {
-console.log("Object Created", event)
-  });
+//   canvas.on('object:added', function(event) {
+// console.log("Object Created", event)
+//   });
 
   
   /// MOUSE DOWN EVENT
@@ -434,9 +434,6 @@ console.log("Object Created", event)
   // MOUSE UP EVENT
   canvas.on('mouse:up', function(event) {
     isMouseDown = false;
-    console.log("mode", mode)
-    console.log("Canvas isDrawingMode", canvas.isDrawingMode)
-
     if (mode === ERASE) {
       removeComponent();
     }
@@ -625,7 +622,6 @@ console.log("Object Created", event)
 
   // component changed
   function componentChanged(event) {
-    console.log("ComponentChanged", event)
     // tbd debounce instead of trottling
     if (event.target.type === "activeSelection") {
       setTimeout(function() { groupUpdate(event.target, "modify") }, 25);
