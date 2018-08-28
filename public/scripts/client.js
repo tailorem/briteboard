@@ -58,6 +58,7 @@ $(document).ready(function() {
     $("#select-username").on('submit', function(e) {
       e.preventDefault();
       $username = $('#select-username input').val();
+      if ($username.trim().length < 1) return;
 
       // Send username to server
       socket.emit('username selected', $username);
