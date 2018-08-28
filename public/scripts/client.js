@@ -48,7 +48,7 @@ $(document).ready(function() {
         <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
           <form id="select-username">
             <p>Select a username:</p>
-            <input type="text" style="outline: none;" />
+            <input type="text" style="outline: none;" autofocus />
             <button>GO</button>
           </form>
         </div>

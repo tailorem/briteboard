@@ -65,7 +65,6 @@ module.exports = (io, boards) => {
     // Send connection message to other clients in the room
     socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
 
-    //
     // socket.on('username selected', (username) => {
     //   clients[socket.id].name = username;
     //   io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
