@@ -40,7 +40,7 @@ mongoose.connect(DB_URI, { useNewUrlParser: true })
   const boards = require('./db/boards');
 
   boards.init(() => {
-    console.log("Of a certainty, good friends, I am not dehydrated, let us party");
+    console.log("In memory database rehydrated");
 
     // start web server
     server.listen(PORT, () => {
@@ -54,4 +54,3 @@ mongoose.connect(DB_URI, { useNewUrlParser: true })
 .catch(err => {
   throw(err);
 });
-
