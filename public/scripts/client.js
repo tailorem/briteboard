@@ -365,37 +365,40 @@ document.addEventListener("DOMContentLoaded", function() {
   ///////////////////
   // TOUCH EVENTS //
   ///////////////////
-// canvas.addEventListener("touchstart", function (e) {
-//   e.preventDefault();
-//   var mousePos = getTouchPos(canvas, e);
-//   var touch = e.touches[0];
-//   // do_mouse_click_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
-// }, false);
+canvas.addEventListener("touchstart", function (e) {
+  e.preventDefault();
+  var mousePos = getTouchPos(canvas, e);
+  var touch = e.touches[0];
+  console.log("touchstart", mousePos)
+  // do_mouse_click_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
+}, false);
 
-// canvas.addEventListener("touchend", function (e) {
-//   e.preventDefault();
-//   var mousePos = getTouchPos(canvas, e);
-//   // do_mouse_up_logic(mousePos.x, mousePos.y);
-// }, false);
+canvas.addEventListener("touchend", function (e) {
+  e.preventDefault();
+  var mousePos = getTouchPos(canvas, e);
+  console.log("touchend", mousePos)
+  // do_mouse_up_logic(mousePos.x, mousePos.y);
+}, false);
 
-// canvas.addEventListener("touchmove", function (e) {
-//   e.preventDefault();
-//   var mousePos = getTouchPos(canvas, e);
-//   var touch = e.touches[0];
-//   // do_mouse_move_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
-// }, false);
+canvas.addEventListener("touchmove", function (e) {
+  e.preventDefault();
+  var mousePos = getTouchPos(canvas, e);
+  var touch = e.touches[0];
+  console.log("touchmove", mousePos)
+  // do_mouse_move_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
+}, false);
 
-// function getTouchPos(canvasDom, touchEvent) {
-//   var rect = canvasDom.getBoundingClientRect();
-//   return {
-//     x: touchEvent.touches[0].clientX - rect.left,
-//     y: touchEvent.touches[0].clientY - rect.top
-//   };
-// }
- ////////////////////////////
+function getTouchPos(canvasDom, touchEvent) {
+  var rect = canvasDom.getBoundingClientRect();
+  return {
+    x: touchEvent.touches[0].clientX - rect.left,
+    y: touchEvent.touches[0].clientY - rect.top
+  };
+}
+ //////////////////////////
 
-//   canvas.on('object:added', function(event) {
-// console.log("Object Created", event)
+  canvas.on('object:added', function(event) {
+console.log("Object Created", event)
 //   });
 
   
