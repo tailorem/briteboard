@@ -45,7 +45,7 @@ module.exports = function(DataHelpers) {
       if (board) {
         res.render('test-board', { board: board });
       } else {
-        res.sendStatus(404);
+        res.render('404');
       }
     });
 
@@ -60,6 +60,6 @@ module.exports = function(DataHelpers) {
 //   // redirect to home
 // });
 
-return routes;
+  return routes;
 
 }
