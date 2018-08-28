@@ -27,9 +27,7 @@ $(document).ready(function() {
   //             CLIENT INFO                //
   ////////////////////////////////////////////
 
-  const individual = {
-    name: "anon"
-  };
+  let selectedUsername = null;
 
   function listUsers(users) {
     console.log(users);
@@ -48,7 +46,7 @@ $(document).ready(function() {
         <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
           <form id="select-username">
             <p>Select a username:</p>
-            <input type="text" style="outline: none;" autofocus />
+            <input type="text" style="outline: none;" autofocus onfocus="this.select()" />
             <button>GO</button>
           </form>
         </div>
@@ -59,6 +57,10 @@ $(document).ready(function() {
       e.preventDefault();
       $username = $('#select-username input').val();
       if ($username.trim().length < 1) return;
+
+      // Save username for reconnection
+      selectedUsername = $username;
+      console.log(selectedUsername);
 
       // Send username to server
       socket.emit('username selected', $username);
@@ -84,13 +86,14 @@ $(document).ready(function() {
   // boardId = (window.location.pathname).split('/').reverse()[0];
   // console.log(boardId);
 
-  // socket.on('new connection', function(currentUsers) {
-  //   console.log('users after connection', currentUsers);
-  //   listUsers(currentUsers);
-  // });
+  socket.on('new connection', function(currentUsers) {
+    console.log('users after connection', currentUsers);
+    listUsers(currentUsers);
+  });
 
   // socket.on('update username', function(currentUsers) {
-  //   // listUsers(currentUsers);
+  //   console.log("CURRENT USERS", currentUsers);
+  //   listUsers(currentUsers);
   // });
 
   // socket.on('user disconnected', function(currentUsers) {
