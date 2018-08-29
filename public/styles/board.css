@@ -74,12 +74,12 @@ button:hover {
 }
 
 .video-container {
-  background-color: white;
   display: flex;
   height: 100%;
 }
 
 video, .video {
+  background-color: white;
   border-radius: 8px;
   height: 60px;
   width: 80px;

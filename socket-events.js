@@ -62,8 +62,8 @@ module.exports = (io, boards) => {
     // Send connection message to client
     socket.emit('connected', { currentUsers: getCurrentUsers(board), notification: "You've successfully connected!", data: boards.getBoard(board) });
 
-    // Send connection message to other clients in the room
-    socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
+    // // Send connection message to other clients in the room
+    // socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
 
     socket.on('username selected', (username) => {
       clients[socket.id].name = username;
@@ -75,7 +75,7 @@ module.exports = (io, boards) => {
     socket.on('disconnect', (reason) => {
       delete clients[socket.id];
       io.in(board).emit('user disconnected', { currentUsers: getCurrentUsers(board), notification: "Someone has left the room!" });
-      console.log("client disconnected")
+      // console.log("client disconnected")
     });
     // console.log(socket.id, board);
     // socket.broadcast.emit('user connected', socket.id);
