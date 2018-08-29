@@ -65,7 +65,7 @@ module.exports = {
     // 1) add it to in-memory `boards`
     // 2) add it to the database (for backup)
     boards.find(b => b.id === id).componentHistory.push(objectData);
-
+console.log("Board History", boardHistory)
     Board.updateOne(
     { 'id': id },
     // { "$push": { "componentHistory": dataObj } },
