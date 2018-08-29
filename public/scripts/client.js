@@ -30,7 +30,7 @@ $(document).ready(function() {
   let selectedUsername = null;
 
   function listUsers(users) {
-    console.log(users);
+    console.log("LIST USERS FUNCTION", users);
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
     users.forEach(function(user) {
@@ -96,10 +96,10 @@ $(document).ready(function() {
   //   listUsers(currentUsers);
   // });
 
-  // socket.on('user disconnected', function(currentUsers) {
-  //   console.log('users after disconnect', currentUsers);
-  //   listUsers(currentUsers);
-  // });
+  socket.on('user disconnected', function(currentUsers) {
+    console.log('users after disconnect', currentUsers);
+    listUsers(currentUsers);
+  });
 
 
   ////////////////////////////////////////////
