@@ -98,10 +98,8 @@ module.exports = (io, boards) => {
 
     // add handler for broadcast new component
     socket.on('create_component', function(objectData) {
-      boardHistory.push(objectData)
-      // console.log(objectData);
       boards.updateBoard(board, objectData, boardHistory);
-      socket.broadcast.emit('create_component', objectData);
+      socket.to(board).emit('create_component', objectData);
     });
 
     // // TODO: update database ON MODIFIED
@@ -109,7 +107,7 @@ module.exports = (io, boards) => {
     // socket.on('modify_component', function(objectData) {
     //   updateboardHistory(boardHistory, objectData);
     //   boards.updateBoard(board, objectData, boardHistory);
-    //   socket.broadcast.emit('modify_component', objectData);
+    //   socket.to(board).emit('modify_component', objectData);
     // });
 
     // // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
@@ -117,12 +115,12 @@ module.exports = (io, boards) => {
     // socket.on('remove_component', function(objectData) {
     //   removeFromHistory(objectData.id, boardHistory);
     //   boards.deleteObject(board, boardHistory);
-    //   socket.broadcast.emit('remove_component', objectData);
+    //   socket.to(board).emit('remove_component', objectData);
     // });
 
     socket.on('path_created', function(objectData) {
       boards.updateBoard(board, objectData, boardHistory);
-      socket.broadcast.emit('path_created', objectData);
+      socket.to(board).emit('path_created', objectData);
     });
 
   });
