@@ -104,13 +104,21 @@ module.exports = (io, boards) => {
       socket.broadcast.emit('create_component', objectData);
     });
 
-    // // TODO: update database ON MODIFIED
-    // // On modified, delete previous object (removeFromHistory) and re-add it...?
-    // socket.on('modify_component', function(objectData) {
-    //   updateboardHistory(boardHistory, objectData);
-    //   boards.updateBoard(board, objectData, boardHistory);
-    //   socket.broadcast.emit('modify_component', objectData);
-    // });
+    // broadcast movements without saving to db
+    socket.on('modify_component', function(objectData) {
+      updateboardHistory(boardHistory, objectData);
+      socket.broadcast.emit('modify_component', objectData);
+      console.log("modifying******")
+    });
+
+    // broadcast and update db when movement has stopped
+    socket.on('modified_component', function(objectData) {
+      console.log("updating history for modified components", objectData)
+      updateboardHistory(boardHistory, objectData);
+      boards.updateBoard(board, objectData, boardHistory);
+      console.log("updating history for modified components")
+      socket.broadcast.emit('modify_component', objectData);
+    });
 
     // // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
     // // Remember to use a separate function for this... (not updateBoard)?
