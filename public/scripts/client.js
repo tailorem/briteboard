@@ -21,7 +21,7 @@ $(document).ready(() => {
 
 
   const socket = io.connect();
-  let DEBUG = false;
+  let DEBUG = true;
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -336,6 +336,14 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
+  ['object:modified'].forEach(function(eventType) {
+    canvas.on(eventType, function(event) {
+      // debouncing not required.
+      console.log("object moved or object modified", event)
+      componentChanged(event, true)
+    });
+  });
+
   canvas.on('text:changed', function(event) {
     // debouncing not required.
     modifyingComponent(event.target)
@@ -350,10 +358,11 @@ $(document).ready(() => {
     }
   });
 
-  ['object:rotating', 'object:moving', 'object:scaling', 'object:modified']
+  ['object:rotating', 'object:moving', 'object:scaling']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
-        componentChanged(event)
+        componentChanged(event, false)
+        console.log("moving", event, event.isMoving)
       });
     })
 
@@ -386,6 +395,32 @@ $(document).ready(() => {
     });
   })
 
+  // throttle async functions
+  function throttled(delay, fn) {
+    let lastCall = 0;
+    return function (...args) {
+      const now = (new Date).getTime();
+      if (now - lastCall < delay) {
+        return;
+      }
+      lastCall = now;
+      return fn(...args);
+    }
+  }
+
+  // debuounce async functions
+  function debounced(delay, fn) {
+    let timerId;
+    return function (...args) {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      timerId = setTimeout(() => {
+        fn(...args);
+        timerId = null;
+      }, delay);
+    }
+  }
   ///////////////////
   // TOUCH EVENTS //
   ///////////////////
@@ -393,12 +428,14 @@ $(document).ready(() => {
 //   e.preventDefault();
 //   var mousePos = getTouchPos(canvas, e);
 //   var touch = e.touches[0];
+//   console.log("touchstart", mousePos)
 //   // do_mouse_click_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
 // }, false);
 
 // canvas.addEventListener("touchend", function (e) {
 //   e.preventDefault();
 //   var mousePos = getTouchPos(canvas, e);
+//   console.log("touchend", mousePos)
 //   // do_mouse_up_logic(mousePos.x, mousePos.y);
 // }, false);
 
@@ -406,6 +443,7 @@ $(document).ready(() => {
 //   e.preventDefault();
 //   var mousePos = getTouchPos(canvas, e);
 //   var touch = e.touches[0];
+//   console.log("touchmove", mousePos)
 //   // do_mouse_move_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
 // }, false);
 
@@ -416,11 +454,11 @@ $(document).ready(() => {
 //     y: touchEvent.touches[0].clientY - rect.top
 //   };
 // }
- ////////////////////////////
+//  //////////////////////////
 
 //   canvas.on('object:added', function(event) {
 // console.log("Object Created", event)
-//   });
+// //   });
 
 
   /// MOUSE DOWN EVENT
@@ -591,7 +629,7 @@ $(document).ready(() => {
   function handleDropTextBox(event) {
     if(mode !== TEXTBOX) return;
 
-    if(event.e.type === "mouseup") {
+    if(event.e.type === "mousedown") {
       var pointer = canvas.getPointer(event.e);
       var textbox = new fabric.IText('MyText', {
         width: 300,
@@ -667,27 +705,27 @@ $(document).ready(() => {
   });
 
   // component changed
-  function componentChanged(event) {
+  function componentChanged(event, isFinal) {
     // tbd debounce instead of trottling
     if (event.target.type === "activeSelection") {
-      setTimeout(function() { groupUpdate(event.target, "modify") }, 25);
+      groupUpdate(event.target, "modify", isFinal)
       } else {
-      setTimeout(function() { modifyingComponent(event.target) }, 25);
+      modifyingComponent(event.target, isFinal)
     }
   }
 
-  function groupUpdate(group, method) {
+  function groupUpdate(group, method, isFinal) {
     var ids = group.getObjects().map(e => e.id);
     group.clone(function(clonedObj) {
       clonedObj._restoreObjectsState();
       clonedObj.getObjects().forEach(function(each, i) {
         let cloned = each;
         cloned.id = ids[i];   // restore custom IDs
-        if(method === "modify") modifyingComponent(cloned);
-        if(method === "create") addComponent(cloned, true, true);      })
+        if(method === "modify") modifyingComponent(cloned, isFinal);
+        if(method === "create") addComponent(cloned, true);
+      })
     })
   }
-
 
   //////////////////////////////////////////
   //              SOCKET IO               //
@@ -718,10 +756,8 @@ $(document).ready(() => {
   }
 
   var currentMoveTimeout;
-
-  function modifyingComponent(component) {
-    if (DEBUG) console.log("Modifying Component", component)
-    let param = {
+  function componentParams(component) {
+    return {
       id: component.id,
       type: component.type,
       left: component.left,
@@ -730,11 +766,24 @@ $(document).ready(() => {
       scaleY: component.scaleY,
       angle: component.angle,
       text: component.text
-    };
+    }
+  }
+
+  // notify component that is being modified
+  // ie: mouse continuous movement
+  function modifyingComponent(component, isFinal) {
+    if (DEBUG) console.log("Modifying Component", component)
     if (DEBUG) console.log("Modify", component)
-    socket.emit("modify_component", param)
-    if (DEBUG) console.log("moving", param, component)
+    let msg_type = isFinal ? "modified_component" : "modify_component";
+    socket.emit(msg_type, componentParams(component))
+    if (DEBUG) console.log("moving", msg_type, componentParams(component))
   };
+
+  // notify components that has been modified
+  // ie: mouse movement that stopped
+  // function modifiedComponent(component) {
+  //   socket.emit("modified_component", componentParams(component))
+  // }
 
   // path created received from server
   socket.on('path_created', function(path) {
@@ -787,6 +836,7 @@ $(document).ready(() => {
     }
   });
 
+  
 
 
 
