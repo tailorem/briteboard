@@ -35,7 +35,10 @@ mongoose.connect(DB_URI, { useNewUrlParser: true })
 
   app.use("/boards", routes);
 
-  // TODO: add 404 error handling
+  // Temp 404 handler
+  app.use((req, res) => {
+    res.status(404).redirect("/");
+  });
 
   const boards = require('./db/boards');
 
