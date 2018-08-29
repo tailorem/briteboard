@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
   let canvas = new fabric.Canvas('whiteboard');
-  canvas.setHeight(800);
-  canvas.setWidth(1200);
+  canvas.setHeight(1600);
+  canvas.setWidth(2400);
   canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
   // Set default canvas values
   const ERASE = 0;
@@ -30,7 +30,7 @@ $(document).ready(function() {
   let selectedUsername = null;
 
   function listUsers(users) {
-    console.log(users);
+    console.log("LIST USERS FUNCTION", users);
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
     users.forEach(function(user) {
@@ -96,10 +96,10 @@ $(document).ready(function() {
   //   listUsers(currentUsers);
   // });
 
-  // socket.on('user disconnected', function(currentUsers) {
-  //   console.log('users after disconnect', currentUsers);
-  //   listUsers(currentUsers);
-  // });
+  socket.on('user disconnected', function(currentUsers) {
+    console.log('users after disconnect', currentUsers);
+    listUsers(currentUsers);
+  });
 
 
   ////////////////////////////////////////////
@@ -705,9 +705,9 @@ $(document).ready(function() {
     var delta = opt.e.deltaY;
     var pointer = canvas.getPointer(opt.e);
     var zoom = canvas.getZoom();
-    zoom = zoom - delta / 200;
-    if (zoom > 5) zoom = 5;
-    if (zoom < 0.5) zoom = 0.5;
+    zoom = zoom - delta / 400;
+    if (zoom > 3) zoom = 3;
+    if (zoom < 0.2) zoom = 0.2;
     canvas.zoomToPoint({
       x: opt.e.offsetX,
       y: opt.e.offsetY
