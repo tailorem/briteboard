@@ -98,10 +98,10 @@ module.exports = (io, boards) => {
 
     // add handler for broadcast new component
     socket.on('create_component', function(objectData) {
-      boardHistory.push(objectData)
       // console.log(objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.broadcast.emit('create_component', objectData);
+
     });
 
     // // TODO: update database ON MODIFIED

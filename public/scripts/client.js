@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
   let canvas = new fabric.Canvas('whiteboard');
-  canvas.setHeight(800);
-  canvas.setWidth(1200);
+  canvas.setHeight(1600);
+  canvas.setWidth(2400);
   canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
   // Set default canvas values
   const ERASE = 0;
@@ -667,9 +667,9 @@ $(document).ready(function() {
     var delta = opt.e.deltaY;
     var pointer = canvas.getPointer(opt.e);
     var zoom = canvas.getZoom();
-    zoom = zoom - delta / 200;
-    if (zoom > 5) zoom = 5;
-    if (zoom < 0.5) zoom = 0.5;
+    zoom = zoom - delta / 400;
+    if (zoom > 3) zoom = 3;
+    if (zoom < 0.2) zoom = 0.2;
     canvas.zoomToPoint({
       x: opt.e.offsetX,
       y: opt.e.offsetY
