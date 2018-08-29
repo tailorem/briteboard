@@ -734,7 +734,7 @@ $(document).ready(function() {
         let cloned = each;
         cloned.id = ids[i];   // restore custom IDs
         if(method === "modify") modifyingComponent(cloned, isFinal);
-        if(method === "create") addComponent(cloned, true, true);
+        if(method === "create") addComponent(cloned, true);
       })
     })
   }
