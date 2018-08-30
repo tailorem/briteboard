@@ -1,3 +1,5 @@
+const v4 = require('uuid/v4');
+
 let DEBUG = false;
 const clients = {};
 
@@ -15,6 +17,7 @@ getCurrentUsers = (board) => {
   }
   return currentUsers;
 }
+
 
 ////////////////////////////////////////////
 //            CANVAS HELPERS              //
@@ -56,7 +59,7 @@ module.exports = (io, boards) => {
   //              USER EVENTS               //
   ////////////////////////////////////////////
 
-    const client = { boardId: board };
+    const client = { id: v4(), boardId: board };
     clients[socket.id] = client;
 
     // Send connection message to client
