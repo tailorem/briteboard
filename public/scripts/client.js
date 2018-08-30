@@ -120,7 +120,7 @@ $(document).ready(() => {
   $('#delete').on('click', function(e) { enableEraserMode() });
 
   $('#border-size').on('click', function(e) {  
-    borderSize = parseInt($('#border-size').val(), 10);
+    borderSize = parseInt($('#border-size').val(), 10) * 2;
     console.log("border size",$('#border-size').val() )});
 
   // Add Image Tool
@@ -570,7 +570,6 @@ $(document).ready(() => {
         strokeWidth: borderSize,
         transparentCorners: false
       });
-      console.log("borde size", borderSize)
       canvas.add(rect).setActiveObject(rect);
     }
     if(event.e.type === "mousemove") {
@@ -606,7 +605,7 @@ $(document).ready(() => {
         left: pointer.x,
         top: pointer.y,
         radius: 1,
-        strokeWidth: 5,
+        strokeWidth: borderSize,
         stroke: 'black',
         fill: currentColor,
         transparentCorners: false,
@@ -638,7 +637,7 @@ $(document).ready(() => {
       var pointer = canvas.getPointer(event.e);
       var points = [pointer.x, pointer.y, pointer.x, pointer.y];
       line = new fabric.Line(points, {
-        strokeWidth: 5,
+        strokeWidth: borderSize,
         stroke: currentColor,
         originX: 'center',
         originY: 'center',
