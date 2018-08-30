@@ -46,26 +46,25 @@ module.exports = {
     let data = boards.find(b => b.id === id);
     return data ? data.componentHistory : [];
   },
-  deleteObject: (id, boardHistory) => {
+  deleteBoardHistory: (id, objectData, boardHistory) => {
+    // boards.find(b => b.id === id).componentHistory.deleteOne( { 'id': objectData.id } );
+    board = boards.filter(b => b.id === id)[0];
+    board.componentHistory = boardHistory;
     Board.updateOne(
-    { 'id': id },
-    // { "$push": { "componentHistory": dataObj } },
-    { "componentHistory": boardHistory } ,
-    function(err, callback) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("DELETED FROM MongoDB!")
-      }
-    });
+      { 'id': id },
+      // { $pull: { "componentHistory" : { "id": "500579b6-49c2-4cbe-a0a2-c739ed373151" } } },
+      { "componentHistory": boardHistory } ,
+      function(err, callback) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Deleted in MongoDB!", boardHistory)
+        }
+      }, false, true);
   },
-  // TODO: Separate this into different functions
   updateBoard: (id, objectData, boardHistory) => {
-    // add objectData to appropriate board history
-    // 1) add it to in-memory `boards`
-    // 2) add it to the database (for backup)
-    boards.find(b => b.id === id).componentHistory.push(objectData);
-console.log("Board History", boardHistory)
+    boards.find(b => b.id === id).componentHistory;
+
     Board.updateOne(
     { 'id': id },
     // { "$push": { "componentHistory": dataObj } },
