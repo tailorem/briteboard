@@ -578,7 +578,7 @@ $(document).ready(() => {
 
       let pointer = canvas.getPointer(event.e);
       if (origX > pointer.x) {
-        rect.set({ left: Math.abs(pointer.x) });s
+        rect.set({ left: Math.abs(pointer.x) });
       }
       if (origY > pointer.y) {
         rect.set({ top: Math.abs(pointer.y) });
