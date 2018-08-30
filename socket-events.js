@@ -10,7 +10,6 @@ const clients = {};
 getCurrentUsers = (board) => {
   const currentUsers = [];
   for (let client in clients) {
-    // console.log(clients[client].boardId, board)
     if (clients[client].boardId === board) {
       currentUsers.push({ [client]: clients[client] });
     }
@@ -90,12 +89,10 @@ module.exports = (io, boards) => {
     // console.log("SOCKET", socket);
 
     var boardHistory = boards.getBoardHistory(board);
-    if (DEBUG) console.log("BOARD HISTORY", boardHistory);
-    if(DEBUG) console.log("boardHistory size", boardHistory.length)
+
 
     function removeFromHistory(boardHistory, data) {
-      if(DEBUG) console.log("boardHistory ", boardHistory)
-      if(DEBUG) console.log("boardHistory size", boardHistory.length)
+
       return boardHistory.filter(each => each.id !== data.id)
     }
 
@@ -106,14 +103,8 @@ module.exports = (io, boards) => {
 
     // add handler for broadcast new component
     socket.on('create_component', function(objectData) {
-      if(DEBUG) console.log("Board History in before create", boardHistory)
-      if(DEBUG) console.log("boardHistory size", boardHistory.length)
       boardHistory = boards.getBoardHistory(board).push(objectData);
-      if(DEBUG) console.log("Board History in curing create", boardHistory)
       boards.updateBoard(board, objectData, boardHistory);
-      if(DEBUG) console.log("Board History in after create", boardHistory)
-      if(DEBUG) console.log("boardHistory size", boardHistory.length)
-      if(DEBUG) console.log("Board History in DB after create", boards.getBoardHistory(board));
       socket.broadcast.emit('create_component', objectData);
     });
 
