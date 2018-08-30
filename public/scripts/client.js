@@ -121,7 +121,7 @@ $(document).ready(() => {
 
   $('#border-size').on('click', function(e) {  
     borderSize = parseInt($('#border-size').val(), 10) * 2;
-    console.log("border size",$('#border-size').val() )});
+  });
 
   // Add Image Tool
   $('#add-image').on('change', function(e) {
@@ -346,21 +346,17 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   ['object:modified'].forEach(function(eventType) {
     canvas.on(eventType, function(event) {
-      // debouncing not required.
-      console.log("object moved or object modified", event)
+      // debouncing/throtling not required.
       componentChanged(event, true)
     });
   });
 
   canvas.on('text:changed', function(event) {
-    // debouncing not required.
+    // debouncing/throtling not required.
     modifyingComponent(event.target)
   });
 
   canvas.on('mouse:up', function(event) {
-    if (currentMoveTimeout) {
-      clearTimeout(currentMoveTimeout)
-    }
     if (mode === ERASE) {
       removeComponent();
     }
@@ -549,7 +545,6 @@ $(document).ready(() => {
     if(mode !== RECT) return;
 
     if(event.e.type === "mousedown") {
-      console.log("borderSie", typeof borderSize)
       canvas.selection = false;
       let pointer = canvas.getPointer(event.e);
       origX = pointer.x;
@@ -796,7 +791,6 @@ $(document).ready(() => {
     });
   } 
 
-  var currentMoveTimeout;
   function componentParams(component) {
     return {  id: component.id,
               type: component.type,
@@ -814,7 +808,6 @@ $(document).ready(() => {
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
     let msg_type = isFinal ? "modified_component" : "modify_component";
-    console.log("Modifying Component", msg_type)
     socket.emit(msg_type, componentParams(component))
   };
 
@@ -872,10 +865,8 @@ $(document).ready(() => {
 
   // delete component request from server
   socket.on('elevate_component', function(data) {
-    if (DEBUG) console.log("receiving data ELEVATE", data)
     let component = findComonent(data.id)
     if (component) {
-      console.log("Bring comonent to front", component)
       canvas.bringToFront(component);
       orderCanvas();
     }
