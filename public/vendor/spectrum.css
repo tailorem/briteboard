@@ -379,14 +379,12 @@
 }
 
 .sp-replacer {
-  margin: 2px 0;
   overflow: hidden;
   cursor: pointer;
   padding: 4px;
   display: inline-block;
   *zoom: 1;
   *display: inline;
-  border: solid 1px #91765d;
   background: #eee;
   color: #333;
   vertical-align: middle

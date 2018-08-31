@@ -162,10 +162,12 @@ $(document).ready(() => {
     showPalette: true,
     palette: [
       ['#000000', '#ffffff'],
-      ['#FF4136', '#0074D9'],
-      ['#2ECC40', '#f9f878'],
-      ['#be50b7', '#FF851B'],
-      ['#39CCCC', '#AAAAAA'],
+      ['#bc000d', '#df3b1a'],
+      ['#fec945', '#008a29'],
+      ['#006b75', '#0076d7'],
+      ['#0051c7', '#561ce1'],
+      ['#795548', '#939393'],
+
     ],
     change: function(color) {
       currentColor = color.toHexString()
