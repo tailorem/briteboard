@@ -1,9 +1,13 @@
 $(document).ready(() => {
 
   let canvas = new fabric.Canvas('whiteboard');
+  let templateId = $('#template-id').text();
+  let templates = ['','/img/weekly-cal.png','/img/background.jpg','/img/background.jpg'];
   canvas.setHeight(1600);
   canvas.setWidth(2400);
-  canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
+  if (templateId !== 0) {
+    canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
+  }
   // Set default canvas values
   const ERASE = 0;
   const LINE = 1;
@@ -25,10 +29,12 @@ $(document).ready(() => {
     y: 0
   }, 0.78);
 
-
   const socket = io.connect();
-  let DEBUG = true;
+  let DEBUG = false;
 
+  canvas.on('mouse:down', function(event) {
+    $('body').append('<p>Aaron</p>');
+  });
   ////////////////////////////////////////////
   //             CLIENT INFO                //
   ////////////////////////////////////////////
@@ -476,7 +482,7 @@ $(document).ready(() => {
 // console.log("Object Created", event)
 // //   });
 
-  // 
+  //
   canvas.on('mouse:over', function(event) {
     if(event.target) {
       event.target.set('opacity', 0.7);
@@ -809,7 +815,7 @@ $(document).ready(() => {
       trackComponentChanges(obj, "remove")
       socket.emit("remove_component", { id: obj.id })
     });
-  } 
+  }
 
   function componentParams(component) {
     return {  id: component.id,
@@ -876,7 +882,7 @@ $(document).ready(() => {
       targetComponent.angle = data.angle;
       targetComponent.set("text",data.text);
       canvas.renderAll();
-      if(mode === SELECT) 
+      if(mode === SELECT)
         targetComponent.set({ selectable: true }).setCoords();
     } else {
       if (DEBUG) console.log("Unknown Component Modified.", data)

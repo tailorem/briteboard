@@ -10,6 +10,10 @@ const BoardSchema = new Schema({
     type: String,
     required: true
   },
+  template: {
+    type: Number,
+    required: true
+  },
   componentHistory: {
     type: Array,
     required: true

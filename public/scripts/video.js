@@ -1,3 +1,9 @@
+$(document).ready(() => {
+  const room = window.location.pathname.split('/')[2];
+  console.log(room);
+});
+
+
 // document.addEventListener("DOMContentLoaded", function() {
 
 //   const canvas = document.getElementById('canvas1');
@@ -30,4 +36,4 @@
 //   video.srcObject = mediaSource;
 // } catch (error) {
 //   video.src = URL.createObjectURL(mediaSource);
-// }
+// });
