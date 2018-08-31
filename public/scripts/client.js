@@ -23,7 +23,7 @@ $(document).ready(() => {
 
 
   const socket = io.connect();
-  let DEBUG = true;
+  let DEBUG = false;
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -464,7 +464,7 @@ $(document).ready(() => {
 // console.log("Object Created", event)
 // //   });
 
-  // 
+  //
   canvas.on('mouse:over', function(event) {
     if(event.target) {
       event.target.set('opacity', 0.7);
@@ -795,7 +795,7 @@ $(document).ready(() => {
       canvas.remove(obj);
       socket.emit("remove_component", { id: obj.id })
     });
-  } 
+  }
 
   function componentParams(component) {
     return {  id: component.id,
@@ -862,7 +862,7 @@ $(document).ready(() => {
       targetComponent.angle = data.angle;
       targetComponent.set("text",data.text);
       canvas.renderAll();
-      if(mode === SELECT) 
+      if(mode === SELECT)
         targetComponent.set({ selectable: true }).setCoords();
     } else {
       if (DEBUG) console.log("Unknown Component Modified.", data)
