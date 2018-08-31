@@ -120,8 +120,8 @@ $(document).ready(() => {
   // Delete Tool
   $('#delete').on('click', function(e) { enableEraserMode() });
 
-  $('#border-size').on('click', function(e) {
-    let pixelSize = parseInt($('#border-size').val(), 10) * 2
+  $('#brush-size').on('click', function(e) {
+    let pixelSize = parseInt($('#brush-size').val(), 10) * 2
     borderSize = pixelSize;
     canvas.freeDrawingBrush.width = pixelSize;
   });

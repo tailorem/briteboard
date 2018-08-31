@@ -9,9 +9,11 @@
   <title>Briteboard</title>
 
   <link rel="stylesheet" type="text/css" href="/vendor/normalize.css" />
-  <link rel="stylesheet" type="text/css" href="/styles/board.css" />
-  <link rel="stylesheet" type="text/css" href="/vendor/spectrum.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/vendor/spectrum.css">
+  <link rel="stylesheet" type="text/css" href="/styles/board.css" />
+
+
 
   <script src="https://webrtc.github.io/adapter/adapter-4.2.2.js"></script>
 
@@ -35,17 +37,18 @@
 
   <div class="container">
     <div class="nav-left">
-      <button id="select"><i class="fas fa-mouse-pointer"></i></button>
-      <button id="hand"><i class="fas fa-hand-paper"></i></button>
-      <button id="draw"><i class="fas fa-pen"></i></button>
-      <button id="line"><i class="fa fa-magic"></i></button>
-      <button id="circle"><i class="far fa-circle"></i></button>
-      <button id="draw-rect"><i class="far fa-square"></i></button>
-      <button id="textbox"><i class="fas fa-font"></i></button>
-      <button id="delete"><i class="fas fa-trash-alt"></i></button>
-      <label for="add-image" class="custom-file-upload"><i class="far fa-images"></i></label>
+
+      <button id="select" title="Select/Move/Modify Tool (esc)"><i class="fas fa-mouse-pointer"></i></button>
+      <button id="hand" title="Hand Tool"><i class="fas fa-hand-paper"></i></button>
+      <button id="draw" title="Free Drawing Tool"><i class="fas fa-pen"></i></button>
+      <button id="line" title="Line Tool"><i class="fa fa-magic"></i></button>
+      <button id="circle" title="Circle Tool"><i class="far fa-circle"></i></button>
+      <button id="draw-rect" title="Rectangle Tool"><i class="far fa-square"></i></button>
+      <button id="textbox" title="Text Tool"><i class="fas fa-font"></i></button>
+      <button id="delete" title="Delete Tool (del)"><i class="fas fa-trash-alt"></i></button>
+      <label for="add-image" class="custom-file-upload" title="Add Image"><i class="far fa-images"></i></label>
       <input id="add-image" type="file" />
-      <button id="duplicate"><i class="far fa-copy"></i></button>
+      <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
       <input id="colorPicker" />
       <label>
         <code>border</code>
