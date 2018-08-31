@@ -18,7 +18,8 @@ $(document).ready(() => {
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
   let currentColor = '#000000';
-  let borderSize = 1;
+  let borderSize = 4;
+  canvas.freeDrawingBrush.width = borderSize;
 
 
   const socket = io.connect();
@@ -119,8 +120,10 @@ $(document).ready(() => {
   // Delete Tool
   $('#delete').on('click', function(e) { enableEraserMode() });
 
-  $('#border-size').on('click', function(e) {
-    borderSize = parseInt($('#border-size').val(), 10) * 2;
+  $('#brush-size').on('click', function(e) {
+    let pixelSize = parseInt($('#brush-size').val(), 10) * 2
+    borderSize = pixelSize;
+    canvas.freeDrawingBrush.width = pixelSize;
   });
 
   // Add Image Tool
@@ -253,8 +256,8 @@ $(document).ready(() => {
 
   // Make Objects Selectable
   function makeObjectsSelectable(boolean) {
-    canvas.forEachObject(function(o) {
-      o.set({
+    canvas.forEachObject(function(object) {
+      object.set({
         selectable: boolean
       }).setCoords();
     })
@@ -385,7 +388,7 @@ $(document).ready(() => {
 
   let rect, line, circle, isMouseDown, origX, origY;
   // TOOLS EVENT HANDLING
-  ['mouse:down', 'mouse:move', 'mouse:up']
+  ['mouse:down', 'mouse:move', 'mouse:up', 'dragenter', 'dragleave', 'drop', 'dragover']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
         handleDrawRect(event);
@@ -461,9 +464,10 @@ $(document).ready(() => {
 // console.log("Object Created", event)
 // //   });
 
+  //
   canvas.on('mouse:over', function(event) {
     if(event.target) {
-      event.target.set('opacity', 0.5);
+      event.target.set('opacity', 0.7);
       canvas.renderAll();
     }
   });
@@ -544,14 +548,14 @@ $(document).ready(() => {
   function handleDrawRect(event) {
     if(mode !== RECT) return;
 
-    if(event.e.type === "mousedown") {
+    if(event.e.type === "mousedown" || event.e.type === "touchstart") {
       canvas.selection = false;
       let pointer = canvas.getPointer(event.e);
       origX = pointer.x;
       origY = pointer.y;
       pointer = canvas.getPointer(event.e);
       rect = new fabric.Rect({
-        selectable: true,
+        selectable: false,
         hasControls: true,
         left: origX,
         top: origY,
@@ -565,9 +569,9 @@ $(document).ready(() => {
         strokeWidth: borderSize,
         transparentCorners: false
       });
-      canvas.add(rect).setActiveObject(rect);
+      canvas.add(rect)
     }
-    if(event.e.type === "mousemove") {
+    if(event.e.type === "mousemove" || event.e.type === "touchmove") {
       if (!isMouseDown) return;
 
       let pointer = canvas.getPointer(event.e);
@@ -581,7 +585,7 @@ $(document).ready(() => {
       rect.set({ height: Math.abs(origY - pointer.y) });
       canvas.renderAll();
     }
-    if(event.e.type === "mouseup") {
+    if(event.e.type === "mouseup" || event.e.type === "touchend") {
       addComponent(rect, true);
     }
   }
@@ -590,7 +594,7 @@ $(document).ready(() => {
    function handleDrawCircle(event) {
     if(mode !== CIRCLE) return;
 
-    if(event.e.type === "mousedown") {
+    if(event.e.type === "mousedown" || event.e.type === "touchstart") {
       canvas.selection = false;
       isDown = true;
       let pointer = canvas.getPointer(event.e);
@@ -608,9 +612,9 @@ $(document).ready(() => {
         originX: 'center',
         originY: 'center'
       });
-      canvas.add(circle).setActiveObject(circle);
+      canvas.add(circle);
     }
-    if(event.e.type === "mousemove") {
+    if(event.e.type === "mousemove" || event.e.type === "touchmove") {
       if (!isMouseDown) return;
       let pointer = canvas.getPointer(event.e);
       circle.set({
@@ -618,8 +622,9 @@ $(document).ready(() => {
       });
       canvas.renderAll();
     }
-    if(event.e.type === "mouseup") {
+    if(event.e.type === "mouseup" || event.e.type === "touchend") {
       addComponent(circle, true);
+      enableSelectMode();
     }
   }
 
@@ -627,7 +632,7 @@ $(document).ready(() => {
   function handleDrawLine(event) {
     if(mode !== LINE) return;
 
-    if(event.e.type === "mousedown") {
+    if(event.e.type === "mousedown" || event.e.type === "touchstart") {
       canvas.selection = false;
       var pointer = canvas.getPointer(event.e);
       var points = [pointer.x, pointer.y, pointer.x, pointer.y];
@@ -640,7 +645,7 @@ $(document).ready(() => {
       });
       canvas.add(line);
     };
-    if(event.e.type === "mousemove") {
+    if(event.e.type === "mousemove" || event.e.type === "touchmove") {
       if (!isMouseDown) return;
       var pointer = canvas.getPointer(event.e);
       line.set({
@@ -649,7 +654,7 @@ $(document).ready(() => {
       });
       canvas.renderAll();
     }
-    if(event.e.type === "mouseup") {
+    if(event.e.type === "mouseup" || event.e.type === "touchend") {
       addComponent(line, true);
     }
   }
@@ -658,7 +663,7 @@ $(document).ready(() => {
   function handleDropTextBox(event) {
     if(mode !== TEXTBOX) return;
 
-    if(event.e.type === "mousedown") {
+    if(event.e.type === "mousedown" || event.e.type === "touchstart") {
       var pointer = canvas.getPointer(event.e);
       var textbox = new fabric.IText('MyText', {
         width: 300,
@@ -673,6 +678,7 @@ $(document).ready(() => {
       });
       canvas.add(textbox).setActiveObject(textbox);
       addComponent(textbox, true);
+      enableSelectMode();
     }
   }
 
@@ -680,7 +686,7 @@ $(document).ready(() => {
     function handlePanning(event, context) {
       if(mode !== HAND) return;
 
-      if(event.e.type === "mousedown") {
+      if(event.e.type === "mousedown" || event.e.type === "touchstart") {
         canvas.selection = false;
         let evt = event.e;
         context.isDragging = true;
@@ -688,7 +694,7 @@ $(document).ready(() => {
         context.lastPosX = evt.clientX;
         context.lastPosY = evt.clientY;
       }
-      if(event.e.type === "mousemove") {
+      if(event.e.type === "mousemove" || event.e.type === "touchmove") {
         if (context.isDragging) {
           var e = event.e;
           context.viewportTransform[4] += e.clientX - context.lastPosX;
