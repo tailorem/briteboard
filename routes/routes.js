@@ -20,9 +20,12 @@ module.exports = function(DataHelpers) {
   routes.post('/new', function(req, res) {
     const id = rando();
     const name = req.body.boardName;
+    const templateId = parseInt(req.body.templateId);
+    // console.log('TEMPLATE ID IN ROUTES:', templateId);
     const newBoard = new Board({
       name: name,
       id: id,
+      template: templateId,
       componentHistory: []
     });
 

@@ -1,9 +1,13 @@
 $(document).ready(() => {
 
   let canvas = new fabric.Canvas('whiteboard');
+  let templateId = $('#template-id').text();
+  let templates = ['','/img/weekly-cal.png','/img/background.jpg','/img/background.jpg'];
   canvas.setHeight(1600);
   canvas.setWidth(2400);
-  canvas.setBackgroundImage('/img/background.jpg', canvas.renderAll.bind(canvas));
+  if (templateId !== 0) {
+    canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
+  }
   // Set default canvas values
   const ERASE = 0;
   const LINE = 1;
@@ -21,10 +25,12 @@ $(document).ready(() => {
   let borderSize = 4;
   canvas.freeDrawingBrush.width = borderSize;
 
-
   const socket = io.connect();
   let DEBUG = false;
 
+  canvas.on('mouse:down', function(event) {
+    $('body').append('<p>Aaron</p>');
+  });
   ////////////////////////////////////////////
   //             CLIENT INFO                //
   ////////////////////////////////////////////

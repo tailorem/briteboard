@@ -22,7 +22,7 @@ module.exports = {
     /* load all boards into memory from db */
     Board.find({}, (err, dbBoardsData) => {
       if (err) {
-        console.log("holy cow, could not init data");
+        console.log("Could not init data");
       }
       boards = dbBoardsData;    // or maybe something else?
       if (success_cb) { success_cb(); }

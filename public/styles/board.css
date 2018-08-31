@@ -73,6 +73,10 @@ button:hover {
   align-items: center;
 }
 
+#template-id {
+  display: none;
+}
+
 .video-container {
   display: flex;
   height: 100%;

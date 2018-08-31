@@ -24,7 +24,7 @@
 <div class="main">
   <header class="nav-top">
     <h1><%= board.name %></h1>
-    <!-- <h2><%= board.id %></h2> -->
+    <p id="template-id"><%= board.template %></p>
 
     <div id="users"></div>
 
@@ -54,8 +54,8 @@
         <code>border</code>
         <input type="range" id="brush-size" value="2" min="0" max="10" style="display: block">
       </label>
-      <button id="save-image"><i class="fas fa-file-download"></i></button>
-      <label for="add-background" class="custom-file-upload"><i class="far fa-images"></i></label>
+      <button id="save-image" title="Save As Image"><i class="fas fa-file-download"></i></button>
+      <label for="add-background" class="custom-file-upload" title="Add Background Image"><i class="far fa-images"></i></label>
       <input id="add-background" type="file" />
     </div>
 
