@@ -63,9 +63,7 @@ button:hover {
 .nav-left {
   display: flex;
   flex-direction: column;
-  margin-left: 0;
   border: 1px solid #ccc;
-  padding: 0;
   height: 100%;
   width: 55px;
 }
