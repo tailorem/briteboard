@@ -183,6 +183,7 @@ input.new-board {
 }
 .btn--inside {
   margin-left: -130px;
+  margin-bottom: 3px;
 }
 
 .form__field-new {
@@ -209,6 +210,7 @@ input.new-board {
   }
   .btn--inside {
     margin-left: 0;
+    margin-bottom: 0;
   }
   .btn--primary {
     border-radius: 0;
