@@ -13,9 +13,7 @@
   <link rel="stylesheet" type="text/css" href="/vendor/spectrum.css">
   <link rel="stylesheet" type="text/css" href="/styles/board.css" />
 
-
-
-  <script src="https://webrtc.github.io/adapter/adapter-4.2.2.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script> -->
 
 </head>
 
@@ -32,8 +30,8 @@
     <div id="users"></div>
 
     <div class="video-container">
-      <video id="video1" autoplay></video>
-      <!-- <canvas id="canvas1" class="video"></canvas> -->
+      <video id="localVideo" autoplay muted></video>
+      <div id="remoteVideos"></div>
     </div>
 
   </header>
@@ -69,6 +67,8 @@
 </div>
 
   <script src="../vendor/jquery-3.3.1.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/simplewebrtc@3.0.2/out/simplewebrtc-with-adapter.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
   <script src="../vendor/fabric.js"></script>
   <script src="../vendor/uuidv4.min.js"></script>
