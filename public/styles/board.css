@@ -62,6 +62,11 @@ button:hover {
   width: 100px;
 }
 
+.navbar-brand {
+  padding-left: 10px;
+  cursor: pointer;
+}
+
 .main {
   background-color: white;
   height: 100%;
