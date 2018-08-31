@@ -119,7 +119,7 @@ $(document).ready(() => {
   // Delete Tool
   $('#delete').on('click', function(e) { enableEraserMode() });
 
-  $('#border-size').on('click', function(e) {  
+  $('#border-size').on('click', function(e) {
     borderSize = parseInt($('#border-size').val(), 10) * 2;
   });
 
@@ -789,7 +789,7 @@ $(document).ready(() => {
       canvas.remove(obj);
       socket.emit("remove_component", { id: obj.id })
     });
-  } 
+  }
 
   function componentParams(component) {
     return {  id: component.id,
@@ -856,7 +856,7 @@ $(document).ready(() => {
       targetComponent.angle = data.angle;
       targetComponent.set("text",data.text);
       canvas.renderAll();
-      if(mode === SELECT) 
+      if(mode === SELECT)
         targetComponent.set({ selectable: true }).setCoords();
     } else {
       if (DEBUG) console.log("Unknown Component Modified.", data)
