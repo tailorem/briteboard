@@ -20,6 +20,10 @@ $(document).ready(() => {
   let currentColor = '#000000';
   let borderSize = 4;
   canvas.freeDrawingBrush.width = borderSize;
+  canvas.zoomToPoint({
+    x: 0,
+    y: 0
+  }, 0.78);
 
 
   const socket = io.connect();
@@ -161,22 +165,6 @@ $(document).ready(() => {
       currentColor = color.toHexString()
       canvas.freeDrawingBrush.color = currentColor;
     }
-  });
-
-  // Change brush sizes
-  $('#small-brush').on('click', function(e) {
-    canvas.freeDrawingBrush.width = 3
-    canvas.isDrawingMode = true;
-    enableDrawingMode();
-  });
-  $('#medium-brush').on('click', function(e) {
-    canvas.freeDrawingBrush.width = 15
-    canvas.isDrawingMode = true;
-    enableDrawingMode();
-  });
-  $('#large-brush').on('click', function(e) {
-    canvas.freeDrawingBrush.width = 30
-    enableDrawingMode();
   });
 
   // Save canvas to image
@@ -347,6 +335,28 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
+  var inRedo = false;
+  let componentHistory = [], historyIndex = 0;
+  function trackComponentChanges(target, eventType) {
+    if(inRedo) return;
+    componentHistory.push({type: eventType, target: target});
+  }
+  function Undo() {
+    if(componentHistory.length > 0)
+      redoHistory(componentHistory.pop())
+  }
+  function redoHistory(lastAction) {
+    inRedo = true;
+    console.log("redo history", lastAction)
+    if(lastAction.type === "add") {
+      removeComponents([lastAction.target]);
+    } else {
+      addComponent(lastAction.target, false);
+    }
+    inRedo = false;
+  }
+
+
   ['object:modified'].forEach(function(eventType) {
     canvas.on(eventType, function(event) {
       // debouncing/throtling not required.
@@ -361,7 +371,7 @@ $(document).ready(() => {
 
   canvas.on('mouse:up', function(event) {
     if (mode === ERASE) {
-      removeComponent();
+      removeComponents(canvas.getActiveObjects());
     }
   });
 
@@ -383,6 +393,7 @@ $(document).ready(() => {
     })(path.toObject);
 
     path.id = uuidv4();
+    componentHistory.push({type: "add", target: path});
     socket.emit("path_created", path.toJSON())
   });
 
@@ -425,6 +436,7 @@ $(document).ready(() => {
       }, delay);
     }
   }
+
   ///////////////////
   // TOUCH EVENTS //
   ///////////////////
@@ -479,13 +491,13 @@ $(document).ready(() => {
   });
 
 
+
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
     if(event.e.metaKey && mode === SELECT) {
       elevateComponent(canvas.getActiveObject())
     }
     isMouseDown = true;
-
   });
 
   // Elevate Components to the top
@@ -510,12 +522,13 @@ $(document).ready(() => {
     if(char == 27) enableSelectMode();         // ESC KEY
     if(ctrlMetaDown && char === 67) Copy();   // CMD/CTR C
     if(ctrlMetaDown && char === 86) Paste();  // CMD/CTRL V
+    if(ctrlMetaDown && char === 90) Undo();  // CMD/CTRL Z
 
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
       let currentSelection = canvas.getActiveObjects();
       if (currentSelection.length > 0) {
-        removeComponent();
+        removeComponents(canvas.getActiveObjects());
       }
     }
 
@@ -536,7 +549,7 @@ $(document).ready(() => {
   canvas.on('mouse:up', function(event) {
     isMouseDown = false;
     if (mode === ERASE) {
-      removeComponent();
+      removeComponents(canvas.getActiveObjects());
     }
   });
 
@@ -732,19 +745,19 @@ $(document).ready(() => {
     }
 
   // Zoom in/out with mousewheel
-  canvas.on('mouse:wheel', function(opt) {
-    var delta = opt.e.deltaY;
-    var pointer = canvas.getPointer(opt.e);
+  canvas.on('mouse:wheel', function(event) {
+    var delta = event.e.deltaY;
+    var pointer = canvas.getPointer(event.e);
     var zoom = canvas.getZoom();
     zoom = zoom - delta / 400;
     if (zoom > 3) zoom = 3;
     if (zoom < 0.2) zoom = 0.2;
     canvas.zoomToPoint({
-      x: opt.e.offsetX,
-      y: opt.e.offsetY
+      x: event.e.offsetX,
+      y: event.e.offsetY
     }, zoom);
-    opt.e.preventDefault();
-    opt.e.stopPropagation();
+    event.e.preventDefault();
+    event.e.stopPropagation();
   });
 
   // component changed
@@ -785,14 +798,15 @@ $(document).ready(() => {
     component.setCoords();
     if(DEBUG) console.log("Create Component", component)
     if (!ignoreCanvas) canvas.add(component);
+    componentHistory.push({type: "add", target: component});
     socket.emit('create_component', component.toJSON());
   };
 
   // Remove component
-  function removeComponent() {
-    let currentSelection = canvas.getActiveObjects();
-    canvas.getActiveObjects().forEach(obj => {
+  function removeComponents(components) {
+    components.forEach(obj => {
       canvas.remove(obj);
+      trackComponentChanges(obj, "remove")
       socket.emit("remove_component", { id: obj.id })
     });
   } 
@@ -821,8 +835,8 @@ $(document).ready(() => {
   socket.on('path_created', function(path) {
     if (DEBUG) console.log('incoming', path);
     fabric.util.enlivenObjects([path], function(objects) {
-      objects.forEach(function(p) {
-        canvas.add(p);
+      objects.forEach(function(each) {
+        canvas.add(each);
       });
     });
   });
@@ -889,6 +903,7 @@ $(document).ready(() => {
     Paste();
   });
 
+  let _clipboard;
   function Copy() {
     canvas.getActiveObject().clone(function(cloned) {
       _clipboard = cloned;
