@@ -118,21 +118,16 @@ $(document).ready(() => {
   let client;
 
   socket.on('connected', (msg) => {
-    // console.log("CONNECTED", msg.currentUsers);
     listUsers(msg.currentUsers);
     getCursors(msg.currentUsers);
   });
 
   socket.on('new connection', (user) => {
-    // console.log("NEW CONNECTION", msg);
     addUser(user);
     client = user;
   });
 
   socket.on('user disconnected', (msg) => {
-    // console.log("USER DISCONNECTED", msg);
-    // listUsers(msg.currentUsers);
-    // console.log("DISCONNECTED", msg.disconnectedUser);
     removeUser(msg.currentUsers);
   });
 
