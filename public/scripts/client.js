@@ -55,10 +55,10 @@ $(document).ready(() => {
   // On connection, user is prompted to select a username
   (function() {
     $(`<div id="username-form" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
-        <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
+        <div class="username-box">
+        <p>Select a username</p>
           <form id="select-username">
-            <p>Select a username:</p>
-            <input type="text" style="outline: none;" autofocus onfocus="this.select()" />
+            <input type="text" placeholder="Enter a username" autofocus onfocus="this.select()" />
             <button>GO</button>
           </form>
         </div>
