@@ -17,11 +17,13 @@ $(document).ready(() => {
   const SELECT = 5;
   const TEXTBOX = 6;
   const DRAW = 7
+  const TRIANGLE = 8;
   let mode = SELECT;
   enableSelectMode();
   canvas.freeDrawingBrush.color = '#000000';
   let currentWidth = canvas.freeDrawingBrush.width = 15;
   let currentColor = '#000000';
+  let currentBorderColor = '#000000';
   let borderSize = 4;
   canvas.freeDrawingBrush.width = borderSize;
   canvas.zoomToPoint({
@@ -121,6 +123,9 @@ $(document).ready(() => {
   // Circle Tool
   $('#circle').on('click', function(e) { enableCircleMode() });
 
+  // Circle Tool
+  $('#triangle').on('click', function(e) { enableTriangleMode() });
+
   // Draw Rectangle Tool
   $('#draw-rect').on('click', function(e) { enableRectMode() });
 
@@ -172,6 +177,23 @@ $(document).ready(() => {
       canvas.freeDrawingBrush.color = currentColor;
     }
   });
+
+    // Border Color Picker
+    $("#border-color-picker").spectrum({
+      color: currentBorderColor,
+      showPalette: true,
+      palette: [
+        ['#000000', '#ffffff'],
+        ['#FF4136', '#0074D9'],
+        ['#2ECC40', '#f9f878'],
+        ['#be50b7', '#FF851B'],
+        ['#39CCCC', '#AAAAAA'],
+      ],
+      change: function(color) {
+        currentBorderColor = color.toHexString()
+      }
+    });
+  
 
   // Save canvas to image
   $('#save-image').on('click', function(e) {
@@ -338,6 +360,14 @@ $(document).ready(() => {
     makeObjectsSelectable(false);
   }
 
+  function enableTriangleMode() {
+    clearModes()
+    mode = TRIANGLE;
+    canvas.discardActiveObject();
+    $('#rectangle').addClass('selected');
+    makeObjectsSelectable(false);
+  }
+
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
@@ -351,6 +381,11 @@ $(document).ready(() => {
     if(componentHistory.length > 0)
       redoHistory(componentHistory.pop())
   }
+
+  function Redo() {
+    // TBD
+  }
+
   function redoHistory(lastAction) {
     inRedo = true;
     console.log("redo history", lastAction)
@@ -399,16 +434,17 @@ $(document).ready(() => {
     })(path.toObject);
 
     path.id = uuidv4();
-    componentHistory.push({type: "add", target: path});
+    trackComponentChanges(path, "add");
     socket.emit("path_created", path.toJSON())
   });
 
-  let rect, line, circle, isMouseDown, origX, origY;
+  let rect, triangle, line, circle, isMouseDown, origX, origY;
   // TOOLS EVENT HANDLING
   ['mouse:down', 'mouse:move', 'mouse:up', 'dragenter', 'dragleave', 'drop', 'dragover']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
         handleDrawRect(event);
+        handleDrawTriangle(event);
         handleDrawCircle(event);
         handleDrawLine(event);
         handleDropTextBox(event);
@@ -443,46 +479,6 @@ $(document).ready(() => {
     }
   }
 
-  ///////////////////
-  // TOUCH EVENTS //
-  ///////////////////
-// canvas.addEventListener("touchstart", function (e) {
-//   e.preventDefault();
-//   var mousePos = getTouchPos(canvas, e);
-//   var touch = e.touches[0];
-//   console.log("touchstart", mousePos)
-//   // do_mouse_click_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
-// }, false);
-
-// canvas.addEventListener("touchend", function (e) {
-//   e.preventDefault();
-//   var mousePos = getTouchPos(canvas, e);
-//   console.log("touchend", mousePos)
-//   // do_mouse_up_logic(mousePos.x, mousePos.y);
-// }, false);
-
-// canvas.addEventListener("touchmove", function (e) {
-//   e.preventDefault();
-//   var mousePos = getTouchPos(canvas, e);
-//   var touch = e.touches[0];
-//   console.log("touchmove", mousePos)
-//   // do_mouse_move_logic(mousePos.x, mousePos.y, touch.clientX, touch.clientY);
-// }, false);
-
-// function getTouchPos(canvasDom, touchEvent) {
-//   var rect = canvasDom.getBoundingClientRect();
-//   return {
-//     x: touchEvent.touches[0].clientX - rect.left,
-//     y: touchEvent.touches[0].clientY - rect.top
-//   };
-// }
-//  //////////////////////////
-
-//   canvas.on('object:added', function(event) {
-// console.log("Object Created", event)
-// //   });
-
-  //
   canvas.on('mouse:over', function(event) {
     if(event.target) {
       event.target.set('opacity', 0.7);
@@ -528,7 +524,9 @@ $(document).ready(() => {
     if(char == 27) enableSelectMode();         // ESC KEY
     if(ctrlMetaDown && char === 67) Copy();   // CMD/CTR C
     if(ctrlMetaDown && char === 86) Paste();  // CMD/CTRL V
-    if(ctrlMetaDown && char === 90) Undo();  // CMD/CTRL Z
+    if(ctrlMetaDown && char === 90)  // CMD/CTRL Z
+      if(event.shiftKey) {
+        Redo() } else { Undo()} ;  
 
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
@@ -573,7 +571,7 @@ $(document).ready(() => {
       origX = pointer.x;
       origY = pointer.y;
       pointer = canvas.getPointer(event.e);
-      rect = new fabric.Rect({
+      rect = new fabric.Triangle({
         selectable: false,
         hasControls: true,
         left: origX,
@@ -584,7 +582,7 @@ $(document).ready(() => {
         height: pointer.y - origY,
         angle: 0,
         fill: currentColor,
-        stroke: "black",
+        stroke: currentBorderColor,
         strokeWidth: borderSize,
         transparentCorners: false
       });
@@ -609,6 +607,52 @@ $(document).ready(() => {
     }
   }
 
+    // DRAW TRIANGLE
+    function handleDrawTriangle(event) {
+      if(mode !== TRIANGLE) return;
+  
+      if(event.e.type === "mousedown" || event.e.type === "touchstart") {
+        canvas.selection = false;
+        let pointer = canvas.getPointer(event.e);
+        origX = pointer.x;
+        origY = pointer.y;
+        pointer = canvas.getPointer(event.e);
+        triangle = new fabric.Triangle({
+          selectable: false,
+          hasControls: true,
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x - origX,
+          height: pointer.y - origY,
+          angle: 0,
+          fill: currentColor,
+          stroke: currentBorderColor,
+          strokeWidth: borderSize,
+          transparentCorners: false
+        });
+        canvas.add(triangle)
+      }
+      if(event.e.type === "mousemove" || event.e.type === "touchmove") {
+        if (!isMouseDown) return;
+  
+        let pointer = canvas.getPointer(event.e);
+        if (origX > pointer.x) {
+          triangle.set({ left: Math.abs(pointer.x) });
+        }
+        if (origY > pointer.y) {
+          triangle.set({ top: Math.abs(pointer.y) });
+        }
+        triangle.set({ width: Math.abs(origX - pointer.x) });
+        triangle.set({ height: Math.abs(origY - pointer.y) });
+        canvas.renderAll();
+      }
+      if(event.e.type === "mouseup" || event.e.type === "touchend") {
+        addComponent(triangle, true);
+      }
+    }
+  
    // DRAW CIRCLE
    function handleDrawCircle(event) {
     if(mode !== CIRCLE) return;
@@ -626,6 +670,7 @@ $(document).ready(() => {
         strokeWidth: borderSize,
         stroke: 'black',
         fill: currentColor,
+        stroke: currentBorderColor,
         transparentCorners: false,
         selectable: false,
         originX: 'center',
@@ -804,7 +849,7 @@ $(document).ready(() => {
     component.setCoords();
     if(DEBUG) console.log("Create Component", component)
     if (!ignoreCanvas) canvas.add(component);
-    componentHistory.push({type: "add", target: component});
+    trackComponentChanges(component, "add");
     socket.emit('create_component', component.toJSON());
   };
 
