@@ -8,6 +8,14 @@ $(document).ready(() => {
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
+
+  // canvas.setBackgroundImage('/img/grid.png', canvas.renderAll.bind(canvas), {
+  //   width: canvas.width,
+  //   height: canvas.height,
+  //   originX: 'left',
+  //   originY: 'top'
+  // });
+
   // Set default canvas values
   const ERASE = 0;
   const LINE = 1;
@@ -34,9 +42,9 @@ $(document).ready(() => {
   const socket = io.connect();
   let DEBUG = false;
 
-  canvas.on('mouse:down', function(event) {
-    $('body').append('<p>Aaron</p>');
-  });
+  // canvas.on('mouse:down', function(event) {
+  //   $('body').append('<p>Aaron</p>');
+  // });
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -45,14 +53,21 @@ $(document).ready(() => {
   let selectedUsername = null;
 
   function listUsers(users) {
-    // console.log("LIST USERS FUNCTION", users);
+    $container = $("div.container");
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
     users.forEach(function(user) {
       userId = Object.keys(user)[0];
       user = user[Object.keys(user)[0]];
-      $('<span style="margin: 0 .25em;">').text(user.name).appendTo($users);
+      $('<span class="user-name">').text(user.name).appendTo($users);
+      $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
     });
+  }
+
+  function removeCursor(currentUsers) {
+    // loop through user elements on page
+    // find id missing from currentUsers
+    // remove that element
   }
 
   // On connection, user is prompted to select a username
@@ -96,8 +111,10 @@ $(document).ready(() => {
   });
 
   socket.on('user disconnected', (msg) => {
-    console.log("USER DISCONNECTED", msg);
+    // console.log("USER DISCONNECTED", msg);
     listUsers(msg.currentUsers);
+    console.log("DISCONNECTED", msg.disconnectedUser);
+    // removeCursor(msg.currentUsers);
   });
 
 
@@ -271,7 +288,7 @@ $(document).ready(() => {
         currentBorderColor = color.toHexString()
       }
     });
-  
+
 
   // Save canvas to image
   $('#save-image').on('click', function(e) {
@@ -581,7 +598,7 @@ $(document).ready(() => {
     if(ctrlMetaDown && char === 86) Paste();  // CMD/CTRL V
     if(ctrlMetaDown && char === 90)  // CMD/CTRL Z
       if(event.shiftKey) {
-        Redo() } else { Undo()} ;  
+        Redo() } else { Undo()} ;
 
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
@@ -665,7 +682,7 @@ $(document).ready(() => {
     // DRAW TRIANGLE
     function handleDrawTriangle(event) {
       if(mode !== TRIANGLE) return;
-  
+
       if(event.e.type === "mousedown" || event.e.type === "touchstart") {
         canvas.selection = false;
         let pointer = canvas.getPointer(event.e);
@@ -691,7 +708,7 @@ $(document).ready(() => {
       }
       if(event.e.type === "mousemove" || event.e.type === "touchmove") {
         if (!isMouseDown) return;
-  
+
         let pointer = canvas.getPointer(event.e);
         if (origX > pointer.x) {
           triangle.set({ left: Math.abs(pointer.x) });
@@ -707,7 +724,7 @@ $(document).ready(() => {
         addComponent(triangle, true);
       }
     }
-  
+
    // DRAW CIRCLE
    function handleDrawCircle(event) {
     if(mode !== CIRCLE) return;
