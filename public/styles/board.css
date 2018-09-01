@@ -155,6 +155,16 @@ label.brush-size {
 
 /* USERNAME INPUT POPUP */
 
+#username-form {
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+  position:fixed;
+}
+
 .username-box {
   background-color: #fff;
   border: 1px solid #aaa;
