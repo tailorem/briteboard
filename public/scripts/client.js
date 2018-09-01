@@ -53,26 +53,41 @@ $(document).ready(() => {
   let selectedUsername = null;
 
   function listUsers(users) {
-    $container = $("div.container");
     $users = $('#users');
-    $users.empty(); // improve this by removing user by id?
     users.forEach(function(user) {
-      userId = Object.keys(user)[0];
       user = user[Object.keys(user)[0]];
-      $('<span class="user-name">').text(user.name).appendTo($users);
-      $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
+      if (user.name) {
+        $('<span class="user-name">').text(user.name).appendTo($users);
+      }
     });
   }
 
-  function removeCursor(currentUsers) {
-    // loop through user elements on page
-    // find id missing from currentUsers
-    // remove that element
+  function getCursors(users) {
+    console.log("CURSOR USERS", users);
+    $container = $("div.container");
+    users.forEach(function(user) {
+      user = user[Object.keys(user)[0]];
+      if (user.name) {
+        $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
+      }
+    });
+  }
+
+  function addUser(user) {
+    $users = $('#users');
+    $container = $("div.container");
+    $('<span class="user-name">').text(user.name).appendTo($users);
+    $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
+  }
+
+  function removeUser(user) {
+    // remove user from listed users
+    // remove user cursor from page
   }
 
   // On connection, user is prompted to select a username
   (function() {
-    $(`<div id="username-form" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
+    $(`<div id="username-form">
         <div class="username-box">
         <p>Select a username</p>
           <form id="select-username">
@@ -96,25 +111,26 @@ $(document).ready(() => {
       socket.emit('username selected', $username);
       $('#username-form').remove();
 
-      console.log('Username submitted:', $username)
+      // console.log('Username submitted:', $username)
     });
   })();
 
   socket.on('connected', (msg) => {
-    console.log("CONNECTED", msg.currentUsers);
+    // console.log("CONNECTED", msg.currentUsers);
     listUsers(msg.currentUsers);
+    getCursors(msg.currentUsers);
   });
 
   socket.on('new connection', (msg) => {
-    console.log("NEW CONNECTION", msg);
-    listUsers(msg);
+    // console.log("NEW CONNECTION", msg);
+    addUser(msg);
   });
 
   socket.on('user disconnected', (msg) => {
     // console.log("USER DISCONNECTED", msg);
-    listUsers(msg.currentUsers);
-    console.log("DISCONNECTED", msg.disconnectedUser);
-    // removeCursor(msg.currentUsers);
+    // listUsers(msg.currentUsers);
+    // console.log("DISCONNECTED", msg.disconnectedUser);
+    removeUser(msg.currentUsers);
   });
 
 
