@@ -210,6 +210,10 @@ label.brush-size {
   color: #a3a3a3;
 }
 
+.user-cursor {
+  position: absolute;
+}
+
 /* MEDIA QUERIES */
 @media (max-width: 480px) {
   .username-box input {
