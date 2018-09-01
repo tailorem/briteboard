@@ -174,7 +174,8 @@ input.new-board {
   cursor: pointer;
 }
 .btn--primary {
-  background: #7f8ff4;
+  background: #79a2f0;
+  /* background: #7f8ff4; */
   color: #fff;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
   border-radius: 2px;
@@ -182,11 +183,12 @@ input.new-board {
 }
 
 .btn--primary:hover {
-  background: #6c7ff2;
+  background: #6893e4;
+  /* background: #6c7ff2; */
 }
 
 .btn--primary:active {
-  background: #7f8ff4;
+  background: #79a2f0;
   box-shadow: inset 0 0 10px 2px rgba(0, 0, 0, 0.2);
 }
 
