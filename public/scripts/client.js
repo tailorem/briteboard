@@ -40,7 +40,7 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = false;
+  let DEBUG = true;
 
 
   ////////////////////////////////////////////
@@ -539,13 +539,8 @@ $(document).ready(() => {
   let currentUserName = "Bob";
   canvas.on('mouse:move', function(event) {
     let pointer = canvas.getPointer(event.e);
-<<<<<<< HEAD
-    // console.log("current user", client)
-    // console.log("user position", pointer.x, pointer.y);
-=======
     if (DEBUG) console.log("current user", client)
     if (DEBUG) console.log("user position", pointer.x, pointer.y);
->>>>>>> 877a8fcc65633290b9d31f88b32b5e2331e9a69d
     socket.emit("user_position", {client: client, pos: pointer})
   });
   // reposition cursor received from server
