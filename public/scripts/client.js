@@ -538,19 +538,22 @@ $(document).ready(() => {
     });
   })
 
+  /////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////
   let currentUserId = uuidv4();
   let currentUserName = "Bob";
   canvas.on('mouse:move', function(event) {
     let pointer = canvas.getPointer(event.e);
-    console.log("current users", getCurrentUsers(board))
+    console.log("current user", client)
     console.log("user position", pointer.x, pointer.y);
-    socket.emit("user_position", {pos: pointer})
+    socket.emit("user_position", {client: client, pos: pointer})
   });
   // reposition cursor received from server
   socket.on('user_position', function(data) {
     if (DEBUG) console.log("received user position", data)
-    console.log("users", users)
-    $('#' + users[0].id).css({top: '200px', left: '200px'});
+    console.log("users", data.client)
+    $(`#${data.client.id}`).css({top: data.pos.y, left: data.pos.x});
   });
 
   // throttle async functions
