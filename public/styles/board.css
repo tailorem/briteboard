@@ -111,8 +111,10 @@ a {
 }
 
 video, .video {
-  background-color: white;
-  border-radius: 8px;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   margin: 0 .25em;
   height: 60px;
   width: 80px;
