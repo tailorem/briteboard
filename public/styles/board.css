@@ -74,10 +74,17 @@ button:hover {
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
-.navbar-brand {
+.navbar-logo {
   padding-left: 10px;
+  height: 45px;
   cursor: pointer;
 }
+
+.navbar-logo-text {
+  height: 35px;
+  cursor: pointer;
+}
+
 
 .main {
   background-color: white;
