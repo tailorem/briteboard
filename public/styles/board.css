@@ -116,8 +116,10 @@ a {
 }
 
 video, .video {
-  background-color: white;
-  border-radius: 8px;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   margin: 0 .25em;
   height: 60px;
   width: 80px;
@@ -157,6 +159,16 @@ label.brush-size {
 }
 
 /* USERNAME INPUT POPUP */
+
+#username-form {
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+  position:fixed;
+}
 
 .username-box {
   background-color: #fff;
@@ -215,13 +227,19 @@ label.brush-size {
 }
 
 .user-name {
-
+  background-color: #eee;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+  color: #222;
+  padding: 10px 15px;
+  margin: 0 .25em;
 }
 
 .user-cursor {
   position: fixed;
   border: 1px solid #aaa;
-  background: #eee;
+  background-color: #eee;
   border-radius: 3px;
   color: #222;
   padding: 10px 15px;
