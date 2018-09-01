@@ -40,20 +40,20 @@
     <div class="nav-left">
 
       <button id="select" title="Select/Move/Modify Tool (esc)"><i class="fas fa-mouse-pointer"></i></button>
-      <button id="hand" title="Hand Tool"><i class="fas fa-hand-paper"></i></button>
+      <button id="hand" title="Hand Tool"><i class="fas fa-arrows-alt"></i></button>
       <button id="draw" title="Free Drawing Tool"><i class="fas fa-pen"></i></button>
-      <button id="line" title="Line Tool"><i class="fa fa-magic"></i></button>
+      <button id="line" title="Line Tool"><i class="fas fa-minus"></i></button>
       <button id="circle" title="Circle Tool"><i class="far fa-circle"></i></button>
       <button id="draw-rect" title="Rectangle Tool"><i class="far fa-square"></i></button>
       <button id="textbox" title="Text Tool"><i class="fas fa-font"></i></button>
       <button id="delete" title="Delete Tool (del)"><i class="fas fa-trash-alt"></i></button>
+      <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
       <label for="add-image" class="custom-file-upload" title="Add Image"><i class="far fa-images"></i></label>
       <input id="add-image" type="file" />
-      <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
+
       <input id="colorPicker" />
-      <label>
-        <code>border</code>
-        <input type="range" id="brush-size" value="2" min="0" max="10" style="display: block; width: 100%;">
+      <label class="brush-size">
+        <input type="range" id="brush-size" value="2" min="0" max="10">
       </label>
       <button id="save-image" title="Save As Image"><i class="fas fa-file-download"></i></button>
       <label for="add-background" class="custom-file-upload" title="Add Background Image"><i class="far fa-images"></i></label>

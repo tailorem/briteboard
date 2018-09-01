@@ -8,39 +8,47 @@ html, body, .main{
   height: 100%;
   max-width: 100vw;
   overflow: hidden;
+  font-family: 'Open Sans', sans-serif;
 }
 
 button {
   padding: 10px 10px 10px 10px;
-  color: white;
+  color: #222;
   font-family: 'Arial', 'Sans Serif';
-  font-size: 10px;
-  letter-spacing: 1px;
+  font-size: 14px;
   text-transform: uppercase;
   text-align: center;
-  background: #FF4136;
-  border-radius: 10px;
-  transition: all 0.1s ease-in-out;
+  background: #eee;
+  border-radius: 0;
+  transition: all 0.1s ease-in;
   cursor: pointer;
   outline: 0;
-  font-size: 14px;
+  border: 0;
 }
 
 button:hover {
- background: #E03A3A;
+ background: #ddd;
 }
 
 .selected {
-  background: #85144b;
+  background: #c0c7f3;
 }
 
 .selected:hover {
-  background: #85144b;
+  background: #c0c7f3;
+}
+
+.fa-minus {
+  transform: scaleY(1.5) scaleX(1.5) rotate(-45deg) ;
+}
+
+.fa-circle, .fa-square, .fa-font {
+  font-weight: bold;
 }
 
 .nav-top {
   align-items: center;
-  background-color: lightgrey;
+  background-color: #dadada;
   display: flex;
   justify-content: space-between;
   padding: .5em;
@@ -54,12 +62,16 @@ button:hover {
 }
 
 .nav-left {
+  /* border-radius: 10px; */
   display: flex;
   flex-direction: column;
-  margin-left: 0;
-  padding: 10px;
-  height: 100%;
-  width: 100px;
+  width: 55px;
+  position: fixed;
+  border: 1px solid #aaa;
+  top: 116px;
+  left: 10px;
+  z-index: 1;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
 .navbar-brand {
@@ -101,19 +113,99 @@ input[type="file"] {
 
 .custom-file-upload {
   padding: 10px 10px 10px 10px;
-  color: white;
-  font-family: arial;
+  color: #222;
+  font-family: 'Arial', 'Sans Serif';
   font-size: 14px;
-  letter-spacing: 1px;
   text-transform: uppercase;
   text-align: center;
-  background: #FF4136;
-  border-radius: 10px;
-  transition: all 0.1s ease-in-out;
+  background: #eee;
+  border-radius: 0;
+  transition: all 0.1s ease-in;
   cursor: pointer;
   outline: 0;
+  border: 0;
 }
 
 .custom-file-upload:hover {
- background: #E03A3A;
+ background: #ddd;
+}
+
+label.brush-size {
+  background-color: #eee;
+  padding: 5px 5px 0;
+}
+
+#brush-size {
+  display: block;
+  width: 100%;
+}
+
+
+
+/* USERNAME INPUT POPUP */
+
+.username-box {
+  background-color: #fff;
+  border: 1px solid #aaa;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+  padding: 25px 50px;;
+  width: 400px;
+}
+
+.username-box p {
+  font-weight: 800;
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.username-box button {
+  display: inline-block;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  transition: background 200ms ease-in;
+  cursor: pointer;
+}
+.username-box button {
+  background: #7f8ff4;
+  color: #fff;
+  border-radius: 2px;
+  padding: 14px 30px;
+}
+
+.username-box button:hover {
+  background: #6c7ff2;
+}
+
+.username-box button:active {
+  background: #7f8ff4;
+  box-shadow: inset 0 0 10px 2px rgba(0, 0, 0, 0.2);
+}
+
+.username-box input {
+  padding: 50px 10px 25px;
+  width: 200px;
+  background: #fff;
+  color: #222;
+  border: 1px solid #6f6f6f;
+  outline: 0;
+  padding: 12px 16px;
+}
+
+.username-box input::placeholder {
+  color: #a3a3a3;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 480px) {
+  .username-box input {
+    width: 100%
+  }
+
+  .username-box button {
+    width: 100%
+  }
 }
