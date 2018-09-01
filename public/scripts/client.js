@@ -34,9 +34,9 @@ $(document).ready(() => {
   const socket = io.connect();
   let DEBUG = false;
 
-  canvas.on('mouse:down', function(event) {
-    $('body').append('<p>Aaron</p>');
-  });
+  // canvas.on('mouse:down', function(event) {
+  //   $('body').append('<p>Aaron</p>');
+  // });
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -103,9 +103,10 @@ $(document).ready(() => {
   });
 
   socket.on('user disconnected', (msg) => {
-    console.log("USER DISCONNECTED", msg);
+    // console.log("USER DISCONNECTED", msg);
     listUsers(msg.currentUsers);
-    removeCursor(msg.currentUsers);
+    console.log("DISCONNECTED", msg.disconnectedUser);
+    // removeCursor(msg.currentUsers);
   });
 
 
