@@ -17,7 +17,6 @@ getCurrentUsers = (board) => {
   return currentUsers;
 }
 
-
 ////////////////////////////////////////////
 //            CANVAS HELPERS              //
 ////////////////////////////////////////////
@@ -50,8 +49,6 @@ module.exports = (io, boards) => {
     socket.join(board);
 
 
-
-
   ////////////////////////////////////////////
   //              USER EVENTS               //
   ////////////////////////////////////////////
@@ -66,24 +63,17 @@ module.exports = (io, boards) => {
       notification: "You've successfully connected!"
     });
 
-    // // Send connection message to other clients in the room
-    // socket.to(board).emit('new connection', { currentUsers: getCurrentUsers(board), notification: "Someone has joined the room!" });
-
+    // Send connected user to all clients
     socket.on('username selected', (username) => {
       clients[socket.id].name = username;
-      io/*socket.broadcast.to(board)*/.emit('new connection', clients[socket.id]);
-      // io/*socket.broadcast.to(board)*/.emit('new connection', getCurrentUsers(board));
-      // console.log("username selected");
+      io.emit('new connection', clients[socket.id]);
     });
 
     // Send disconnect message to everyone in the room
     socket.on('disconnect', (reason) => {
+      io.in(board).emit('user disconnected', clients[socket.id]);
       delete clients[socket.id];
-      io.in(board).emit('user disconnected', { disconnectedUser: socket.id, currentUsers: getCurrentUsers(board), notification: "Someone has left the room!" });
-      // console.log("client disconnected")
     });
-    // console.log(socket.id, board);
-    // socket.broadcast.emit('user connected', socket.id);
 
 
   ////////////////////////////////////////////
@@ -148,5 +138,11 @@ module.exports = (io, boards) => {
     socket.on('elevate_component', function(objectData) {
       socket.to(board).emit('elevate_component', objectData);
     });
+
+    socket.on('user_position', function(objectData) {
+      socket.to(board).emit('user_position', objectData);
+    });
   });
+
+  
 }
