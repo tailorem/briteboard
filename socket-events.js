@@ -81,7 +81,7 @@ module.exports = (io, boards) => {
   //             CAVAS EVENTS               //
   ////////////////////////////////////////////
 
-    if (DEBUG) console.log(boards);
+    // if (DEBUG) console.log(boards);
     // console.log("SOCKET", socket);
 
     var boardHistory = boards.getBoardHistory(board);
