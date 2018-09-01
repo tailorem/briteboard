@@ -74,7 +74,7 @@ module.exports = (io, boards) => {
     // Send disconnect message to everyone in the room
     socket.on('disconnect', (reason) => {
       delete clients[socket.id];
-      io.in(board).emit('user disconnected', { currentUsers: getCurrentUsers(board), notification: "Someone has left the room!" });
+      io.in(board).emit('user disconnected', { disconnectedUser: socket.id, currentUsers: getCurrentUsers(board), notification: "Someone has left the room!" });
       // console.log("client disconnected")
     });
     // console.log(socket.id, board);
@@ -105,14 +105,14 @@ module.exports = (io, boards) => {
     socket.on('create_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board).push(objectData);
       boards.updateBoard(board, objectData, boardHistory);
-      socket.broadcast.emit('create_component', objectData);
+      socket.to(board).emit('create_component', objectData);
     });
 
     // broadcast movements without saving to db
     socket.on('modify_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
       updateboardHistory(boardHistory, objectData);
-      socket.broadcast.emit('modify_component', objectData);
+      socket.to(board).emit('modify_component', objectData);
     });
 
     // broadcast and update db when movement has stopped
@@ -120,7 +120,7 @@ module.exports = (io, boards) => {
       boardHistory = boards.getBoardHistory(board);
       updateboardHistory(boardHistory, objectData);
       boards.updateBoard(board, objectData, boardHistory);
-      socket.broadcast.emit('modify_component', objectData);
+      socket.to(board).emit('modify_component', objectData);
     });
 
     // // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
