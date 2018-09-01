@@ -545,15 +545,20 @@ $(document).ready(() => {
   let currentUserName = "Bob";
   canvas.on('mouse:move', function(event) {
     let pointer = canvas.getPointer(event.e);
-    console.log("current user", client)
-    console.log("user position", pointer.x, pointer.y);
+    // console.log("current user", client)
+    // console.log("user position", pointer.x, pointer.y);
     socket.emit("user_position", {client: client, pos: pointer})
   });
   // reposition cursor received from server
   socket.on('user_position', function(data) {
-    if (DEBUG) console.log("received user position", data)
-    console.log("users", data.client)
-    $(`#${data.client.id}`).css({top: data.pos.y, left: data.pos.x});
+    // if (DEBUG) console.log("received user position", data)
+    // console.log("users", data.client)
+    console.log("Zoom", canvas.getZoom())
+    let topPos = (canvas._offset.top + data.pos.y) * canvas.getZoom(),
+        leftPos = (canvas._offset.left + data.pos.x) * canvas.getZoom();
+        // canvas._offset.top
+    $(`#${data.client.id}`).text(`${parseInt(data.pos.x)}, ${parseInt(data.pos.y)}`)
+    $(`#${data.client.id}`).css({top: topPos, left: leftPos});
   });
 
   // throttle async functions
@@ -600,6 +605,10 @@ $(document).ready(() => {
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
+    console.log("mouse down", event)
+    console.log("mouse down offset", canvas._offset.left, canvas._offset.top)
+    console.log("canvas getBoundingClientRect" , canvas.getBoundingClientRect)
+    console.log("calc boundaries", canvas.calcViewportBoundaries())
     if(event.e.metaKey && mode === SELECT) {
       elevateComponent(canvas.getActiveObject())
     }
@@ -982,6 +991,7 @@ $(document).ready(() => {
   // notify component that is being modified
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
+    console.log("modifying component", componentParams(component))
     let msg_type = isFinal ? "modified_component" : "modify_component";
     socket.emit(msg_type, componentParams(component))
   };
