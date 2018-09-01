@@ -47,11 +47,15 @@
 
     <!-- Jumbotron Header -->
     <header class="jumbotron jumbotron-fluid my-4 text-center homepage-main">
-      <div class="container">
-      <img src="../img/logo.svg" alt="Briteboard" />
-      <h1 class="display-6 tag-line">The place for bright ideas</h1>
-      <p class="product-description">Briteboard is an online collaborative whiteboard for creative team sketching, diagramming, and planning. Work with your team in real time and get immediate feedback with voice and video chat.
-      </p>
+      <video id="video-background" preload muted autoplay loop>
+        <source src="../video/bg-video.mp4" type="video/mp4">
+      </video>
+
+      <div class="container home-content">
+        <img src="../img/logo.svg" alt="Briteboard" />
+        <h1 class="display-6 tag-line">The place for bright ideas</h1>
+        <p class="product-description">Briteboard is an online collaborative whiteboard for creative team sketching, diagramming, and planning. Work with your team in real time and get immediate feedback with voice and video chat.
+        </p>
       <!-- <h4>Create a new briteboard:</h4>
       <div class="new-board">
       <form action="/boards/new" method="POST">
@@ -69,10 +73,11 @@
           </form>
         </div>
       </div>
+      <br>
+      <small><a href="/boards/pxop8fnb">Demo Board</a></small>
+      </div>
 
-        <br>
-        <small><a href="/boards/pxop8fnb">Demo Board</a></small>
-        </div>
+
     </header>
 
     <!-- Page Content -->
