@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1800px"
+	 height="1000px" viewBox="0 0 1800 1000" style="enable-background:new 0 0 1800 1000;" xml:space="preserve">
+<font horiz-adv-x="1000">
+<!-- &#xA9;2009 Commercial Type. -->
+<!-- Copyright: Copyright 2018 Adobe System Incorporated. All rights reserved. -->
+<font-face font-family="Graphik-Bold" units-per-em="1000" underline-position="-100" underline-thickness="50"/>
+<missing-glyph horiz-adv-x="519"/>
+<glyph unicode="A" horiz-adv-x="747" d="M13,0l191,0l38,133l237,0l38,-133l217,0l-227,715l-265,0M361,549l78,-275l-157,0z"/>
+<glyph unicode="D" horiz-adv-x="743" d="M275,158l0,399l45,0C444,557 498,499 498,363l0,-8C498,222 444,158 322,158M69,0l259,0C580,0 712,135 712,358l0,8C712,588 583,715 329,715l-260,0z"/>
+<glyph unicode="E" horiz-adv-x="612" d="M69,0l510,0l0,158l-306,0l0,130l231,0l0,146l-231,0l0,123l290,0l0,158l-494,0z"/>
+<glyph unicode="F" horiz-adv-x="579" d="M69,0l206,0l0,253l221,0l0,151l-221,0l0,152l277,0l0,159l-483,0z"/>
+<glyph unicode="H" horiz-adv-x="784" d="M69,0l206,0l0,282l235,0l0,-282l205,0l0,715l-205,0l0,-273l-235,0l0,273l-206,0z"/>
+<glyph unicode="I" horiz-adv-x="352" d="M73,0l207,0l0,715l-207,0z"/>
+<glyph unicode="M" horiz-adv-x="942" d="M69,0l183,0l0,445l173,-445l68,0l175,445l0,-445l204,0l0,715l-262,0l-137,-381l-137,381l-267,0z"/>
+<glyph unicode="N" horiz-adv-x="777" d="M69,0l180,0l0,449l261,-449l198,0l0,715l-179,0l0,-403l-229,403l-231,0z"/>
+<glyph unicode="O" horiz-adv-x="819" d="M410,149C311,149 245,224 245,354l0,8C245,492 308,565 409,565C510,565 574,490 574,363l0,-8C574,227 511,149 410,149M406,-12C637,-12 788,138 788,358l0,8C788,588 627,725 409,725C195,725 31,579 31,361l0,-8C31,138 175,-12 406,-12z"/>
+<glyph unicode="R" horiz-adv-x="697" d="M69,0l204,0l0,256l48,0l145,-256l216,0l-171,296C586,325 640,382 640,484l0,4C640,639 536,715 349,715l-280,0M273,389l0,172l67,0C406,561 442,538 442,480l0,-4C442,418 408,389 339,389z"/>
+<glyph unicode="S" horiz-adv-x="647" d="M331,-12C515,-12 619,95 619,226C619,381 526,428 345,448C256,460 234,478 234,518C234,554 262,579 317,579C373,579 402,553 409,502l190,0C586,653 489,725 317,725C146,725 40,631 40,502C40,358 108,298 310,274C396,261 423,249 423,205C423,163 390,134 331,134C246,134 223,176 218,227l-195,0C29,72 131,-12 331,-12z"/>
+<glyph unicode="T" horiz-adv-x="618" d="M206,0l206,0l0,557l185,0l0,158l-576,0l0,-158l185,0z"/>
+<glyph unicode="U" horiz-adv-x="764" d="M381,-12C578,-12 700,85 700,293l0,422l-207,0l0,-413C493,195 466,149 381,149C294,149 269,198 269,299l0,416l-205,0l0,-425C64,90 179,-12 381,-12z"/>
+<glyph unicode="W" horiz-adv-x="996" d="M180,0l200,0l111,454l110,-454l214,0l167,715l-190,0l-97,-450l-104,450l-182,0l-96,-446l-92,446l-207,0z"/>
+</font>
+
+	<g id="Layer_2">
+	<rect id="background" style="fill:#FFFFFF;" width="1798" height="1000"/>
+	<rect id="sun_bg" x="-1" style="fill:#C6C5ED;" width="253" height="1000"/>
+	<rect id="sat_bg" x="1547" style="fill:#C6C5ED;" width="253" height="1000"/>
+	<rect id="Footer" y="941" style="fill:#333333;" width="1798" height="59"/>
+	<rect id="Days" y="0" style="fill:#333333;" width="1800" height="95"/>
+	<text transform="matrix(1 0 0 1 82 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">SUN</text>
+	<text transform="matrix(1 0 0 1 337 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">MON</text>
+	<text transform="matrix(1 0 0 1 600 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">TUE</text>
+	<text transform="matrix(1 0 0 1 852 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">WED</text>
+	<text transform="matrix(1 0 0 1 1113 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">THU</text>
+	<text transform="matrix(1 0 0 1 1386 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">FRI</text>
+	<text transform="matrix(1 0 0 1 1638 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">SAT</text>
+</g>
+<g id="horizontal">
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="3" y1="775.5" x2="1803" y2="775.5"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="3" y1="606.5" x2="1803" y2="606.5"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="4" y1="437.5" x2="1804" y2="437.5"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="5" y1="268.5" x2="1805" y2="268.5"/>
+</g>
+<g id="vert">
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="251.5" y1="0" x2="251.5" y2="940"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="512.5" y1="0" x2="512.5" y2="940"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="768.5" y1="0" x2="768.5" y2="940"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="1026.5" y1="0" x2="1026.5" y2="940"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="1284.5" y1="0" x2="1284.5" y2="940"/>
+	
+		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="1547.5" y1="1" x2="1547.5" y2="941"/>
+</g>
+<g id="Layer_1" style="display:none;">
+	
+		<image style="display:inline;overflow:visible;opacity:0.5;" width="2001" height="1127" xlink:href="../../../../../Desktop/calendar-template.png"  transform="matrix(0.8987 0 0 0.887 7.629395e-06 7.629395e-06)">
+	</image>
+</g>
+</svg>
