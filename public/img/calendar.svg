@@ -1,42 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1800px"
-	 height="1000px" viewBox="0 0 1800 1000" style="enable-background:new 0 0 1800 1000;" xml:space="preserve">
-<font horiz-adv-x="1000">
-<!-- &#xA9;2009 Commercial Type. -->
-<!-- Copyright: Copyright 2018 Adobe System Incorporated. All rights reserved. -->
-<font-face font-family="Graphik-Bold" units-per-em="1000" underline-position="-100" underline-thickness="50"/>
-<missing-glyph horiz-adv-x="519"/>
-<glyph unicode="A" horiz-adv-x="747" d="M13,0l191,0l38,133l237,0l38,-133l217,0l-227,715l-265,0M361,549l78,-275l-157,0z"/>
-<glyph unicode="D" horiz-adv-x="743" d="M275,158l0,399l45,0C444,557 498,499 498,363l0,-8C498,222 444,158 322,158M69,0l259,0C580,0 712,135 712,358l0,8C712,588 583,715 329,715l-260,0z"/>
-<glyph unicode="E" horiz-adv-x="612" d="M69,0l510,0l0,158l-306,0l0,130l231,0l0,146l-231,0l0,123l290,0l0,158l-494,0z"/>
-<glyph unicode="F" horiz-adv-x="579" d="M69,0l206,0l0,253l221,0l0,151l-221,0l0,152l277,0l0,159l-483,0z"/>
-<glyph unicode="H" horiz-adv-x="784" d="M69,0l206,0l0,282l235,0l0,-282l205,0l0,715l-205,0l0,-273l-235,0l0,273l-206,0z"/>
-<glyph unicode="I" horiz-adv-x="352" d="M73,0l207,0l0,715l-207,0z"/>
-<glyph unicode="M" horiz-adv-x="942" d="M69,0l183,0l0,445l173,-445l68,0l175,445l0,-445l204,0l0,715l-262,0l-137,-381l-137,381l-267,0z"/>
-<glyph unicode="N" horiz-adv-x="777" d="M69,0l180,0l0,449l261,-449l198,0l0,715l-179,0l0,-403l-229,403l-231,0z"/>
-<glyph unicode="O" horiz-adv-x="819" d="M410,149C311,149 245,224 245,354l0,8C245,492 308,565 409,565C510,565 574,490 574,363l0,-8C574,227 511,149 410,149M406,-12C637,-12 788,138 788,358l0,8C788,588 627,725 409,725C195,725 31,579 31,361l0,-8C31,138 175,-12 406,-12z"/>
-<glyph unicode="R" horiz-adv-x="697" d="M69,0l204,0l0,256l48,0l145,-256l216,0l-171,296C586,325 640,382 640,484l0,4C640,639 536,715 349,715l-280,0M273,389l0,172l67,0C406,561 442,538 442,480l0,-4C442,418 408,389 339,389z"/>
-<glyph unicode="S" horiz-adv-x="647" d="M331,-12C515,-12 619,95 619,226C619,381 526,428 345,448C256,460 234,478 234,518C234,554 262,579 317,579C373,579 402,553 409,502l190,0C586,653 489,725 317,725C146,725 40,631 40,502C40,358 108,298 310,274C396,261 423,249 423,205C423,163 390,134 331,134C246,134 223,176 218,227l-195,0C29,72 131,-12 331,-12z"/>
-<glyph unicode="T" horiz-adv-x="618" d="M206,0l206,0l0,557l185,0l0,158l-576,0l0,-158l185,0z"/>
-<glyph unicode="U" horiz-adv-x="764" d="M381,-12C578,-12 700,85 700,293l0,422l-207,0l0,-413C493,195 466,149 381,149C294,149 269,198 269,299l0,416l-205,0l0,-425C64,90 179,-12 381,-12z"/>
-<glyph unicode="W" horiz-adv-x="996" d="M180,0l200,0l111,454l110,-454l214,0l167,715l-190,0l-97,-450l-104,450l-182,0l-96,-446l-92,446l-207,0z"/>
-</font>
-
-	<g id="Layer_2">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="1800px" height="1000px" viewBox="0 0 1800 1000" style="enable-background:new 0 0 1800 1000;" xml:space="preserve">
+<g id="Layer_2">
 	<rect id="background" style="fill:#FFFFFF;" width="1798" height="1000"/>
 	<rect id="sun_bg" x="-1" style="fill:#C6C5ED;" width="253" height="1000"/>
 	<rect id="sat_bg" x="1547" style="fill:#C6C5ED;" width="253" height="1000"/>
 	<rect id="Footer" y="941" style="fill:#333333;" width="1798" height="59"/>
-	<rect id="Days" y="0" style="fill:#333333;" width="1800" height="95"/>
-	<text transform="matrix(1 0 0 1 82 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">SUN</text>
-	<text transform="matrix(1 0 0 1 337 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">MON</text>
-	<text transform="matrix(1 0 0 1 600 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">TUE</text>
-	<text transform="matrix(1 0 0 1 852 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">WED</text>
-	<text transform="matrix(1 0 0 1 1113 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">THU</text>
-	<text transform="matrix(1 0 0 1 1386 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">FRI</text>
-	<text transform="matrix(1 0 0 1 1638 61)" style="fill:#FFFFFF; font-family:'Graphik-Bold'; font-size:36;">SAT</text>
+	<rect id="Days" style="fill:#333333;" width="1800" height="95"/>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M82.828,52.829h7.019c0.18,1.836,1.008,3.348,4.067,3.348c2.124,0,3.312-1.044,3.312-2.556
+			c0-1.584-0.972-2.016-4.067-2.483c-7.271-0.864-9.719-3.024-9.719-8.207c0-4.644,3.815-8.027,9.971-8.027
+			c6.191,0,9.683,2.592,10.151,8.027h-6.839c-0.252-1.836-1.296-2.772-3.312-2.772c-1.98,0-2.988,0.9-2.988,2.196
+			c0,1.439,0.792,2.088,3.996,2.52c6.515,0.72,9.863,2.412,9.863,7.991c0,4.715-3.744,8.566-10.367,8.566
+			C86.715,61.432,83.044,58.408,82.828,52.829z"/>
+		<path style="fill:#FFFFFF;" d="M107.235,50.562V35.264h7.379v14.974c0,3.636,0.9,5.399,4.032,5.399
+			c3.06,0,4.031-1.656,4.031-5.508V35.264h7.451v15.189c0,7.487-4.392,10.979-11.482,10.979
+			C111.375,61.432,107.235,57.761,107.235,50.562z"/>
+		<path style="fill:#FFFFFF;" d="M134.919,35.264h8.315l8.243,14.506V35.264h6.443V61h-7.127l-9.395-16.162V61h-6.479V35.264z"/>
+	</g>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M339.484,35.264h9.611l4.931,13.714l4.931-13.714h9.431V61h-7.343V44.982L354.746,61h-2.448
+			l-6.227-16.018V61h-6.587V35.264z"/>
+		<path style="fill:#FFFFFF;" d="M372.027,48.294v-0.288c0-7.848,5.903-13.103,13.606-13.103c7.847,0,13.642,4.932,13.642,12.922
+			v0.288c0,7.919-5.435,13.318-13.75,13.318S372.027,56.032,372.027,48.294z M391.573,48.222v-0.288
+			c0-4.571-2.304-7.271-5.939-7.271s-5.903,2.628-5.903,7.308v0.288c0,4.68,2.376,7.379,5.939,7.379
+			C389.305,55.637,391.573,52.829,391.573,48.222z"/>
+		<path style="fill:#FFFFFF;" d="M402.879,35.264h8.315l8.243,14.506V35.264h6.443V61h-7.127l-9.395-16.162V61h-6.479V35.264z"/>
+	</g>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M607.415,40.95h-6.659v-5.687h20.733v5.687h-6.659V61h-7.415V40.95z"/>
+		<path style="fill:#FFFFFF;" d="M624.552,50.562V35.264h7.379v14.974c0,3.636,0.9,5.399,4.032,5.399
+			c3.06,0,4.031-1.656,4.031-5.508V35.264h7.451v15.189c0,7.487-4.392,10.979-11.482,10.979
+			C628.691,61.432,624.552,57.761,624.552,50.562z"/>
+		<path style="fill:#FFFFFF;" d="M652.235,35.264h17.782v5.687h-10.439v4.428h8.315v5.255h-8.315v4.68h11.015V61h-18.357V35.264z"/>
+	</g>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M852.504,35.264h7.451l3.312,16.054l3.456-16.054h6.551l3.744,16.197l3.491-16.197h6.839
+			L881.336,61h-7.703l-3.959-16.342L865.678,61h-7.199L852.504,35.264z"/>
+		<path style="fill:#FFFFFF;" d="M890.339,35.264h17.782v5.687h-10.439v4.428h8.315v5.255h-8.315v4.68h11.015V61h-18.358V35.264z"/>
+		<path style="fill:#FFFFFF;" d="M912.371,35.264h9.359c9.143,0,13.786,4.571,13.786,12.562v0.288
+			c0,8.027-4.751,12.887-13.822,12.887h-9.323V35.264z M921.479,55.312c4.391,0,6.335-2.304,6.335-7.091v-0.288
+			c0-4.896-1.944-6.983-6.407-6.983h-1.619v14.362H921.479z"/>
+	</g>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M1120.415,40.95h-6.659v-5.687h20.733v5.687h-6.659V61h-7.415V40.95z"/>
+		<path style="fill:#FFFFFF;" d="M1137.732,35.264h7.414v9.826h8.459v-9.826h7.379V61h-7.379V50.85h-8.459V61h-7.414V35.264z"/>
+		<path style="fill:#FFFFFF;" d="M1165.775,50.562V35.264h7.379v14.974c0,3.636,0.9,5.399,4.031,5.399
+			c3.061,0,4.031-1.656,4.031-5.508V35.264h7.451v15.189c0,7.487-4.391,10.979-11.482,10.979
+			C1169.915,61.432,1165.775,57.761,1165.775,50.562z"/>
+	</g>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M1388.484,35.264h17.385v5.723h-9.971v5.472h7.955v5.436h-7.955V61h-7.414V35.264z"/>
+		<path style="fill:#FFFFFF;" d="M1409.328,35.264h10.078c6.73,0,10.475,2.735,10.475,8.171v0.144c0,3.672-1.943,5.724-4.644,6.768
+			L1431.393,61h-7.775l-5.219-9.215h-1.729V61h-7.342V35.264z M1419.047,46.998c2.482,0,3.707-1.044,3.707-3.132v-0.144
+			c0-2.088-1.296-2.916-3.672-2.916h-2.412v6.191H1419.047z"/>
+		<path style="fill:#FFFFFF;" d="M1434.562,35.264h7.451V61h-7.451V35.264z"/>
+	</g>
+	<g style="enable-background:new    ;">
+		<path style="fill:#FFFFFF;" d="M1638.828,52.829h7.02c0.18,1.836,1.008,3.348,4.066,3.348c2.124,0,3.312-1.044,3.312-2.556
+			c0-1.584-0.973-2.016-4.068-2.483c-7.271-0.864-9.719-3.024-9.719-8.207c0-4.644,3.816-8.027,9.971-8.027
+			c6.191,0,9.684,2.592,10.151,8.027h-6.839c-0.252-1.836-1.297-2.772-3.312-2.772c-1.979,0-2.987,0.9-2.987,2.196
+			c0,1.439,0.792,2.088,3.995,2.52c6.516,0.72,9.863,2.412,9.863,7.991c0,4.715-3.744,8.566-10.367,8.566
+			C1642.715,61.432,1639.044,58.408,1638.828,52.829z"/>
+		<path style="fill:#FFFFFF;" d="M1669.283,35.264h9.538L1686.992,61h-7.811l-1.368-4.787h-8.53L1667.915,61h-6.876L1669.283,35.264
+			z M1670.723,51.138h5.651l-2.808-9.899L1670.723,51.138z"/>
+		<path style="fill:#FFFFFF;" d="M1692.539,40.95h-6.659v-5.687h20.733v5.687h-6.659V61h-7.415V40.95z"/>
+	</g>
 </g>
 <g id="horizontal">
 	
@@ -62,9 +93,9 @@
 	
 		<line style="fill:none;stroke:#D6D6D6;stroke-width:3;stroke-miterlimit:10;stroke-dasharray:20,10;" x1="1547.5" y1="1" x2="1547.5" y2="941"/>
 </g>
-<g id="Layer_1" style="display:none;">
+<g id="Layer_1_1_" style="display:none;">
 	
-		<image style="display:inline;overflow:visible;opacity:0.5;" width="2001" height="1127" xlink:href="../../../../../Desktop/calendar-template.png"  transform="matrix(0.8987 0 0 0.887 7.629395e-06 7.629395e-06)">
+		<image style="display:inline;overflow:visible;opacity:0.5;enable-background:new    ;" width="2001" height="1127" xlink:href="../../../../../Desktop/calendar-template.png"  transform="matrix(0.8987 0 0 0.887 7.629395e-06 7.629395e-06)">
 	</image>
 </g>
 </svg>

@@ -2,7 +2,7 @@ $(document).ready(() => {
 
   const canvas = new fabric.Canvas('whiteboard');
   const templateId = $('#template-id').text();
-  const templates = ['','/img/calendar.svg','/img/background.jpg','/img/background.jpg'];
+  const templates = ['','/img/calendar.svg','/img/background.jpg','/img/graph.svg'];
   canvas.setHeight(1600);
   canvas.setWidth(2400);
   if (templateId !== 0) {
@@ -40,17 +40,12 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = true;
+  let DEBUG = false;
 
-  // canvas.on('mouse:down', function(event) {
-  //   $('body').append('<p>Aaron</p>');
-  // });
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
   ////////////////////////////////////////////
-
-  let selectedUsername = null;
 
   function listUsers(users) {
     $users = $('#users');
@@ -63,7 +58,6 @@ $(document).ready(() => {
   }
 
   function getCursors(users) {
-    console.log("CURSOR USERS", users);
     $container = $("div.container");
     users.forEach(function(user) {
       user = user[Object.keys(user)[0]];
@@ -75,18 +69,22 @@ $(document).ready(() => {
 
   function addUser(user) {
     $users = $('#users');
+    $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
+  }
+
+  function addCursor(user) {
     $container = $("div.container");
-    $('<span class="user-name">').text(user.name).appendTo($users);
-    $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
+    $(`<span id="${user.id}" class="user-cursor ${user.id}">`).text(user.name).appendTo($container);
   }
 
   function removeUser(user) {
-    // remove user from listed users
-    // remove user cursor from page
+    $(`.${user.id}`).remove();
   }
 
+  // Store client object
+  let client;
+
   // On connection, user is prompted to select a username
-  (function() {
     $(`<div id="username-form">
         <div class="username-box">
         <p>Select a username</p>
@@ -103,38 +101,34 @@ $(document).ready(() => {
       $username = $('#select-username input').val();
       if ($username.trim().length < 1) return;
 
-      // Save username for reconnection
-      selectedUsername = $username;
-      console.log(selectedUsername);
-
       // Send username to server
       socket.emit('username selected', $username);
       $('#username-form').remove();
-
-      // console.log('Username submitted:', $username)
     });
-  })();
-
-  let client;
 
   socket.on('connected', (msg) => {
     listUsers(msg.currentUsers);
     getCursors(msg.currentUsers);
   });
 
-  socket.on('new connection', (user) => {
+  socket.on('connection established', (user) => {
     addUser(user);
+  });
+
+  socket.on('new connection', (user) => {
     client = user;
+    addUser(user);
+    addCursor(user);
   });
 
-  socket.on('user disconnected', (msg) => {
-    removeUser(msg.currentUsers);
+  socket.on('user disconnected', (user) => {
+    removeUser(user);
   });
 
 
-  // boardId = (window.location.pathname).split('/').reverse()[0];
-  // console.log(boardId);
-
+  ////////////////////////////////////////////
+  //             TOOL HELPERS               //
+  ////////////////////////////////////////////
 
   // Make Objects Selectable
   function makeObjectsSelectable(boolean) {
@@ -168,7 +162,7 @@ $(document).ready(() => {
     makeObjectsSelectable(true);
     orderCanvas();
     mode = newMode
-  } 
+  }
 
   ////////////////////////////////////////////
   //             TOOL BUTTONS               //
@@ -182,7 +176,7 @@ $(document).ready(() => {
   $('#select').on('click', function(e) { enableSelectMode() });
 
   // Hand Tool (Move canvas)
-  $('#hand').on('click', function(e) { 
+  $('#hand').on('click', function(e) {
     setupForMode(HAND);
     canvas.discardActiveObject();
     $('#hand').addClass('selected');
@@ -190,21 +184,21 @@ $(document).ready(() => {
   });
 
   // Draw Tool
-  $('#draw').on('click', function(e) { 
+  $('#draw').on('click', function(e) {
     setupForMode(DRAW);
     canvas.isDrawingMode = true;
     $('#draw').addClass('selected');
    });
 
   // Line Tool
-  $('#line').on('click', function(e) { 
+  $('#line').on('click', function(e) {
     setupForMode(DRAW);
     makeObjectsSelectable(false);
     $('#line').addClass('selected');
    });
 
   // Circle Tool
-  $('#circle').on('click', function(e) { 
+  $('#circle').on('click', function(e) {
     setupForMode(CIRCLE);
     canvas.discardActiveObject();
     $('#circle').addClass('selected');
@@ -212,7 +206,7 @@ $(document).ready(() => {
    });
 
   // Triangle Tool
-  $('#triangle').on('click', function(e) { 
+  $('#triangle').on('click', function(e) {
     setupForMode(TRIANGLE);
     canvas.discardActiveObject();
     $('#rectangle').addClass('selected');
@@ -220,7 +214,7 @@ $(document).ready(() => {
    });
 
   // Draw Rectangle Tool
-  $('#draw-rect').on('click', function(e) { 
+  $('#draw-rect').on('click', function(e) {
     setupForMode(RECT);
     canvas.discardActiveObject();
     $('#draw-rect').addClass('selected');
@@ -228,14 +222,14 @@ $(document).ready(() => {
    });
 
   // Text box
-  $('#textbox').on('click', function(e) { 
+  $('#textbox').on('click', function(e) {
     setupForMode(TEXTBOX);
     makeObjectsSelectable(false);
     $('#textbox').addClass('selected');
    });
 
   // Delete Tool
-  $('#delete').on('click', function(e) { 
+  $('#delete').on('click', function(e) {
     clearModes();
     mode = ERASE;
     canvas.discardActiveObject();
@@ -474,7 +468,7 @@ $(document).ready(() => {
 
   function redoHistory(lastAction) {
     inRedo = true;
-    console.log("redo history", lastAction)
+    if (DEBUG) console.log("redo history", lastAction)
     if(lastAction.type === "add") {
       removeComponents([lastAction.target]);
     } else {
@@ -545,8 +539,13 @@ $(document).ready(() => {
   let currentUserName = "Bob";
   canvas.on('mouse:move', function(event) {
     let pointer = canvas.getPointer(event.e);
+<<<<<<< HEAD
     // console.log("current user", client)
     // console.log("user position", pointer.x, pointer.y);
+=======
+    if (DEBUG) console.log("current user", client)
+    if (DEBUG) console.log("user position", pointer.x, pointer.y);
+>>>>>>> 877a8fcc65633290b9d31f88b32b5e2331e9a69d
     socket.emit("user_position", {client: client, pos: pointer})
   });
   // reposition cursor received from server
@@ -587,6 +586,7 @@ $(document).ready(() => {
       }, delay);
     }
   }
+
 
   canvas.on('mouse:over', function(event) {
     if(event.target) {
