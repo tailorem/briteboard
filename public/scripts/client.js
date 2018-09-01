@@ -42,9 +42,6 @@ $(document).ready(() => {
   const socket = io.connect();
   let DEBUG = false;
 
-  // canvas.on('mouse:down', function(event) {
-  //   $('body').append('<p>Aaron</p>');
-  // });
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -81,12 +78,15 @@ $(document).ready(() => {
   }
 
   function removeUser(user) {
+    console.log(user.id);
     // remove user from listed users
     // remove user cursor from page
   }
 
+  // Store client object
+  let client;
+
   // On connection, user is prompted to select a username
-  (function() {
     $(`<div id="username-form">
         <div class="username-box">
         <p>Select a username</p>
@@ -110,12 +110,7 @@ $(document).ready(() => {
       // Send username to server
       socket.emit('username selected', $username);
       $('#username-form').remove();
-
-      // console.log('Username submitted:', $username)
     });
-  })();
-
-  let client;
 
   socket.on('connected', (msg) => {
     listUsers(msg.currentUsers);
@@ -123,17 +118,14 @@ $(document).ready(() => {
   });
 
   socket.on('new connection', (user) => {
-    addUser(user);
     client = user;
+    addUser(user);
   });
 
-  socket.on('user disconnected', (msg) => {
-    removeUser(msg.currentUsers);
+  socket.on('user disconnected', (user) => {
+    console.log("client object", client);
+    removeUser(user);
   });
-
-
-  // boardId = (window.location.pathname).split('/').reverse()[0];
-  // console.log(boardId);
 
 
   ////////////////////////////////////////////
@@ -512,6 +504,7 @@ $(document).ready(() => {
       }, delay);
     }
   }
+
 
   canvas.on('mouse:over', function(event) {
     if(event.target) {
