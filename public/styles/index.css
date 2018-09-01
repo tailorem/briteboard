@@ -165,7 +165,6 @@ input.new-board {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* background-color: #fee35c; */
   padding: 50px 10px 25px;
 }
 
@@ -205,12 +204,16 @@ input.new-board {
 .form__field-new {
   width: 360px;
   background: #fff;
-  color: #a3a3a3;
+  color: #222;
   font: inherit;
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #6f6f6f;
   outline: 0;
   padding: 18px 18px;
+}
+
+.form__field-new::placeholder {
+  color: #a3a3a3;
 }
 
 .template-input {

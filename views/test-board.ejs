@@ -13,9 +13,7 @@
   <link rel="stylesheet" type="text/css" href="/vendor/spectrum.css">
   <link rel="stylesheet" type="text/css" href="/styles/board.css" />
 
-
-
-  <script src="https://webrtc.github.io/adapter/adapter-4.2.2.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script> -->
 
 </head>
 
@@ -23,17 +21,22 @@
 
 <div class="main">
   <header class="nav-top">
-    <a class="navbar-brand" href="/">
-      <img src="../img/briteboard-logo.svg" alt="Briteboard" />
-    </a>
+    <div class="logo-wrapper">
+      <a href="/">
+          <img src="../img/logo.svg" class="navbar-logo" alt="Briteboard Logo" />
+      </a>
+      <a href="/">
+          <img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" />
+      </a>
+    </div>
     <h1><%= board.name %></h1>
     <p id="template-id"><%= board.template %></p>
 
     <div id="users"></div>
 
     <div class="video-container">
-      <video id="video1" autoplay></video>
-      <!-- <canvas id="canvas1" class="video"></canvas> -->
+      <video id="localVideo" autoplay muted></video>
+      <div id="remoteVideos"></div>
     </div>
 
   </header>
@@ -50,13 +53,14 @@
       <button id="draw-rect" title="Rectangle Tool"><i class="far fa-square" aria-hidden="true"></i></button>
       <button id="textbox" title="Text Tool"><i class="fas fa-font"></i></button>
       <button id="delete" title="Delete Tool (del)"><i class="fas fa-trash-alt"></i></button>
+      <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
       <label for="add-image" class="custom-file-upload" title="Add Image"><i class="far fa-images"></i></label>
       <input id="add-image" type="file" />
-      <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
+
       <input id="colorPicker" />
       <input id="border-color-picker" />
-      <label>
-        <input type="range" id="brush-size" value="2" min="0" max="10" style="display: block; width: 100%;">
+      <label class="brush-size">
+        <input type="range" id="brush-size" value="2" min="0" max="10">
       </label>
       <button id="save-image" title="Save As Image"><i class="fas fa-file-download"></i></button>
       <label for="add-background" class="custom-file-upload" title="Add Background Image"><i class="far fa-images"></i></label>
@@ -70,6 +74,8 @@
 </div>
 
   <script src="../vendor/jquery-3.3.1.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/simplewebrtc@3.0.2/out/simplewebrtc-with-adapter.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
   <script src="../vendor/fabric.js"></script>
   <script src="../vendor/uuidv4.min.js"></script>

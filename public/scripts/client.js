@@ -57,10 +57,10 @@ $(document).ready(() => {
   // On connection, user is prompted to select a username
   (function() {
     $(`<div id="username-form" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:100; position:fixed;">
-        <div style="opacity:1; padding: 1em; background-color:lightgrey; border-radius:1em;">
+        <div class="username-box">
+        <p>Select a username</p>
           <form id="select-username">
-            <p>Select a username:</p>
-            <input type="text" style="outline: none;" autofocus onfocus="this.select()" />
+            <input type="text" placeholder="Enter a username" autofocus onfocus="this.select()" />
             <button>GO</button>
           </form>
         </div>
@@ -167,10 +167,12 @@ $(document).ready(() => {
     showPalette: true,
     palette: [
       ['#000000', '#ffffff'],
-      ['#FF4136', '#0074D9'],
-      ['#2ECC40', '#f9f878'],
-      ['#be50b7', '#FF851B'],
-      ['#39CCCC', '#AAAAAA'],
+      ['#bc000d', '#df3b1a'],
+      ['#fec945', '#008a29'],
+      ['#006b75', '#0076d7'],
+      ['#0051c7', '#561ce1'],
+      ['#795548', '#939393'],
+
     ],
     change: function(color) {
       currentColor = color.toHexString()
