@@ -90,6 +90,7 @@ button:hover {
 video, .video {
   background-color: white;
   border-radius: 8px;
+  margin: 0 .25em;
   height: 60px;
   width: 80px;
 }
