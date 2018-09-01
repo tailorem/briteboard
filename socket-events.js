@@ -143,5 +143,11 @@ module.exports = (io, boards) => {
     socket.on('elevate_component', function(objectData) {
       socket.to(board).emit('elevate_component', objectData);
     });
+
+    socket.on('user_position', function(objectData) {
+      socket.to(board).emit('user_position', objectData);
+    });
   });
+
+  
 }

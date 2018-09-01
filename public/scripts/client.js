@@ -40,7 +40,7 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = false;
+  let DEBUG = true;
 
   // canvas.on('mouse:down', function(event) {
   //   $('body').append('<p>Aaron</p>');
@@ -56,6 +56,7 @@ $(document).ready(() => {
     $container = $("div.container");
     $users = $('#users');
     $users.empty(); // improve this by removing user by id?
+    console.log("Users", users)
     users.forEach(function(user) {
       userId = Object.keys(user)[0];
       user = user[Object.keys(user)[0]];
@@ -147,7 +148,7 @@ $(document).ready(() => {
   }
 
   // SET TOOL MODE
-  function setupForMode(newMode)
+  function setupForMode(newMode) {
   $(".selected").removeClass("selected");
     canvas.isDrawingMode = false;
     canvas.selection = true;
@@ -523,6 +524,20 @@ $(document).ready(() => {
         handlePanning(event, this);
     });
   })
+
+  let currentUserId = uuidv4();
+  let currentUserName = "Bob";
+  canvas.on('mouse:move', function(event) {
+    let pointer = canvas.getPointer(event.e);
+    console.log("user position", pointer.x, pointer.y);
+    socket.emit("user_position", {pos: pointer})
+  });
+  // reposition cursor received from server
+  socket.on('user_position', function(data) {
+    if (DEBUG) console.log("received user position", data)
+    console.log("users", users)
+    $('#' + users[0].id).css({top: '200px', left: '200px'});
+  });
 
   // throttle async functions
   function throttled(delay, fn) {
