@@ -8,6 +8,14 @@ $(document).ready(() => {
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
+
+  // canvas.setBackgroundImage('/img/grid.png', canvas.renderAll.bind(canvas), {
+  //   width: canvas.width,
+  //   height: canvas.height,
+  //   originX: 'left',
+  //   originY: 'top'
+  // });
+
   // Set default canvas values
   const ERASE = 0;
   const LINE = 1;
