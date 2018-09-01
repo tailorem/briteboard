@@ -112,11 +112,11 @@ $(document).ready(() => {
   });
 
   socket.on('connection established', (user) => {
+    client = user;
     addUser(user);
   });
 
   socket.on('new connection', (user) => {
-    client = user;
     addUser(user);
     addCursor(user);
   });
