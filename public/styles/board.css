@@ -106,6 +106,10 @@ button:hover {
   height: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 video, .video {
   background-color: white;
   border-radius: 8px;

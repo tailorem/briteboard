@@ -115,18 +115,6 @@ body {
 }
 
 
-/* Old Homepage input */
-/*
-input.new-board {
-  border: none;
-  outline: none;
-  padding: 20px;
-  font-size: 24px;
-  transition: box-shadow 0.4s ease;
-} */
-
-
-
 /* CREATE NEW BOARD INPUT */
 
 input.new-board:focus {
