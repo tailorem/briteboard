@@ -1,0 +1,22 @@
+ html, body {
+  font-family: monospace;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+p {
+  font-size: 1.2em;
+}
+
+.container {
+  margin-bottom: 20%;
+  text-align: center;
+}

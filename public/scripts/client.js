@@ -1,8 +1,8 @@
 $(document).ready(() => {
 
-  let canvas = new fabric.Canvas('whiteboard');
-  let templateId = $('#template-id').text();
-  let templates = ['','/img/weekly-cal.png','/img/background.jpg','/img/background.jpg'];
+  const canvas = new fabric.Canvas('whiteboard');
+  const templateId = $('#template-id').text();
+  const templates = ['','/img/weekly-cal.png','/img/background.jpg','/img/background.jpg'];
   canvas.setHeight(1600);
   canvas.setWidth(2400);
   if (templateId !== 0) {
@@ -35,6 +35,7 @@ $(document).ready(() => {
   canvas.on('mouse:down', function(event) {
     $('body').append('<p>Aaron</p>');
   });
+
   ////////////////////////////////////////////
   //             CLIENT INFO                //
   ////////////////////////////////////////////
