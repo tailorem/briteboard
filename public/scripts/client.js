@@ -69,16 +69,16 @@ $(document).ready(() => {
 
   function addUser(user) {
     $users = $('#users');
+    $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
+  }
+
+  function addCursor(user) {
     $container = $("div.container");
-    $('<span class="user-name">').text(user.name).appendTo($users);
-    $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
+    $(`<span id="${user.id}" class="user-cursor ${user.id}">`).text(user.name).appendTo($container);
   }
 
   function removeUser(user) {
-    $(`#${user.id}`).remove();
-    // console.log(user.id);
-    // remove user from listed users
-    // remove user cursor from page
+    $(`.${user.id}`).remove();
   }
 
   // Store client object
@@ -111,9 +111,14 @@ $(document).ready(() => {
     getCursors(msg.currentUsers);
   });
 
+  socket.on('connection established', (user) => {
+    addUser(user);
+  });
+
   socket.on('new connection', (user) => {
     client = user;
     addUser(user);
+    addCursor(user);
   });
 
   socket.on('user disconnected', (user) => {

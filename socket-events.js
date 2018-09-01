@@ -66,7 +66,8 @@ module.exports = (io, boards) => {
     // Send connected user to all clients
     socket.on('username selected', (username) => {
       clients[socket.id].name = username;
-      io.emit('new connection', clients[socket.id]);
+      socket.emit('connection established', clients[socket.id]);
+      socket.to(board).emit('new connection', clients[socket.id]);
     });
 
     // Send disconnect message to everyone in the room
@@ -144,5 +145,5 @@ module.exports = (io, boards) => {
     });
   });
 
-  
+
 }
