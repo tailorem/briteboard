@@ -573,7 +573,7 @@ $(document).ready(() => {
       origX = pointer.x;
       origY = pointer.y;
       pointer = canvas.getPointer(event.e);
-      rect = new fabric.Triangle({
+      rect = new fabric.Rect({
         selectable: false,
         hasControls: true,
         left: origX,
