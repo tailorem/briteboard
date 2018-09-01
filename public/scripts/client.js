@@ -105,36 +105,111 @@ $(document).ready(() => {
   // console.log(boardId);
 
 
+  // Make Objects Selectable
+  function makeObjectsSelectable(boolean) {
+    canvas.forEachObject(function(object) {
+      object.set({
+        selectable: boolean
+      }).setCoords();
+    })
+  }
+
+  function orderCanvas() {
+    canvas.getObjects().forEach(each => {
+      if(each.type === "i-text")
+        canvas.bringToFront(each)
+    })
+  }
+  // CLEAR ALL MODES
+  function clearModes() {
+    $(".selected").removeClass("selected");
+    canvas.isDrawingMode = false;
+    canvas.selection = true;
+    makeObjectsSelectable(true);
+    orderCanvas();
+  }
+
+  // SET TOOL MODE
+  function setupForMode(newMode)
+  $(".selected").removeClass("selected");
+    canvas.isDrawingMode = false;
+    canvas.selection = true;
+    makeObjectsSelectable(true);
+    orderCanvas();
+    mode = newMode
+  } 
+
   ////////////////////////////////////////////
   //             TOOL BUTTONS               //
   ////////////////////////////////////////////
 
   // Select Tool
+  function enableSelectMode() {
+    setupForMode(SELECT);
+    $('#select').addClass('selected');
+  }
   $('#select').on('click', function(e) { enableSelectMode() });
 
   // Hand Tool (Move canvas)
-  $('#hand').on('click', function(e) { enableHandMode() });
+  $('#hand').on('click', function(e) { 
+    setupForMode(HAND);
+    canvas.discardActiveObject();
+    $('#hand').addClass('selected');
+    makeObjectsSelectable(false);
+  });
 
   // Draw Tool
-  $('#draw').on('click', function(e) { enableDrawingMode() });
+  $('#draw').on('click', function(e) { 
+    setupForMode(DRAW);
+    canvas.isDrawingMode = true;
+    $('#draw').addClass('selected');
+   });
 
   // Line Tool
-  $('#line').on('click', function(e) { enableLineMode() });
+  $('#line').on('click', function(e) { 
+    setupForMode(DRAW);
+    makeObjectsSelectable(false);
+    $('#line').addClass('selected');
+   });
 
   // Circle Tool
-  $('#circle').on('click', function(e) { enableCircleMode() });
+  $('#circle').on('click', function(e) { 
+    setupForMode(CIRCLE);
+    canvas.discardActiveObject();
+    $('#circle').addClass('selected');
+    makeObjectsSelectable(false);
+   });
 
-  // Circle Tool
-  $('#triangle').on('click', function(e) { enableTriangleMode() });
+  // Triangle Tool
+  $('#triangle').on('click', function(e) { 
+    setupForMode(TRIANGLE);
+    canvas.discardActiveObject();
+    $('#rectangle').addClass('selected');
+    makeObjectsSelectable(false);
+   });
 
   // Draw Rectangle Tool
-  $('#draw-rect').on('click', function(e) { enableRectMode() });
+  $('#draw-rect').on('click', function(e) { 
+    setupForMode(RECT);
+    canvas.discardActiveObject();
+    $('#draw-rect').addClass('selected');
+    makeObjectsSelectable(false);
+   });
 
   // Text box
-  $('#textbox').on('click', function(e) { enableTxtBoxMode() });
+  $('#textbox').on('click', function(e) { 
+    setupForMode(TEXTBOX);
+    makeObjectsSelectable(false);
+    $('#textbox').addClass('selected');
+   });
 
   // Delete Tool
-  $('#delete').on('click', function(e) { enableEraserMode() });
+  $('#delete').on('click', function(e) { 
+    clearModes();
+    mode = ERASE;
+    canvas.discardActiveObject();
+    $('#delete').addClass('selected');
+   });
 
   $('#brush-size').on('click', function(e) {
     let pixelSize = parseInt($('#brush-size').val(), 10) * 2
@@ -273,29 +348,6 @@ $(document).ready(() => {
   //             TOOL MODES                 //
   ////////////////////////////////////////////
 
-  // Make Objects Selectable
-  function makeObjectsSelectable(boolean) {
-    canvas.forEachObject(function(object) {
-      object.set({
-        selectable: boolean
-      }).setCoords();
-    })
-  }
-
-  function orderCanvas() {
-    canvas.getObjects().forEach(each => {
-      if(each.type === "i-text")
-        canvas.bringToFront(each)
-    })
-  }
-  // CLEAR ALL MODES
-  function clearModes() {
-    $(".selected").removeClass("selected");
-    canvas.isDrawingMode = false;
-    canvas.selection = true;
-    makeObjectsSelectable(true);
-    orderCanvas();
-  }
 
   // DRAWING MODE
   function enableDrawingMode() {
@@ -322,11 +374,11 @@ $(document).ready(() => {
   }
 
   // SELECT MODE
-  function enableSelectMode() {
-    clearModes();
-    mode = SELECT;
-    $('#select').addClass('selected');
-  }
+  // function enableSelectMode() {
+  //   clearModes();
+  //   mode = SELECT;
+  //   $('#select').addClass('selected');
+  // }
 
   // HAND MODE
   function enableHandMode() {
