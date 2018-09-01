@@ -46,12 +46,17 @@ button:hover {
   font-weight: bold;
 }
 
+.fa-caret-up {
+  transform: scaleY(2.9) scaleX(1.8);
+}
+
 .nav-top {
   align-items: center;
-  background-color: #dadada;
+  background-color: #f2f2f2;
   display: flex;
   justify-content: space-between;
   padding: .5em;
+  border-bottom: 1px solid #aaa;
 }
 
 .container {
@@ -190,6 +195,7 @@ label.brush-size {
   transition: background 200ms ease-in;
   cursor: pointer;
 }
+
 .username-box button {
   background: #7f8ff4;
   color: #fff;

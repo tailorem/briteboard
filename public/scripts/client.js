@@ -2,7 +2,7 @@ $(document).ready(() => {
 
   const canvas = new fabric.Canvas('whiteboard');
   const templateId = $('#template-id').text();
-  const templates = ['','/img/weekly-cal.png','/img/background.jpg','/img/background.jpg'];
+  const templates = ['','/img/calendar.svg','/img/background.jpg','/img/background.jpg'];
   canvas.setHeight(1600);
   canvas.setWidth(2400);
   if (templateId !== 0) {

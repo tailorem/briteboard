@@ -22,10 +22,8 @@
 <div class="main">
   <header class="nav-top">
     <div class="logo-wrapper">
-      <a href="/">
-        <img src="../img/logo.svg" class="navbar-logo" alt="Briteboard Logo" />
-        <img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" />
-      </a>
+      <a href="/"><img src="../img/logo.svg" class="navbar-logo" alt="Briteboard Logo" /></a>
+      <a href="/"><img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" /></a>
     </div>
     <h1><%= board.name %></h1>
     <p id="template-id"><%= board.template %></p>
@@ -47,17 +45,16 @@
       <button id="draw" title="Free Drawing Tool"><i class="fas fa-pen"></i></button>
       <button id="line" title="Line Tool"><i class="fas fa-minus"></i></button>
       <button id="circle" title="Circle Tool"><i class="far fa-circle"></i></button>
-      <button id="triangle" title="triangle Tool"><i class="fa fa-caret-up" aria-hidden="true"></i></button>
+      <button id="triangle" title="Triangle Tool"><i class="fa fa-caret-up" aria-hidden="true"></i></button>
       <button id="draw-rect" title="Rectangle Tool"><i class="far fa-square" aria-hidden="true"></i></button>
       <button id="textbox" title="Text Tool"><i class="fas fa-font"></i></button>
       <button id="delete" title="Delete Tool (del)"><i class="fas fa-trash-alt"></i></button>
       <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
       <label for="add-image" class="custom-file-upload" title="Add Image"><i class="far fa-images"></i></label>
       <input id="add-image" type="file" />
-
-      <input id="colorPicker" />
-      <input id="border-color-picker" />
-      <label class="brush-size">
+      <input id="colorPicker" title="Fill Color"/>
+      <input id="border-color-picker" title="Stroke Color" />
+      <label class="brush-size" title="Stroke Size">
         <input type="range" id="brush-size" value="2" min="0" max="10">
       </label>
       <button id="save-image" title="Save As Image"><i class="fas fa-file-download"></i></button>
