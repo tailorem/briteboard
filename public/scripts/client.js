@@ -9,13 +9,6 @@ $(document).ready(() => {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
 
-  // canvas.setBackgroundImage('/img/grid.png', canvas.renderAll.bind(canvas), {
-  //   width: canvas.width,
-  //   height: canvas.height,
-  //   originX: 'left',
-  //   originY: 'top'
-  // });
-
   // Set default canvas values
   const ERASE = 0;
   const LINE = 1;
@@ -51,6 +44,7 @@ $(document).ready(() => {
 
   // Store client object
   let client;
+  let videoOn = true;
 
   // On connection, user is prompted to select a username
     $(`<div id="username-form">
@@ -92,6 +86,10 @@ $(document).ready(() => {
 
   socket.on('user disconnected', (user) => {
     removeUser(user);
+  });
+
+  $('#localVideo').on('click', (e) => {
+    toggleVideo(videoOn);
   });
 
   ////////////////////////////////////////////
