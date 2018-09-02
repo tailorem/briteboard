@@ -370,85 +370,6 @@ $(document).ready(() => {
   });
 
   ////////////////////////////////////////////
-  //             TOOL MODES                 //
-  ////////////////////////////////////////////
-
-
-  // DRAWING MODE
-  function enableDrawingMode() {
-    clearModes();
-    canvas.isDrawingMode = true;
-    mode = DRAW;
-    $('#draw').addClass('selected');
-  }
-
-  // LINE MODE
-  function enableLineMode() {
-    clearModes();
-    mode = LINE;
-    makeObjectsSelectable(false);
-    $('#line').addClass('selected');
-  }
-
-  // TEXTBOX MODE
-  function enableTxtBoxMode() {
-    clearModes();
-    mode = TEXTBOX;
-    makeObjectsSelectable(false);
-    $('#textbox').addClass('selected');
-  }
-
-  // SELECT MODE
-  // function enableSelectMode() {
-  //   clearModes();
-  //   mode = SELECT;
-  //   $('#select').addClass('selected');
-  // }
-
-  // HAND MODE
-  function enableHandMode() {
-    clearModes();
-    mode = HAND;
-    canvas.discardActiveObject();
-    $('#hand').addClass('selected');
-    makeObjectsSelectable(false);
-  }
-
-  // ERASER MODE
-  function enableEraserMode() {
-    clearModes();
-    mode = ERASE;
-    canvas.discardActiveObject();
-    $('#delete').addClass('selected');
-    }
-
-  // CIRCLE MODE
-  function enableCircleMode() {
-    clearModes()
-    mode = CIRCLE;
-    canvas.discardActiveObject();
-    $('#circle').addClass('selected');
-    makeObjectsSelectable(false);
-  }
-
-  // RECTANGLE MODE
-  function enableRectMode() {
-    clearModes()
-    mode = RECT;
-    canvas.discardActiveObject();
-    $('#draw-rect').addClass('selected');
-    makeObjectsSelectable(false);
-  }
-
-  function enableTriangleMode() {
-    clearModes()
-    mode = TRIANGLE;
-    canvas.discardActiveObject();
-    $('#rectangle').addClass('selected');
-    makeObjectsSelectable(false);
-  }
-
-  ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
   var inRedo = false;
@@ -478,11 +399,9 @@ $(document).ready(() => {
   }
 
 
-  ['object:modified'].forEach(function(eventType) {
-    canvas.on(eventType, function(event) {
-      // debouncing/throtling not required.
-      componentChanged(event, true)
-    });
+  canvas.on("'object:modified'", function(event) {
+    // debouncing/throtling not required.
+    componentChanged(event, true)
   });
 
   canvas.on('text:changed', function(event) {
@@ -499,7 +418,7 @@ $(document).ready(() => {
   ['object:rotating', 'object:moving', 'object:scaling']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
-        throttled(25, componentChanged(event, false))
+        throttled(50, componentChanged(event, false))
       });
     })
 
@@ -537,10 +456,10 @@ $(document).ready(() => {
   /////////////////////////////////////////////////////////////////////
   let currentUserId = uuidv4();
   let currentUserName = "Bob";
-  canvas.on('mouse:move', function(event) {
+  canvas.on('mouse:move', throttled(50, function(event) {
     let pointer = canvas.getPointer(event.e);
     socket.emit("user_position", {client: client, pos: pointer})
-  });
+  }));
   // reposition cursor received from server
   socket.on('user_position', function(data) {
     let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
@@ -595,23 +514,44 @@ $(document).ready(() => {
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
+    
     if(event.e.metaKey && mode === SELECT) {
-      elevateComponent(canvas.getActiveObject())
+      console.log("event & shift", event, event.shiftKey)
+      let action = event.e.shiftKey ? "lower" : "elevate"
+      layerComponent(canvas.getActiveObject(), action, true);  // CMD/CTRL UPARROW
     }
     isMouseDown = true;
   });
 
+  // // Elevate Components to the top
+  // function elevateComponent(component) {
+  //   if(component === "activeSelection") {
+  //     component.getObjects().forEach(each => {
+  //       canvas.bringToFront(each);
+  //       socket.emit("elevate_component", { id: each.id })
+  //     });
+  //   }
+  //   else {
+  //     canvas.bringToFront(component);
+  //     socket.emit("elevate_component", { id: component.id } )
+  //   }
+  //   orderCanvas();
+  // }
+
   // Elevate Components to the top
-  function elevateComponent(component) {
+  function layerComponent(component, action, notify) {
+    function performLayering(component, action) {
+      if(action === "elevate") canvas.bringToFront(component);
+      if(action === "lower") canvas.sendToBack(component);
+      if(notify) socket.emit("layer_component", { id: component.id, action: action } )
+    }
     if(component === "activeSelection") {
       component.getObjects().forEach(each => {
-        canvas.bringToFront(each);
-        socket.emit("elevate_component", { id: each.id })
+        performLayering(each, action)
       });
     }
     else {
-      canvas.bringToFront(component);
-      socket.emit("elevate_component", { id: component.id } )
+      performLayering(component, action)
     }
     orderCanvas();
   }
@@ -630,23 +570,22 @@ $(document).ready(() => {
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
       let currentSelection = canvas.getActiveObjects();
-      if (DEBUG) console.log("currentSelection del", currentSelection)
       if (currentSelection.length > 0) {
         removeComponents(canvas.getActiveObjects());
       }
     }
 
-    // ELEVATE COMPONENT
+    // ELEVATE/LOWER COMPONENT
     if(ctrlMetaDown && char === 38) {
-      elevateComponent(canvas.getActiveObject());  // CMD/CTRL UPARROW
+      // let action = event.shiftKey ? "lower" : "elevate"
+      // layerComponent(canvas.getActiveObject(), action);  // CMD/CTRL UPARROW
     }
 
-    // return true if current selection is text and in "text mode"
     function isEditingText() {
+      // return true if current selection is text and in "text mode"
       var objects = canvas.getActiveObjects();
       return objects.length === 1 && objects[0].type === "i-text" && objects[0].isEditing === true
     }
-
   });
 
   // MOUSE UP EVENT
@@ -845,54 +784,54 @@ $(document).ready(() => {
     }
   }
 
-    // HANDLE PANNING
-    function handlePanning(event, context) {
-      if(mode !== HAND) return;
+  // HANDLE PANNING
+  function handlePanning(event, context) {
+    if(mode !== HAND) return;
 
-      if(event.e.type === "mousedown" || event.e.type === "touchstart") {
-        canvas.selection = false;
-        let evt = event.e;
-        context.isDragging = true;
-        context.selection = false;
-        context.lastPosX = evt.clientX;
-        context.lastPosY = evt.clientY;
-      }
-      if(event.e.type === "mousemove" || event.e.type === "touchmove") {
-        if (context.isDragging) {
-          var e = event.e;
-          context.viewportTransform[4] += e.clientX - context.lastPosX;
-          context.viewportTransform[5] += e.clientY - context.lastPosY;
-          context.requestRenderAll();
-          context.lastPosX = e.clientX;
-          context.lastPosY = e.clientY;
+    if(event.e.type === "mousedown" || event.e.type === "touchstart") {
+      canvas.selection = false;
+      let evt = event.e;
+      context.isDragging = true;
+      context.selection = false;
+      context.lastPosX = evt.clientX;
+      context.lastPosY = evt.clientY;
+    }
+    if(event.e.type === "mousemove" || event.e.type === "touchmove") {
+      if (context.isDragging) {
+        var e = event.e;
+        context.viewportTransform[4] += e.clientX - context.lastPosX;
+        context.viewportTransform[5] += e.clientY - context.lastPosY;
+        context.requestRenderAll();
+        context.lastPosX = e.clientX;
+        context.lastPosY = e.clientY;
 
-          // panning code added by Aaron:
-          // let delta = new fabric.Point(event.e.movementX, event.e.movementY);
-          // canvas.relativePan(delta);
+        // panning code added by Aaron:
+        // let delta = new fabric.Point(event.e.movementX, event.e.movementY);
+        // canvas.relativePan(delta);
 
-          // let canvasViewPort = canvas.viewportTransform;
+        // let canvasViewPort = canvas.viewportTransform;
 
-          // let imageHeight = canvas.height * canvasViewPort[0];
-          // let imageWidth = canvas.width * canvasViewPort[0];
+        // let imageHeight = canvas.height * canvasViewPort[0];
+        // let imageWidth = canvas.width * canvasViewPort[0];
 
-          // let bottomEndPoint = canvas.height * (canvasViewPort[0] - 1);
-          // if (canvasViewPort[5] >= 0 || -bottomEndPoint > canvasViewPort[5]) {
-          //   canvasViewPort[5] = (canvasViewPort[5] >= 0) ? 0 : -bottomEndPoint;
-          // }
+        // let bottomEndPoint = canvas.height * (canvasViewPort[0] - 1);
+        // if (canvasViewPort[5] >= 0 || -bottomEndPoint > canvasViewPort[5]) {
+        //   canvasViewPort[5] = (canvasViewPort[5] >= 0) ? 0 : -bottomEndPoint;
+        // }
 
-          // let rightEndPoint = canvas.width * (canvasViewPort[0] - 1);
-          // if (canvasViewPort[4] >= 0 || -rightEndPoint > canvasViewPort[4]) {
-          //   canvasViewPort[4] = (canvasViewPort[4] >= 0) ? 0 : -rightEndPoint;
-          // }
-          /// End of code added by Aaron
+        // let rightEndPoint = canvas.width * (canvasViewPort[0] - 1);
+        // if (canvasViewPort[4] >= 0 || -rightEndPoint > canvasViewPort[4]) {
+        //   canvasViewPort[4] = (canvasViewPort[4] >= 0) ? 0 : -rightEndPoint;
+        // }
+        /// End of code added by Aaron
 
-        }
-      }
-      if(event.e.type === "mouseup") {
-        context.isDragging = false;
-        context.selection = true;
       }
     }
+    if(event.e.type === "mouseup") {
+      context.isDragging = false;
+      context.selection = true;
+    }
+  }
 
   // Zoom in/out with mousewheel
   canvas.on('mouse:wheel', function(event) {
@@ -960,7 +899,6 @@ $(document).ready(() => {
       canvas.discardActiveObject();
       socket.emit("remove_component", { id: obj.id })
     });
-    canvas.discardActiveGroup
   }
 
   function componentParams(component) {
@@ -1036,13 +974,10 @@ $(document).ready(() => {
     }
   });
 
-  // delete component request from server
-  socket.on('elevate_component', function(data) {
-    let component = findComonent(data.id)
-    if (component) {
-      canvas.bringToFront(component);
-      orderCanvas();
-    }
+  // layer component request from server
+  socket.on('layer_component', function(data) {
+    let component = findComonent(data.id);
+    if (component) layerComponent(component, data.action);
   });
 
 
