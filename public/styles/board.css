@@ -75,12 +75,13 @@ button:hover {
 }
 
 .nav-left {
-  /* border-radius: 10px; */
   display: flex;
   flex-direction: column;
   width: 55px;
   position: fixed;
   border: 1px solid #aaa;
+  padding-bottom: 10px;
+  background-color: #eee;
   top: 80px;
   left: 10px;
   z-index: 2;
@@ -203,7 +204,7 @@ input[type="file"] {
 
 label.brush-size {
   background-color: #eee;
-  padding: 5px 5px 0;
+  padding: 2px 5px 0;
 }
 
 #brush-size {
