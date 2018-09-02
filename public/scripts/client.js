@@ -115,6 +115,7 @@ $(document).ready(() => {
   socket.on('connection established', (user) => {
     client = user;
     addUser(user);
+    getVideo();
   });
 
   socket.on('new connection', (user) => {
