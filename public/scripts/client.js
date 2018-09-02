@@ -40,7 +40,7 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = true;
+  let DEBUG = false;
 
 
   ////////////////////////////////////////////
@@ -52,7 +52,7 @@ $(document).ready(() => {
     users.forEach(function(user) {
       user = user[Object.keys(user)[0]];
       if (user.name) {
-        $('<span class="user-name">').text(user.name).appendTo($users);
+        $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
       }
     });
   }
@@ -78,7 +78,8 @@ $(document).ready(() => {
   }
 
   function removeUser(user) {
-    $(`.${user.id}`).remove();
+    $(`span.${user.id}`).remove();
+    $(`span#${user.id}`).remove();
   }
 
   // Store client object
@@ -629,7 +630,7 @@ $(document).ready(() => {
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
       let currentSelection = canvas.getActiveObjects();
-      console.log("currentSelection del", currentSelection)
+      if (DEBUG) console.log("currentSelection del", currentSelection)
       if (currentSelection.length > 0) {
         removeComponents(canvas.getActiveObjects());
       }
@@ -978,7 +979,7 @@ $(document).ready(() => {
   // notify component that is being modified
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
-    console.log("modifying component", componentParams(component))
+    if (DEBUG) console.log("modifying component", componentParams(component))
     let msg_type = isFinal ? "modified_component" : "modify_component";
     socket.emit(msg_type, componentParams(component))
   };

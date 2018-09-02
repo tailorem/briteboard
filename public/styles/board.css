@@ -267,10 +267,10 @@ label.brush-size {
 .user-name {
   background-color: white;
   border: 1px solid #aaa;
-  border-radius: 3px;
+  border-radius: .75em 0 .75em 0;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   color: #222;
-  padding: 10px 15px;
+  padding: 5px 10px;
   margin: 0 .25em;
 }
 
@@ -278,9 +278,9 @@ label.brush-size {
   position: fixed;
   border: 1px solid #aaa;
   background-color: #eee;
-  border-radius: 3px;
+  border-radius: 0 .75em .75em .75em;
   color: #222;
-  padding: 10px 15px;
+  padding: 5px 10px;
   top: 216px;
   left: 310px;
   z-index: 1;
