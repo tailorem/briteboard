@@ -136,8 +136,8 @@ module.exports = (io, boards) => {
       socket.to(board).emit('path_created', objectData);
     });
 
-    socket.on('elevate_component', function(objectData) {
-      socket.to(board).emit('elevate_component', objectData);
+    socket.on('layer_component', function(objectData) {
+      socket.to(board).emit('layer_component', objectData);
     });
 
     socket.on('user_position', function(objectData) {
