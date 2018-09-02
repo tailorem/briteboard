@@ -160,6 +160,11 @@ button:hover {
   z-index: 3;
 }
 
+#remote-videos {
+  display: flex;
+  flex-direction: column;
+}
+
 video {
   background-color: #eee;
   border-radius: 3px;
