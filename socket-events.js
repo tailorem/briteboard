@@ -103,7 +103,6 @@ module.exports = (io, boards) => {
       boardHistory.push(objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('create_component', objectData);
-    console.log("create component", objectData)
     });
 
     // broadcast movements without saving to db
@@ -120,8 +119,6 @@ module.exports = (io, boards) => {
       updateboardHistory(boardHistory, objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('modify_component', objectData);
-      console.log("boardHistory -------------------------------------", boardHistory)
-    console.log("modified_component", objectData)
     });
 
     // // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
