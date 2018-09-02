@@ -64,7 +64,6 @@ module.exports = {
   },
   updateBoard: (id, objectData, boardHistory) => {
     boards.find(b => b.id === id).componentHistory;
-
     Board.updateOne(
     { 'id': id },
     // { "$push": { "componentHistory": dataObj } },

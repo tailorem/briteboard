@@ -99,7 +99,8 @@ module.exports = (io, boards) => {
 
     // add handler for broadcast new component
     socket.on('create_component', function(objectData) {
-      boardHistory = boards.getBoardHistory(board).push(objectData);
+      boardHistory = boards.getBoardHistory(board);
+      boardHistory.push(objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('create_component', objectData);
     console.log("create component", objectData)
@@ -135,7 +136,8 @@ module.exports = (io, boards) => {
     });
 
     socket.on('path_created', function(objectData) {
-      boardHistory = boards.getBoardHistory(board).push(objectData);
+      boardHistory = boards.getBoardHistory(board)
+      boardHistory.push(objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('path_created', objectData);
     });
