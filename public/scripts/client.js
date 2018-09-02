@@ -451,9 +451,10 @@ $(document).ready(() => {
     });
   })
 
-  /////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////
+  //                LAYERING                //
+  ////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////////
   let currentUserId = uuidv4();
   let currentUserName = "Bob";
   canvas.on('mouse:move', throttled(50, function(event) {
@@ -514,7 +515,7 @@ $(document).ready(() => {
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
-    
+
     if(event.e.metaKey && mode === SELECT) {
       console.log("event & shift", event, event.shiftKey)
       let action = event.e.shiftKey ? "lower" : "elevate"
