@@ -79,17 +79,37 @@ button:hover {
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
-.navbar-logo {
+.navbar-icon {
   padding-left: 10px;
-  height: 45px;
+  height: 38px;
+  width: 55px;
   cursor: pointer;
 }
 
 .navbar-logo-text {
   height: 35px;
+  padding-bottom: 3px;
   cursor: pointer;
 }
 
+.logo-wrapper{
+  display: inline;
+  transition: all 500;
+}
+
+.logo-wrapper .icon-colored {
+  display: none;
+}
+
+.logo-wrapper:hover .icon-outline,
+.logo-wrapper:active .icon-outline {
+  display: none;
+}
+
+.logo-wrapper:hover .icon-colored,
+.logo-wrapper:active .icon-colored {
+  display: inline;
+}
 
 .main {
   background-color: white;
