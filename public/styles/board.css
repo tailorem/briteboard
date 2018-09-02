@@ -145,6 +145,7 @@ button:hover {
 }
 
 .video {
+  display: flex;
   position: fixed;
   top: 80px;
   right: 10px;
