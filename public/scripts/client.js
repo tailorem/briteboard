@@ -33,16 +33,16 @@ $(document).ready(() => {
   let currentColor = '#000000';
   let currentBorderColor = '#000000';
   let borderSize = 4;
-  canvas.freeDrawingBrush.width = borderSize;
+  canvas.freeDrawingBrush.width = borderSize + 1;
   canvas.zoomToPoint({
     x: 0,
     y: 0
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = false;
-
-
+  let DEBUG = true;
+  console.log("URL", $(location).attr('href'));
+  // _clipboard =  $(location).attr('href')
   ////////////////////////////////////////////
   //             CLIENT INFO                //
   ////////////////////////////////////////////
@@ -126,7 +126,6 @@ $(document).ready(() => {
   socket.on('user disconnected', (user) => {
     removeUser(user);
   });
-
 
   ////////////////////////////////////////////
   //             TOOL HELPERS               //
@@ -231,16 +230,21 @@ $(document).ready(() => {
    });
 
   // Delete Tool
+  $('#url-to-clipboard').on('click', function(e) {
+    copyUrlToClipboard();
+   });
+
+     // Delete Tool
   $('#delete').on('click', function(e) {
     setupForMode(ERASE);
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
    });
 
-  $('#brush-size').on('click', function(e) {
+  $('#brush-size').on('input', function(e) {
     let pixelSize = parseInt($('#brush-size').val(), 10) * 2
     borderSize = pixelSize;
-    canvas.freeDrawingBrush.width = pixelSize;
+    canvas.freeDrawingBrush.width = pixelSize + 1;
   });
 
   // Add Image Tool
@@ -419,7 +423,8 @@ $(document).ready(() => {
   }
 
 
-  canvas.on("'object:modified'", function(event) {
+  canvas.on('object:modified', function(event) {
+    if(DEBUG) console.log("OBJECT MODIFIED")
     // debouncing/throtling not required.
     componentChanged(event, true)
   });
@@ -438,7 +443,7 @@ $(document).ready(() => {
   ['object:rotating', 'object:moving', 'object:scaling']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
-        throttled(50, componentChanged(event, false))
+        throttled(75, componentChanged(event, false))
       });
     })
 
@@ -477,7 +482,7 @@ $(document).ready(() => {
 
   let currentUserId = uuidv4();
   let currentUserName = "Bob";
-  canvas.on('mouse:move', throttled(50, function(event) {
+  canvas.on('mouse:move', throttled(100, function(event) {
     let pointer = canvas.getPointer(event.e);
     socket.emit("user_position", {client: client, pos: pointer})
   }));
@@ -535,14 +540,18 @@ $(document).ready(() => {
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
-
     if(event.e.metaKey && mode === SELECT) {
-      console.log("event & shift", event, event.shiftKey)
       let action = event.e.shiftKey ? "lower" : "elevate"
       layerComponent(canvas.getActiveObject(), action, true);  // CMD/CTRL UPARROW
     }
     isMouseDown = true;
   });
+
+  function copyUrlToClipboard() {
+    let content = $(location).attr('href');
+    let dummy = $('<input>').val(content).appendTo('body').select()
+    document.execCommand('copy')
+  }
 
   // // Elevate Components to the top
   // function elevateComponent(component) {
@@ -793,7 +802,7 @@ $(document).ready(() => {
         height: 300,
         top: pointer.y,
         left: pointer.x,
-        hasControls: false,
+        hasControls: true,
         fontSize: 30,
         fixedWidth: 300,
         fixedFontSize: 30,
@@ -938,7 +947,7 @@ $(document).ready(() => {
   // notify component that is being modified
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
-    if (DEBUG) console.log("modifying component", componentParams(component))
+    if (DEBUG) console.log("modifying component", isFinal, componentParams(component))
     let msg_type = isFinal ? "modified_component" : "modify_component";
     socket.emit(msg_type, componentParams(component))
   };
