@@ -30,10 +30,15 @@
 
     <p id="template-id"><%= board.template %></p>
 
-    <p class="tool-text">
-      Canvas
-      <input id="background-color-picker" title="Background Color" />
-    </p>
+    <div style="display:flex; flex-direction: row;">
+      <button id="url-to-clipboard" title="Copy URL to Clipboard"><i class="fas fa-link"></i></button>
+      <button id="save-image" title="Save As Image"><i class="fas fa-save"></i></button>
+      <button id="delete-board" title="Delete Board"><i class="fas fa-trash-alt"></i></button>
+      <div class="tool-text" style="display:flex; flex-direction: column;">
+        Canvas
+        <input id="background-color-picker" title="Background Color" />
+      </div>
+    </div>
 
     <!-- <h2 style="color:#333; font-weight:400; display:inline;">&nbsp| <%= board.name %></h2> -->
     <div id="users"></div>
@@ -60,8 +65,7 @@
       <button id="triangle" title="Triangle Tool"><i class="fa fa-caret-up" aria-hidden="true"></i></button>
       <button id="draw-rect" title="Rectangle Tool"><i class="far fa-square" aria-hidden="true"></i></button>
       <button id="textbox" title="Text Tool"><i class="fas fa-font"></i></button>
-      <button id="delete" title="Delete Tool (del)"><i class="fas fa-trash-alt"></i></button>
-      <button id="url-to-clipboard" title="Copy URL to Clipboard"><i class="fas fa-copy"></i></button>
+      <button id="delete" title="Erase Tool (del)"><i class="fas fa-eraser"></i></button>
       <button id="duplicate" title="Duplicate Selection (Cmd + C / Cmd + V)"><i class="far fa-copy"></i></button>
       <label for="add-image" class="custom-file-upload" title="Add Image"><i class="far fa-images"></i></label>
       <input id="add-image" type="file" />
@@ -69,11 +73,10 @@
       <input id="border-color-picker" title="Stroke Color" />
       <p class="tool-text">Fill</p>
       <input id="colorPicker" title="Fill Color"/>
-      <p class="tool-text">Width</p>
+      <p class="tool-text">Size</p>
       <label class="brush-size" title="Stroke Size">
         <input type="range" id="brush-size" value="2" min="1" max="10">
       </label>
-      <button id="save-image" title="Save As Image"><i class="fas fa-file-download"></i></button>
       <!-- <label for="add-background" class="custom-file-upload" title="Add Background Image"><i class="far fa-images"></i></label> -->
       <input id="add-background" type="file" />
     </div>

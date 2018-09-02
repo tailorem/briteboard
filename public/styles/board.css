@@ -50,6 +50,10 @@ button:hover {
   font-weight: bold;
 }
 
+.fa-save, .fa-trash-alt, .fa-link {
+  transform: scaleY(2) scaleX(2);
+}
+
 .fa-caret-up {
   transform: scaleY(2.9) scaleX(1.8);
 }
