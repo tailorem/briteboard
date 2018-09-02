@@ -41,8 +41,8 @@ $(document).ready(() => {
 
   const socket = io.connect();
   let DEBUG = false;
-
-
+  console.log("URL", $(location).attr('href'));
+  _clipboard =  $(location).attr('href')
   ////////////////////////////////////////////
   //             CLIENT INFO                //
   ////////////////////////////////////////////
@@ -125,7 +125,6 @@ $(document).ready(() => {
   socket.on('user disconnected', (user) => {
     removeUser(user);
   });
-
 
   ////////////////////////////////////////////
   //             TOOL HELPERS               //
@@ -418,7 +417,7 @@ $(document).ready(() => {
   ['object:rotating', 'object:moving', 'object:scaling']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
-        throttled(50, componentChanged(event, false))
+        throttled(75, componentChanged(event, false))
       });
     })
 
@@ -456,7 +455,7 @@ $(document).ready(() => {
   /////////////////////////////////////////////////////////////////////
   let currentUserId = uuidv4();
   let currentUserName = "Bob";
-  canvas.on('mouse:move', throttled(50, function(event) {
+  canvas.on('mouse:move', throttled(100, function(event) {
     let pointer = canvas.getPointer(event.e);
     socket.emit("user_position", {client: client, pos: pointer})
   }));
@@ -514,9 +513,12 @@ $(document).ready(() => {
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
-    
+    console.log("client", client)
+    var dummyContent = "this is to be copied to clipboard";
+    var dummy = $('<input>').val(dummyContent).appendTo('body').select()
+    document.execCommand('copy')
+
     if(event.e.metaKey && mode === SELECT) {
-      console.log("event & shift", event, event.shiftKey)
       let action = event.e.shiftKey ? "lower" : "elevate"
       layerComponent(canvas.getActiveObject(), action, true);  // CMD/CTRL UPARROW
     }
