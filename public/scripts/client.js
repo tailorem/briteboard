@@ -115,6 +115,7 @@ $(document).ready(() => {
   socket.on('connection established', (user) => {
     client = user;
     addUser(user);
+    getVideo();
   });
 
   socket.on('new connection', (user) => {
@@ -209,7 +210,7 @@ $(document).ready(() => {
   $('#triangle').on('click', function(e) {
     setupForMode(TRIANGLE);
     canvas.discardActiveObject();
-    $('#rectangle').addClass('selected');
+    $('#triangle').addClass('selected');
     makeObjectsSelectable(false);
    });
 
@@ -306,7 +307,7 @@ $(document).ready(() => {
   $('#save-image').on('click', function(e) {
     canvas.discardActiveObject();
     $('#whiteboard').get(0).toBlob(function(blob) {
-      saveAs(blob, 'whiteboard.png');
+      saveAs(blob, 'whiteboard.svg');
     });
   });
 
@@ -371,6 +372,25 @@ $(document).ready(() => {
     reader.readAsDataURL(file);
     $("#add-background").val("");
     enableSelectMode();
+  });
+
+
+  $("#background-color-picker").spectrum({
+    color: canvas.backgroundColor,
+    showPalette: true,
+    palette: [
+      ['#000000', '#ffffff'],
+      ['#bc000d', '#df3b1a'],
+      ['#fec945', '#008a29'],
+      ['#006b75', '#0076d7'],
+      ['#0051c7', '#561ce1'],
+      ['#795548', '#939393'],
+
+    ],
+    change: function(color) {
+      canvas.backgroundColor = color.toHexString();
+      canvas.renderAll();
+    }
   });
 
   ////////////////////////////////////////////
