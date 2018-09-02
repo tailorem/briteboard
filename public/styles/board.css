@@ -11,6 +11,10 @@ html, body, .main{
   font-family: 'Open Sans', sans-serif;
 }
 
+a {
+  text-decoration: none;
+}
+
 button {
   padding: 10px 10px 10px 10px;
   color: #222;
@@ -144,16 +148,11 @@ button:hover {
 
 .video-container {
   display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
-a {
-  text-decoration: none;
-}
-
 .video {
-  display: flex;
-  flex-direction: column;
   position: fixed;
   top: 80px;
   right: 10px;
@@ -162,10 +161,9 @@ a {
 
 video {
   background-color: #eee;
-  /*border: 1px solid #aaa;*/
   border-radius: 3px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
-  margin: 0 .25em;
+  margin-bottom: .35em;
   height: 60px;
   width: 80px;
 }
