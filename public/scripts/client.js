@@ -774,7 +774,8 @@ $(document).ready(() => {
         fontSize: 30,
         fixedWidth: 300,
         fixedFontSize: 30,
-        fill: currentColor
+        fill: currentColor,
+        fontFamily: 'Open Sans'
       });
       canvas.add(textbox).setActiveObject(textbox);
       addComponent(textbox, true);
