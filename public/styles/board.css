@@ -73,21 +73,25 @@ button:hover {
   width: 55px;
   position: fixed;
   border: 1px solid #aaa;
-  top: 116px;
+  top: 80px;
   left: 10px;
   z-index: 2;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
+.logo-wrapper {
+  height:45px;
+}
+
 .navbar-logo {
   padding-left: 10px;
   height: 45px;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 
 .navbar-logo-text {
   height: 35px;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 
 
@@ -115,9 +119,18 @@ a {
   text-decoration: none;
 }
 
-video, .video {
+.video {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  z-index: 3;
+}
+
+video {
   background-color: #eee;
-  border: 1px solid #aaa;
+  /*border: 1px solid #aaa;*/
   border-radius: 3px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   margin: 0 .25em;
@@ -176,6 +189,7 @@ label.brush-size {
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   padding: 25px 50px;;
   width: 400px;
+  margin-bottom: 10%;
 }
 
 .username-box p {
@@ -227,7 +241,7 @@ label.brush-size {
 }
 
 .user-name {
-  background-color: #eee;
+  background-color: white;
   border: 1px solid #aaa;
   border-radius: 3px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);

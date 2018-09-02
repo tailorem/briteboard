@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>Briteboard</title>
+  <title><%= board.name %></title>
 
   <link rel="stylesheet" type="text/css" href="/vendor/normalize.css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
@@ -21,21 +21,27 @@
 
 <div class="main">
   <header class="nav-top">
-    <div class="logo-wrapper">
-      <a href="/"><img src="../img/logo.svg" class="navbar-logo" alt="Briteboard Logo" /></a>
-      <a href="/"><img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" /></a>
-    </div>
-    <h1><%= board.name %></h1>
+    <a href="/">
+      <div class="logo-wrapper" style="display:flex; align-items:center;">
+        <img src="../img/logo.svg" class="navbar-logo" alt="Briteboard Logo" />&nbsp;
+        <img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" />
+      </div>
+    </a>
     <p id="template-id"><%= board.template %></p>
 
+    <!-- <h2 style="color:#333; font-weight:400; display:inline;">&nbsp| <%= board.name %></h2> -->
     <div id="users"></div>
+
+  </header>
+
+  <div class="video">
 
     <div class="video-container">
       <video id="localVideo" autoplay muted></video>
       <div id="remoteVideos"></div>
     </div>
 
-  </header>
+  </div>
 
   <div class="container">
     <div class="nav-left">
@@ -69,13 +75,11 @@
 </div>
 
   <script src="../vendor/jquery-3.3.1.min.js"></script>
-
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/simplewebrtc@3.0.2/out/simplewebrtc-with-adapter.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
   <script src="../vendor/fabric.js"></script>
   <script src="../vendor/uuidv4.min.js"></script>
   <script src="../scripts/client.js"></script>
-  <!-- // <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script> -->
   <script src="../scripts/video.js"></script>
   <script src="../vendor/spectrum.js"></script>
   <script src="../vendor/filesaver.min.js"></script>
