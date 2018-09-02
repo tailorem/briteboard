@@ -40,7 +40,7 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = false;
+  let DEBUG = true;
 
 
   ////////////////////////////////////////////
@@ -192,7 +192,7 @@ $(document).ready(() => {
 
   // Line Tool
   $('#line').on('click', function(e) {
-    setupForMode(DRAW);
+    setupForMode(LINE);
     makeObjectsSelectable(false);
     $('#line').addClass('selected');
    });
@@ -230,8 +230,7 @@ $(document).ready(() => {
 
   // Delete Tool
   $('#delete').on('click', function(e) {
-    clearModes();
-    mode = ERASE;
+    setupForMode(ERASE);
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
    });
@@ -548,8 +547,19 @@ $(document).ready(() => {
     // if (DEBUG) console.log("received user position", data)
     // console.log("users", data.client)
     console.log("Zoom", canvas.getZoom())
-    let topPos = (canvas._offset.top + data.pos.y) * canvas.getZoom(),
-        leftPos = (canvas._offset.left + data.pos.x) * canvas.getZoom();
+    let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
+    let boundaries = canvas.calcViewportBoundaries();
+        topPos = (((data.pos.y - boundaries.tl.y )) * canvas.getZoom())  + canvas._offset.top;
+        leftPos = (((data.pos.x - boundaries.tl.x )) * canvas.getZoom()) + canvas._offset.left;
+        console.log("top/left Pos", leftPos, topPos)
+        var invertedMatrix = fabric.util.invertTransform(canvas.viewportTransform);
+var transformedP = fabric.util.transformPoint({x: data.pos.x, y: data.pos.y}, invertedMatrix);
+console.log("canvas offset", canvas._offset.left, canvas._offset.top)
+console.log("insertedMMatrix", invertedMatrix)
+console.log("transformedP", transformedP)
+console.log("canvas getBoundingClientRect" , canvas.getBoundingClientRect)
+console.log("calc boundaries", canvas.calcViewportBoundaries())
+console.log("canvas", canvas)
         // canvas._offset.top
     $(`#${data.client.id}`).text(`${parseInt(data.pos.x)}, ${parseInt(data.pos.y)}`)
     $(`#${data.client.id}`).css({top: topPos, left: leftPos});
