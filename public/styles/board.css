@@ -73,27 +73,35 @@ button:hover {
   width: 55px;
   position: fixed;
   border: 1px solid #aaa;
-  top: 116px;
+  top: 80px;
   left: 10px;
   z-index: 2;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+}
+
+.logo-wrapper {
+  height:45px;
+}
+
+.navbar-logo {
+  padding-left: 10px;
+  height: 45px;
 }
 
 .navbar-icon {
   padding-left: 10px;
   height: 38px;
   width: 55px;
-  cursor: pointer;
 }
 
 .navbar-logo-text {
   height: 35px;
   padding-bottom: 3px;
-  cursor: pointer;
 }
 
 .logo-wrapper{
-  display: inline;
+  display:flex;
+  align-items:center;
   transition: all 500;
 }
 
@@ -101,9 +109,25 @@ button:hover {
   display: none;
 }
 
+  #icon-outline {
+    margin:0 auto;
+    width:45px;
+    height:38px;
+    transition: background-image .5s ease-in-out;
+    background-image:url(../img/logo-outline.svg);
+    background-size: 45px 38px;
+    /*background-color: black;*/
+  }
+
+  #icon-outline:hover {
+    background-image:url("../img/logo.svg");
+    background-size: 45px 38px;
+  }
+
 .logo-wrapper:hover .icon-outline,
 .logo-wrapper:active .icon-outline {
   display: none;
+  transition: background 200ms ease-in;
 }
 
 .logo-wrapper:hover .icon-colored,
@@ -135,9 +159,18 @@ a {
   text-decoration: none;
 }
 
-video, .video {
+.video {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  z-index: 3;
+}
+
+video {
   background-color: #eee;
-  border: 1px solid #aaa;
+  /*border: 1px solid #aaa;*/
   border-radius: 3px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   margin: 0 .25em;
@@ -193,9 +226,11 @@ label.brush-size {
 .username-box {
   background-color: #fff;
   border: 1px solid #aaa;
+  border-radius: .25em;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   padding: 25px 50px;;
   width: 400px;
+  margin-bottom: 10%;
 }
 
 .username-box p {
@@ -220,7 +255,7 @@ label.brush-size {
   background: #7f8ff4;
   color: #fff;
   border-radius: 2px;
-  padding: 14px 30px;
+  padding: 12px 20px;
 }
 
 .username-box button:hover {
@@ -234,12 +269,12 @@ label.brush-size {
 
 .username-box input {
   padding: 50px 10px 25px;
-  width: 200px;
+  width: 225px;
   background: #fff;
   color: #222;
   border: 1px solid #6f6f6f;
   outline: 0;
-  padding: 12px 16px;
+  padding: 10px 15px;
 }
 
 .username-box input::placeholder {
@@ -247,12 +282,12 @@ label.brush-size {
 }
 
 .user-name {
-  background-color: #eee;
+  background-color: white;
   border: 1px solid #aaa;
-  border-radius: 3px;
+  border-radius: .75em 0 .75em 0;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   color: #222;
-  padding: 10px 15px;
+  padding: 5px 10px;
   margin: 0 .25em;
 }
 
@@ -260,9 +295,9 @@ label.brush-size {
   position: fixed;
   border: 1px solid #aaa;
   background-color: #eee;
-  border-radius: 3px;
+  border-radius: 0 .75em .75em .75em;
   color: #222;
-  padding: 10px 15px;
+  padding: 5px 10px;
   top: 216px;
   left: 310px;
   z-index: 1;

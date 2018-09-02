@@ -58,7 +58,7 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
-          console.log("Deleted in MongoDB!", boardHistory)
+          console.log("Deleted in MongoDB!")
         }
       }, false, true);
   },
