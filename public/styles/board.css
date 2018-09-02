@@ -203,14 +203,22 @@ input[type="file"] {
 
 label.brush-size {
   background-color: #eee;
-  padding: 5px 5px 0;
+  padding: 5px 5px 5px;
 }
 
 #brush-size {
   display: block;
   width: 100%;
 }
+label.shadow-size {
+  background-color: #eee;
+  padding: 5px 5px 5px;
+}
 
+#shadow-size {
+  display: block;
+  width: 100%;
+}
 /* USERNAME INPUT POPUP */
 
 #username-form {
