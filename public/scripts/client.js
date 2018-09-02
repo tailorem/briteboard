@@ -42,8 +42,9 @@ $(document).ready(() => {
   //               USER INFO                //
   ////////////////////////////////////////////
 
-  // Store client object
+  const roomURL = window.location.pathname.split('/')[2];
   let client;
+  let webrtc;
   let videoOn = true;
 
   // On connection, user is prompted to select a username
@@ -76,7 +77,24 @@ $(document).ready(() => {
   socket.on('connection established', (user) => {
     client = user;
     addUser(user);
-    getVideo();
+
+    // Get video
+    webrtc = new SimpleWebRTC({
+      localVideoEl: 'localVideo',
+      remoteVideosEl: 'remoteVideos',
+      autoRequestMedia: true,
+      localVideo: {
+        autoplay: true,
+        muted: true
+      },
+      media: {audio: true, video: true},
+      autoRemoveVideos: true
+    })
+
+    // Join video room
+    webrtc.on('readyToCall', function () {
+      webrtc.joinRoom(roomURL);
+    });
   });
 
   socket.on('new connection', (user) => {
@@ -89,8 +107,38 @@ $(document).ready(() => {
   });
 
   $('#localVideo').on('click', (e) => {
-    toggleVideo(videoOn);
+    toggleVideo();
   });
+
+
+////////////////////////////////////////////
+//             VIDEO HELPERS              //
+////////////////////////////////////////////
+
+function toggleVideo() {
+  if (videoOn === true) {
+    webrtc.pause();
+    videoOn = false;
+  } else {
+    webrtc.resume();
+    videoOn = true;
+  }
+}
+
+  // toggleVideo = () => {
+  //   if (this.state.videoOn) {
+  //     this.webrtc.pauseVideo()
+  //     this.setState({
+  //       videoOn: false
+  //     })
+  //   } else {
+  //     this.webrtc.resumeVideo()
+  //     this.setState({
+  //       videoOn: true
+  //     })
+  //   }
+  // }
+
 
   ////////////////////////////////////////////
   //             TOOL HELPERS               //

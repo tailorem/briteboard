@@ -1,5 +1,3 @@
-// $(document).ready(() => {
-
 ////////////////////////////////////////////
 //             USER HELPERS               //
 ////////////////////////////////////////////
@@ -39,58 +37,3 @@
     $(`span#${user.id}`).remove();
   }
 
-
-////////////////////////////////////////////
-//             VIDEO HELPERS              //
-////////////////////////////////////////////
-
-let webrtcVar;
-
-function getVideo() {
-  const roomURL = window.location.pathname.split('/')[2];
-
-  const webrtc = new SimpleWebRTC({
-    localVideoEl: 'localVideo',
-    remoteVideosEl: 'remoteVideos',
-    autoRequestMedia: true,
-    localVideo: {
-      autoplay: true,
-      muted: true
-    },
-    media: {audio: true, video: true},
-    autoRemoveVideos: true
-  })
-
-  webrtc.on('readyToCall', function () {
-    webrtc.joinRoom(roomURL);
-  });
-
-  webrtcVar = webrtc;
-}
-
-function toggleVideo(videoOn) {
-  if (videoOn === true) {
-    webrtcVar.pause();
-    videoOn = false;
-  } else {
-    webrtcVar.resume();
-    videoOn = true;
-  }
-}
-
-// });
-
-
-  // toggleVideo = () => {
-  //   if (this.state.videoOn) {
-  //     this.webrtc.pauseVideo()
-  //     this.setState({
-  //       videoOn: false
-  //     })
-  //   } else {
-  //     this.webrtc.resumeVideo()
-  //     this.setState({
-  //       videoOn: true
-  //     })
-  //   }
-  // }
