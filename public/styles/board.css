@@ -79,6 +79,14 @@ button:hover {
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
+.tool-text {
+  text-transform: uppercase;
+  font-size: 8px;
+  font-weight: 800;
+  background-color: #eee;
+  text-align: center;
+}
+
 .logo-wrapper {
   height:45px;
 }
