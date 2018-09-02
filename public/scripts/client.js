@@ -43,44 +43,11 @@ $(document).ready(() => {
   let DEBUG = false;
   console.log("URL", $(location).attr('href'));
   // _clipboard =  $(location).attr('href')
+
+
   ////////////////////////////////////////////
-  //             CLIENT INFO                //
+  //               USER INFO                //
   ////////////////////////////////////////////
-
-  function listUsers(users) {
-    $users = $('#users');
-    users.forEach(function(user) {
-      user = user[Object.keys(user)[0]];
-      if (user.name) {
-        $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
-      }
-    });
-  }
-
-  function getCursors(users) {
-    $container = $("div.container");
-    users.forEach(function(user) {
-      user = user[Object.keys(user)[0]];
-      if (user.name) {
-        $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
-      }
-    });
-  }
-
-  function addUser(user) {
-    $users = $('#users');
-    $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
-  }
-
-  function addCursor(user) {
-    $container = $("div.container");
-    $(`<span id="${user.id}" class="user-cursor ${user.id}">`).text(user.name).appendTo($container);
-  }
-
-  function removeUser(user) {
-    $(`span.${user.id}`).remove();
-    $(`span#${user.id}`).remove();
-  }
 
   // Store client object
   let client;
@@ -165,15 +132,16 @@ $(document).ready(() => {
     mode = newMode
   }
 
-  ////////////////////////////////////////////
-  //             TOOL BUTTONS               //
-  ////////////////////////////////////////////
-
   // Select Tool
   function enableSelectMode() {
     setupForMode(SELECT);
     $('#select').addClass('selected');
   }
+
+  ////////////////////////////////////////////
+  //             TOOL BUTTONS               //
+  ////////////////////////////////////////////
+
   $('#select').on('click', function(e) { enableSelectMode() });
 
   // Hand Tool (Move canvas)
