@@ -538,30 +538,14 @@ $(document).ready(() => {
   let currentUserName = "Bob";
   canvas.on('mouse:move', function(event) {
     let pointer = canvas.getPointer(event.e);
-    if (DEBUG) console.log("current user", client)
-    if (DEBUG) console.log("user position", pointer.x, pointer.y);
     socket.emit("user_position", {client: client, pos: pointer})
   });
   // reposition cursor received from server
   socket.on('user_position', function(data) {
-    // if (DEBUG) console.log("received user position", data)
-    // console.log("users", data.client)
-    console.log("Zoom", canvas.getZoom())
     let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
     let boundaries = canvas.calcViewportBoundaries();
-        topPos = (((data.pos.y - boundaries.tl.y )) * canvas.getZoom())  + canvas._offset.top;
-        leftPos = (((data.pos.x - boundaries.tl.x )) * canvas.getZoom()) + canvas._offset.left;
-        console.log("top/left Pos", leftPos, topPos)
-        var invertedMatrix = fabric.util.invertTransform(canvas.viewportTransform);
-var transformedP = fabric.util.transformPoint({x: data.pos.x, y: data.pos.y}, invertedMatrix);
-console.log("canvas offset", canvas._offset.left, canvas._offset.top)
-console.log("insertedMMatrix", invertedMatrix)
-console.log("transformedP", transformedP)
-console.log("canvas getBoundingClientRect" , canvas.getBoundingClientRect)
-console.log("calc boundaries", canvas.calcViewportBoundaries())
-console.log("canvas", canvas)
-        // canvas._offset.top
-    $(`#${data.client.id}`).text(`${parseInt(data.pos.x)}, ${parseInt(data.pos.y)}`)
+    topPos = (((data.pos.y - boundaries.tl.y )) * canvas.getZoom())  + canvas._offset.top;
+    leftPos = (((data.pos.x - boundaries.tl.x )) * canvas.getZoom()) + canvas._offset.left;
     $(`#${data.client.id}`).css({top: topPos, left: leftPos});
   });
 
@@ -610,10 +594,6 @@ console.log("canvas", canvas)
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
-    console.log("mouse down", event)
-    console.log("mouse down offset", canvas._offset.left, canvas._offset.top)
-    console.log("canvas getBoundingClientRect" , canvas.getBoundingClientRect)
-    console.log("calc boundaries", canvas.calcViewportBoundaries())
     if(event.e.metaKey && mode === SELECT) {
       elevateComponent(canvas.getActiveObject())
     }
@@ -649,6 +629,7 @@ console.log("canvas", canvas)
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
       let currentSelection = canvas.getActiveObjects();
+      console.log("currentSelection del", currentSelection)
       if (currentSelection.length > 0) {
         removeComponents(canvas.getActiveObjects());
       }
@@ -806,7 +787,6 @@ console.log("canvas", canvas)
     }
     if(event.e.type === "mouseup" || event.e.type === "touchend") {
       addComponent(circle, true);
-      enableSelectMode();
     }
   }
 
@@ -975,9 +955,11 @@ console.log("canvas", canvas)
   function removeComponents(components) {
     components.forEach(obj => {
       canvas.remove(obj);
-      trackComponentChanges(obj, "remove")
+      trackComponentChanges(obj, "remove");
+      canvas.discardActiveObject();
       socket.emit("remove_component", { id: obj.id })
     });
+    canvas.discardActiveGroup
   }
 
   function componentParams(component) {
