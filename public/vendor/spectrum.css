@@ -381,7 +381,7 @@
 .sp-replacer {
   overflow: hidden;
   cursor: pointer;
-  padding: 4px;
+  padding: 2px 4px 8px;
   display: inline-block;
   *zoom: 1;
   *display: inline;
@@ -414,8 +414,8 @@
   width: 25px;
   height: 20px;
   border: solid 1px #222;
-  margin-right: 5px;
-  float: left;
+  margin: 0 auto 2px;
+  /* float: left; */
   z-index: 0
 }
 
