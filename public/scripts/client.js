@@ -245,11 +245,18 @@ function toggleVideo() {
     copyUrlToClipboard();
    });
 
-     // Delete Tool
+  // Erase Tool
   $('#delete').on('click', function(e) {
     setupForMode(ERASE);
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
+   });
+
+  // Delete Board Tool
+  $('#delete-board').on('click', function(e) {
+    $('body').prepend('<div class="confirm">CONFIRM</div>')
+    result = confirm("Are you sure you want to delete this board? It'll be gone forever!");
+    console.log(result);
    });
 
   $('#brush-size').on('input', function(e) {

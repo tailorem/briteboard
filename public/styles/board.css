@@ -19,7 +19,7 @@ a {
             USERNAME INPUT
 ======================================= */
 
-#username-form {
+#username-form, .confirm {
   width:100%;
   height:100%;
   display:flex;
