@@ -49,3 +49,8 @@
   border-bottom: 1px solid #aaa;
 }
 
+@media (min-width: 1200px) {
+  #background {
+    background-size: 100% auto;
+  }
+}
