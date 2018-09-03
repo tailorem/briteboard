@@ -426,7 +426,9 @@ $(document).ready(() => {
   });
 
 
-  // Show Images Menu On Hover
+  ////////////////////////////////////////////
+  //           EMOJIS / STICKERS            //
+  ////////////////////////////////////////////
 
   $('#image-menu').hover(
     function() {
@@ -444,6 +446,51 @@ $(document).ready(() => {
     }
   );
 
+  function addSticker (url) {
+    let imgObj = new Image();
+    imgObj.src = url;
+    imgObj.onload = function() {
+      let image = new fabric.Image(imgObj);
+      image.set({
+        left: 200,
+        top: 200,
+      }).scale(0.2);
+      addComponent(image);
+    }
+    enableSelectMode();
+  }
+
+  $("#sticky-note").on("click", function() {
+    addSticker("/img/sticky-note.png");
+  });
+
+  $("#speech-bubble").on("click", function() {
+    addSticker("/img/speech-bubble.svg");
+  });
+
+  $("#arrow-emoji").on("click", function() {
+    addSticker("/img/arrow.svg");
+  });
+
+  $("#smile-emoji").on("click", function() {
+    addSticker("/img/happy.svg");
+  });
+
+  $("#frown-emoji").on("click", function() {
+    addSticker("/img/sad.svg");
+  });
+
+  $("#poop-emoji").on("click", function() {
+    addSticker("/img/poo.svg");
+  });
+
+  $("#doge-emoji").on("click", function() {
+    addSticker("/img/doge-emoji.png");
+  });
+
+  $("#heart-emoji").on("click", function() {
+    addSticker("/img/heart-emoji.svg");
+  });
 
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
