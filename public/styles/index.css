@@ -2,7 +2,7 @@ body {
   background-color: #fdfdfd;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
-  padding-top: 54px;
+  padding-top: 2.5em;
 }
 
 #background {
@@ -201,7 +201,8 @@ input.new-board {
 ======================================= */
 
 .templates-area {
-  margin: 3em 0;
+  margin-top: 3em;
+  margin-bottom: 1em;
 }
 
 .card {
@@ -288,9 +289,6 @@ footer {
 }
 
 @media (min-width: 992px) {
-  body {
-    padding-top: 56px;
-  }
 
   #background {
     background: url(../img/background3.jpg);
