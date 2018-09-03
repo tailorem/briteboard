@@ -10,19 +10,20 @@ $(document).ready(() => {
   }
 
   // Set default canvas values
-  const ERASE = 0;
-  const LINE = 1;
-  const RECT = 2;
-  const CIRCLE = 3;
-  const HAND = 4;
-  const SELECT = 5;
-  const TEXTBOX = 6;
-  const DRAW = 7
-  const TRIANGLE = 8;
+  const SELECT = 1;
+  const HAND = 2;
+  const DRAW = 3;
+  const LINE = 4;
+  const CIRCLE = 5;
+  const TRIANGLE = 6;
+  const RECT = 7;
+  const TEXTBOX = 8;
+  const ERASE = 9;
   let mode = SELECT;
   enableSelectMode();
+  let buttonIDs = ['select', 'hand', 'draw', 'line', 'circle', 'triangle', 'draw-rect', 'textbox', 'delete'];
   canvas.freeDrawingBrush.color = '#000000';
-  let currentWidth = canvas.freeDrawingBrush.width = 15;
+  canvas.freeDrawingBrush.width = 15;
   let currentColor = '#000000';
   let currentBorderColor = '#000000';
   let borderSize = 4;
@@ -33,7 +34,7 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = false;
+  let DEBUG = true;
 
   ////////////////////////////////////////////
   //               USER INFO                //
@@ -124,8 +125,6 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //             TOOL HELPERS               //
   ////////////////////////////////////////////
-
-  // Make Objects Selectable
   function makeObjectsSelectable(boolean) {
     canvas.forEachObject(function(object) {
       object.set({
@@ -139,14 +138,6 @@ $(document).ready(() => {
       if(each.type === "i-text")
         canvas.bringToFront(each)
     })
-  }
-  // CLEAR ALL MODES
-  function clearModes() {
-    $(".selected").removeClass("selected");
-    canvas.isDrawingMode = false;
-    canvas.selection = true;
-    makeObjectsSelectable(true);
-    orderCanvas();
   }
 
   // SET TOOL MODE
@@ -184,7 +175,7 @@ $(document).ready(() => {
     setupForMode(DRAW);
     canvas.isDrawingMode = true;
     $('#draw').addClass('selected');
-   });
+  });
 
   // Line Tool
   $('#line').on('click', function(e) {
@@ -199,7 +190,7 @@ $(document).ready(() => {
     canvas.discardActiveObject();
     $('#circle').addClass('selected');
     makeObjectsSelectable(false);
-   });
+  });
 
   // Triangle Tool
   $('#triangle').on('click', function(e) {
@@ -207,7 +198,7 @@ $(document).ready(() => {
     canvas.discardActiveObject();
     $('#triangle').addClass('selected');
     makeObjectsSelectable(false);
-   });
+  });
 
   // Draw Rectangle Tool
   $('#draw-rect').on('click', function(e) {
@@ -215,29 +206,34 @@ $(document).ready(() => {
     canvas.discardActiveObject();
     $('#draw-rect').addClass('selected');
     makeObjectsSelectable(false);
-   });
+  });
 
   // Text box
   $('#textbox').on('click', function(e) {
     setupForMode(TEXTBOX);
     makeObjectsSelectable(false);
     $('#textbox').addClass('selected');
-   });
+  });
 
   // Delete Tool
   $('#url-to-clipboard').on('click', function(e) {
     copyUrlToClipboard();
-   });
+  });
 
   // Erase Tool
   $('#delete').on('click', function(e) {
     setupForMode(ERASE);
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
-   });
+  });
 
 
-
+     // Brush Tool
+  $('#brush-mode').on('input', function(e) {
+    console.log("changing brush mode to: ", this.value + 'Brush')
+    canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+    updateCanvasBrush()
+  });
 
   // Delete Board Tool
   $('#delete-board').on('click', function(e) {
@@ -271,11 +267,8 @@ $(document).ready(() => {
 
 
 
-
+  // Bush Size Selection
   $('#brush-size').on('input', function(e) {
-    // let pixelSize = parseInt($('#brush-size').val(), 10) * 2
-    // borderSize = pixelSize;
-    // canvas.freeDrawingBrush.width = pixelSize + 1;
     updateCanvasBrush()
   });
 
@@ -284,6 +277,7 @@ $(document).ready(() => {
     borderSize = brushSize;
     canvas.freeDrawingBrush.width = brushSize + 1;
   }
+
   // Add Image Tool
   $('#add-image').on('change', function(e) {
     let reader = new FileReader();
@@ -324,21 +318,21 @@ $(document).ready(() => {
     }
   });
 
-    // Border Color Picker
-    $("#border-color-picker").spectrum({
-      color: currentBorderColor,
-      showPalette: true,
-      palette: [
-        ['#000000', '#ffffff'],
-        ['#FF4136', '#0074D9'],
-        ['#2ECC40', '#f9f878'],
-        ['#be50b7', '#FF851B'],
-        ['#39CCCC', '#AAAAAA'],
-      ],
-      change: function(color) {
-        currentBorderColor = color.toHexString()
-      }
-    });
+  // Border Color Picker
+  $("#border-color-picker").spectrum({
+    color: currentBorderColor,
+    showPalette: true,
+    palette: [
+      ['#000000', '#ffffff'],
+      ['#FF4136', '#0074D9'],
+      ['#2ECC40', '#f9f878'],
+      ['#be50b7', '#FF851B'],
+      ['#39CCCC', '#AAAAAA'],
+    ],
+    change: function(color) {
+      currentBorderColor = color.toHexString()
+    }
+  });
 
 
   // Save canvas to image
@@ -352,13 +346,11 @@ $(document).ready(() => {
 
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
-    if (DEBUG) console.log(e);
-console.log("drop event", e)
     let xpos = e.offsetX;
     let ypos = e.offsetY;
     e = e || window.event;
     // if (e.preventDefault) {
-    //   e.preventDefault();
+      // e.preventDefault();
     // }
     let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
     let files = e.target.files || (dt && dt.files);
@@ -379,22 +371,11 @@ console.log("drop event", e)
         }).scale(0.5);
         addComponent(image);
       }
-      console.log("drop done", file)
       reader.readAsDataURL(file);
-      canvas.renderAll();
+      enableSelectMode();
     }
-
-    return false;
+    return false
   });
-  $('.main').on('dragover', cancel);
-  $('.main').on('dragenter', cancel);
-
-  function cancel(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    return false;
-  }
 
   $('#add-background').on('change', function(e) {
     var file = e.target.files[0];
@@ -575,6 +556,7 @@ console.log("drop event", e)
   ['mouse:down', 'mouse:move', 'mouse:up', 'dragenter', 'dragleave', 'drop', 'dragover']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
+        handleComponentLayer(event)
         handleDrawRect(event);
         handleDrawTriangle(event);
         handleDrawCircle(event);
@@ -587,13 +569,6 @@ console.log("drop event", e)
   ////////////////////////////////////////////
   //                LAYERING                //
   ////////////////////////////////////////////
-
-  let currentUserId = uuidv4();
-  let currentUserName = "Bob";
-  canvas.on('mouse:move', throttled(100, function(event) {
-    let pointer = canvas.getPointer(event.e);
-    socket.emit("user_position", {client: client, pos: pointer})
-  }));
   // reposition cursor received from server
   socket.on('user_position', function(data) {
     let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
@@ -615,7 +590,6 @@ console.log("drop event", e)
       return fn(...args);
     }
   }
-
   // debuounce async functions
   function debounced(delay, fn) {
     let timerId;
@@ -630,6 +604,11 @@ console.log("drop event", e)
     }
   }
 
+  // Broadcast Mouse Position
+  canvas.on('mouse:move', throttled(100, function(event) {
+    let pointer = canvas.getPointer(event.e);
+    socket.emit("user_position", {client: client, pos: pointer})
+  }));
 
   canvas.on('mouse:over', function(event) {
     if(event.target) {
@@ -648,10 +627,6 @@ console.log("drop event", e)
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
-    if(event.e.metaKey && mode === SELECT) {
-      let action = event.e.shiftKey ? "lower" : "elevate"
-      layerComponent(canvas.getActiveObject(), action, true);  // CMD/CTRL UPARROW
-    }
     isMouseDown = true;
   });
 
@@ -660,21 +635,6 @@ console.log("drop event", e)
     let dummy = $('<input>').val(content).appendTo('body').select()
     document.execCommand('copy')
   }
-
-  // // Elevate Components to the top
-  // function elevateComponent(component) {
-  //   if(component === "activeSelection") {
-  //     component.getObjects().forEach(each => {
-  //       canvas.bringToFront(each);
-  //       socket.emit("elevate_component", { id: each.id })
-  //     });
-  //   }
-  //   else {
-  //     canvas.bringToFront(component);
-  //     socket.emit("elevate_component", { id: component.id } )
-  //   }
-  //   orderCanvas();
-  // }
 
   // Elevate Components to the top
   function layerComponent(component, action, notify) {
@@ -694,6 +654,13 @@ console.log("drop event", e)
     orderCanvas();
   }
 
+  function handleComponentLayer(event) {
+    if(event.e.type === "mousedown" && event.e.metaKey && mode === SELECT) {
+      let action = event.e.shiftKey ? "lower" : "elevate"
+      layerComponent(canvas.getActiveObject(), action, true);  // CMD/CTRL UPARROW
+    }
+  }
+
   /// KEYBOARD EVENTS
   document.addEventListener('keydown', function(event){
     var char = event.keyCode;
@@ -705,18 +672,17 @@ console.log("drop event", e)
       if(event.shiftKey) {
         Redo() } else { Undo()} ;
 
+    if(event.ctrlKey && char >= 49 && char <= 57) {
+      console.log("button id", buttonIDs[char - 49])
+      $(`#${buttonIDs[char - 49]}`).trigger('click');
+    }
+        
     // DELETE KEY
     if(!ctrlMetaDown && char === 8 && !isEditingText()) {
       let currentSelection = canvas.getActiveObjects();
       if (currentSelection.length > 0) {
         removeComponents(canvas.getActiveObjects());
       }
-    }
-
-    // ELEVATE/LOWER COMPONENT
-    if(ctrlMetaDown && char === 38) {
-      // let action = event.shiftKey ? "lower" : "elevate"
-      // layerComponent(canvas.getActiveObject(), action);  // CMD/CTRL UPARROW
     }
 
     function isEditingText() {
