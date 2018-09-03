@@ -47,12 +47,10 @@ module.exports = {
     return data ? data.componentHistory : [];
   },
   deleteBoardHistory: (id, objectData, boardHistory) => {
-    // boards.find(b => b.id === id).componentHistory.deleteOne( { 'id': objectData.id } );
     board = boards.filter(b => b.id === id)[0];
     board.componentHistory = boardHistory;
     Board.updateOne(
       { 'id': id },
-      // { $pull: { "componentHistory" : { "id": "500579b6-49c2-4cbe-a0a2-c739ed373151" } } },
       { "componentHistory": boardHistory } ,
       function(err, callback) {
         if (err) {
@@ -63,10 +61,8 @@ module.exports = {
       }, false, true);
   },
   updateBoard: (id, objectData, boardHistory) => {
-    boards.find(b => b.id === id).componentHistory;
     Board.updateOne(
     { 'id': id },
-    // { "$push": { "componentHistory": dataObj } },
     { "componentHistory": boardHistory } ,
     function(err, callback) {
       if (err) {
@@ -76,6 +72,17 @@ module.exports = {
       }
     });
     console.log('updated in memory DB!');
+  },
+  updateBackgroundColor: (id, objectData) => {
+    Board.updateOne(
+    { 'id': id },
+    { "backgroundColor": objectData.color } ,
+    function(err, callback) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated BG Color in MongoDB!")
+      }
+    });
   }
-
 }
