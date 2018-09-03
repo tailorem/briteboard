@@ -2,14 +2,14 @@ body {
   background-color: #fdfdfd;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
-  padding-top: 54px;
+  padding-top: 2.5em;
 }
 
 #background {
   margin: 0;
   /*opacity: .5;*/
   padding: 2em;
-  height: 100%;
+  /*height: 100%;*/
   width: 100%;
   z-index: -1;
 }
@@ -41,7 +41,7 @@ section img {
 #logo-pulse-bright {
   animation-name: fade;
   animation-timing-function: ease-in-out;
-  animation-duration: 3s;
+  animation-duration: 2.5s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
@@ -64,7 +64,7 @@ section img {
 .jumbotron {
   padding: 0;
   color: inherit;
-  background-color: #eee;
+  background-color: none;
   height: 460px;
   overflow: hidden;
   position: relative;
@@ -76,10 +76,10 @@ section img {
   left: 50%;
   min-height: 100%;
   min-width: 100%;
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: -1;
   opacity: 0.5;
 }
 
@@ -201,23 +201,21 @@ input.new-board {
 ======================================= */
 
 .templates-area {
-
+  margin-top: 3em;
+  margin-bottom: 1em;
 }
 
 .card {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   transition: all 100ms;
+  margin-top: 10px;
+  box-sizing: border-box;
+  border-radius: .56em;
+  background-clip: padding-box;
 }
 
 .selected-card {
   box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 8px 3px rgba(126, 143, 244, 0.81);
-}
-
-.card {
-  margin-top: 10px;
-  box-sizing: border-box;
-  border-radius: 2px;
-  background-clip: padding-box;
 }
 
 .card span.card-title {
@@ -228,7 +226,7 @@ input.new-board {
 }
 
 .card-img-top {
-  border-radius: 0;
+  border-radius: .5em .5em 0 0;
 }
 
 .card .card-image {
@@ -272,31 +270,15 @@ header, footer {
 
 footer {
   padding: 1em 1em;
+/*  position: fixed;
+  bottom: 0;*/
+  width: 100%;
+  /*z-index: 1;*/
 }
 
 /* ======================================
               MEDIA QUERIES
 ======================================= */
-
-@media (min-width: 768px) {
-  #background {
-    background: url(../img/background1.jpg);
-    background-size: auto 100%;
-    background-position: 50% 50%;
-  }
-}
-
-@media (min-width: 992px) {
-  body {
-    padding-top: 56px;
-  }
-
-  #background {
-    background: url(../img/background1.jpg);
-    background-size: 100vw;
-    background-position: 50% 50%;
-  }
-}
 
 @media (max-width: 480px) {
   .jumbotron {
@@ -328,3 +310,4 @@ footer {
     display: none;
   }
 }
+
