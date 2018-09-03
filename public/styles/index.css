@@ -322,3 +322,9 @@ footer {
     width: 100%;
   }
 }
+
+@media (max-width: 380px) {
+  ul.navbar-nav {
+    display: none;
+  }
+}
