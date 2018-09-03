@@ -6,7 +6,12 @@
   justify-content: center;
   height: 100%;
   width: 100%;
-  /*background-color: #e3e3e3;*/
+
+/*  background: url(../img/background1.jpg);
+  background-size: 100% auto ;
+  background-position: 50% 50%;
+
+  background-color: #e0e0e0;*/
 }
 
 
@@ -31,7 +36,8 @@
 }
 
 .main {
-  background-color: #feffff;
+  background-color: #fdfdfd;
+  border: 1px solid #aaa;
   border-radius: .5em;
   margin-bottom: 10%;
   text-align: center;
@@ -48,6 +54,15 @@
   justify-content: space-between;
   padding: .5em;
   border-bottom: 1px solid #aaa;
+}
+
+footer {
+  margin: 0;
+  padding: 1em 1em;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 @media (min-width: 1200px) {

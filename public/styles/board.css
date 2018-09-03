@@ -33,7 +33,7 @@ a {
 .username-box, #confirm-delete-box {
   background-color: #fff;
   border: 1px solid #aaa;
-  border-radius: .25em;
+  border-radius: .5em;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   padding: 25px 50px;;
   width: 400px;
@@ -60,7 +60,7 @@ a {
   /*cursor: pointer;*/
   background: #7f8ff4;
   color: #fff;
-  border-radius: 2px;
+  border-radius: .25em;
   padding: 12px 20px;
   margin: 0 .25em;
 }
@@ -80,6 +80,7 @@ a {
   background: #fff;
   color: #222;
   border: 1px solid #6f6f6f;
+  border-radius: .25em;
   outline: 0;
   padding: 10px 15px;
 }
@@ -91,7 +92,7 @@ a {
 .user-name {
   background-color: white;
   border: 1px solid #aaa;
-  border-radius: .75em 0 .75em 0;
+  border-radius: .5em 0 .5em 0;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   color: #222;
   padding: 5px 10px;
@@ -357,7 +358,7 @@ label.brush-size {
 
 video {
   background-color: #eee;
-  border-radius: 3px;
+  border-radius: .5em;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   margin-bottom: .35em;
   height: 60px;
@@ -372,7 +373,7 @@ video {
   position: fixed;
   border: 1px solid #aaa;
   background-color: #eee;
-  border-radius: 0 .75em .75em .75em;
+  border-radius: 0 .5em .5em .5em;
   color: #222;
   padding: 5px 10px;
   top: 216px;
