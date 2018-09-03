@@ -420,6 +420,8 @@ function toggleVideo() {
   });
 
 
+  // Show Images Menu On Hover
+
   $('#image-menu').hover(
     function() {
       $('.image-nav').show().css('display', 'flex');
@@ -435,8 +437,6 @@ function toggleVideo() {
       $(this).hide();
     }
   );
-
-
 
 
   ////////////////////////////////////////////
