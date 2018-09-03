@@ -74,6 +74,8 @@ module.exports = {
     console.log('updated in memory DB!');
   },
   updateBackgroundColor: (id, objectData) => {
+    board = boards.filter(b => b.id === id)[0];
+    board.backgroundColor = objectData.color
     Board.updateOne(
     { 'id': id },
     { "backgroundColor": objectData.color } ,
