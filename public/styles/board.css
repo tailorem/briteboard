@@ -50,7 +50,8 @@ button:hover {
 }
 
 .fa-save, .fa-trash-alt, .fa-link {
-  transform: scaleY(2) scaleX(2);
+  transform: scaleY(1.5) scaleX(1.5);
+  /*margin-right: .25em;*/
 }
 
 .fa-caret-up {
