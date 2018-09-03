@@ -467,6 +467,58 @@ $(document).ready(() => {
   });
 
   ////////////////////////////////////////////
+  //           PEN TOOL MENU                //
+  ////////////////////////////////////////////
+
+  $('#draw').hover(
+    function() {
+      $('.brush-nav').show().css('display', 'flex');
+    }, function() {
+      $('.brush-nav').hide();
+    }
+  );
+
+  $('.brush-nav').hover(
+    function() {
+      $(this).show().css('display', 'flex');
+    }, function() {
+      $(this).hide();
+    }
+  );
+
+  $("#pen-brush").on("click", function() {
+    setupForMode(DRAW);
+    canvas.isDrawingMode = true;
+    $('#draw').addClass('selected');
+    canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas);
+    updateCanvasBrush();
+  });
+
+  $("#circle-brush").on("click", function() {
+    setupForMode(DRAW);
+    canvas.isDrawingMode = true;
+    $('#draw').addClass('selected');
+    canvas.freeDrawingBrush = new fabric['CircleBrush'](canvas);
+    updateCanvasBrush();
+  });
+
+  $("#spray-brush").on("click", function() {
+    setupForMode(DRAW);
+    canvas.isDrawingMode = true;
+    $('#draw').addClass('selected');
+    canvas.freeDrawingBrush = new fabric['SprayBrush'](canvas);
+    updateCanvasBrush();
+  });
+
+  $("#pattern-brush").on("click", function() {
+    setupForMode(DRAW);
+    canvas.isDrawingMode = true;
+    $('#draw').addClass('selected');
+    canvas.freeDrawingBrush = new fabric['PatternBrush'](canvas);
+    updateCanvasBrush();
+  });
+
+  ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
   // UNDO / REDO
