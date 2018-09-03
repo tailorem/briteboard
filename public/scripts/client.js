@@ -340,13 +340,13 @@ function toggleVideo() {
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
     if (DEBUG) console.log(e);
-
+console.log("drop event", e)
     let xpos = e.offsetX;
     let ypos = e.offsetY;
     e = e || window.event;
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
+    // if (e.preventDefault) {
+    //   e.preventDefault();
+    // }
     let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
     let files = e.target.files || (dt && dt.files);
     for (let i = 0; i < files.length; i++) {
@@ -364,9 +364,11 @@ function toggleVideo() {
           left: xpos,
           top: ypos,
         }).scale(0.5);
-        canvas.add(image);
+        addComponent(image);
       }
+      console.log("drop done", file)
       reader.readAsDataURL(file);
+      canvas.renderAll();
     }
 
     return false;
@@ -400,6 +402,7 @@ function toggleVideo() {
   });
 
 
+  // set background color
   $("#background-color-picker").spectrum({
     color: canvas.backgroundColor,
     showPalette: true,
@@ -410,7 +413,6 @@ function toggleVideo() {
       ['#006b75', '#0076d7'],
       ['#0051c7', '#561ce1'],
       ['#795548', '#939393'],
-
     ],
     change: function(color) {
       canvas.backgroundColor = color.toHexString();
