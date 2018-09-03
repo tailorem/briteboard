@@ -76,10 +76,10 @@ section img {
   left: 50%;
   min-height: 100%;
   min-width: 100%;
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 0;
+  z-index: -1;
   opacity: 0.5;
 }
 
@@ -201,7 +201,7 @@ input.new-board {
 ======================================= */
 
 .templates-area {
-  margin-top: 3em;
+  margin: 3em 0;
 }
 
 .card {
@@ -269,10 +269,10 @@ header, footer {
 
 footer {
   padding: 1em 1em;
-  position: fixed;
-  bottom: 0;
+/*  position: fixed;
+  bottom: 0;*/
   width: 100%;
-  z-index: 1;
+  /*z-index: 1;*/
 }
 
 /* ======================================
