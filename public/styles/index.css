@@ -205,7 +205,7 @@ input.new-board {
 }
 
 .selected-card {
-  box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 4px 4px rgba(126, 143, 244, 0.81);
+  box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 8px 3px rgba(126, 143, 244, 0.81);
 }
 
 .card {
