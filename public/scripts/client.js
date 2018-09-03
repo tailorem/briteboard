@@ -34,7 +34,7 @@ $(document).ready(() => {
   }, 0.78);
 
   const socket = io.connect();
-  let DEBUG = true;
+  let DEBUG = false;
 
   ////////////////////////////////////////////
   //               USER INFO                //
