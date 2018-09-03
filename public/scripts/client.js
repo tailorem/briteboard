@@ -420,6 +420,7 @@ function toggleVideo() {
     change: function(color) {
       canvas.backgroundColor = color.toHexString();
       canvas.renderAll();
+      socket.emit("set_background_color", {color: canvas.backgroundColor})
     }
   });
 
@@ -1010,6 +1011,13 @@ function toggleVideo() {
     if (component) {
       canvas.remove(component);
     }
+  });
+
+  // background color request from server
+  socket.on('set_background_color', function(data) {
+    if (DEBUG) console.log("receiving background color data", data)
+    canvas.backgroundColor = data.color;
+    canvas.renderAll();
   });
 
   function findComonent(id) {
