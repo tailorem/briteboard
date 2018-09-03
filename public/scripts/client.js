@@ -325,7 +325,7 @@ function toggleVideo() {
   $('#save-image').on('click', function(e) {
     canvas.discardActiveObject();
     $('#whiteboard').get(0).toBlob(function(blob) {
-      saveAs(blob, 'whiteboard.svg');
+      saveAs(blob, 'whiteboard.png');
     });
   });
 
