@@ -12,17 +12,15 @@
 
 #background {
   margin: 0;
-  /*opacity: .5;*/
   position: absolute;
   bottom: 0px;
   padding: 2em;
   opacity: .4;
   width: 100vw;
   z-index: 0;
-  background: url(../img/background4.jpg);
-  background-repeat: no-repeat;
-  background-size: 100vw;
-  background-position: 100% 0%;
+  background: url(../img/background1.jpg);
+  background-size: auto 100%;
+  background-position: 50% 50%;
 
   background-color: #e0e0e0;
 }
@@ -33,9 +31,12 @@
 }
 
 .main {
+  background-color: #feffff;
+  border-radius: .5em;
   margin-bottom: 10%;
   text-align: center;
   z-index: 1;
+  padding: 1em 3em;
 }
 
 
@@ -48,42 +49,3 @@
   border-bottom: 1px solid #aaa;
 }
 
-.logo-wrapper {
-  height:45px;
-}
-
-.navbar-logo {
-  padding-left: 10px;
-  height: 45px;
-}
-
-.navbar-icon {
-  padding-left: 10px;
-  height: 38px;
-  width: 55px;
-}
-
-.navbar-logo-text {
-  height: 35px;
-  padding-bottom: 3px;
-}
-
-.logo-wrapper{
-  display:flex;
-  align-items:center;
-}
-
-.logo-wrapper #icon-outline {
-  margin:0 auto;
-  width:45px;
-  height:38px;
-  transition: background-image .25s ease-in-out;
-  background-image:url(../img/logo.svg);
-  background-size: 45px 38px;
-  /*background-color: black;*/
-}
-
-.logo-wrapper:hover #icon-outline {
-  background-image:url("../img/logo-bright.svg");
-  background-size: 45px 38px;
-}
