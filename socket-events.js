@@ -49,10 +49,9 @@ module.exports = (io, boards) => {
     socket.join(board);
 
 
-  ////////////////////////////////////////////
-  //              USER EVENTS               //
-  ////////////////////////////////////////////
-
+    ////////////////////////////////////////////
+    //              USER EVENTS               //
+    ////////////////////////////////////////////
     const client = { id: v4(), boardId: board };
     clients[socket.id] = client;
 
@@ -77,23 +76,17 @@ module.exports = (io, boards) => {
     });
 
     socket.on('delete board', (boardId) => {
-      console.log(boardId, "DELETED");
       socket.to(board).emit('board deleted');
     });
 
 
-  ////////////////////////////////////////////
-  //             CAVAS EVENTS               //
-  ////////////////////////////////////////////
-
-    // if (DEBUG) console.log(boards);
-    // console.log("SOCKET", socket);
-
+    ////////////////////////////////////////////
+    //             CAVAS EVENTS               //
+    ////////////////////////////////////////////
     var boardHistory = boards.getBoardHistory(board);
 
 
     function removeFromHistory(boardHistory, data) {
-
       return boardHistory.filter(each => each.id !== data.id)
     }
 
@@ -108,7 +101,7 @@ module.exports = (io, boards) => {
       socket.emit('set_background_color', {color: myBoard.backgroundColor});
     
 
-    // add handler for broadcast new component
+    // add handler for broadcast of component creation
     socket.on('create_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
       boardHistory.push(objectData);
@@ -121,7 +114,6 @@ module.exports = (io, boards) => {
       boardHistory = boards.getBoardHistory(board);
       updateboardHistory(boardHistory, objectData);
       socket.to(board).emit('modify_component', objectData);
-      if (DEBUG) console.log("modify_component", objectData)
     });
 
     // broadcast and update db when movement has stopped
@@ -132,8 +124,7 @@ module.exports = (io, boards) => {
       socket.to(board).emit('modify_component', objectData);
     });
 
-    // // TODO: REMOVE OBJECT FROM MEMORY AND DATABASE
-    // // Remember to use a separate function for this... (not updateBoard)?
+    // Remove component from db and broadcast
     socket.on('remove_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
       boardHistory = boardHistory.filter(each => each.id !== objectData.id)
@@ -143,6 +134,7 @@ module.exports = (io, boards) => {
       socket.to(board).emit('remove_component', objectData);
     });
 
+    // Update db path creation and broadcast
     socket.on('path_created', function(objectData) {
       boardHistory = boards.getBoardHistory(board)
       boardHistory.push(objectData);
@@ -150,13 +142,17 @@ module.exports = (io, boards) => {
       socket.to(board).emit('path_created', objectData);
     });
 
+    // Broadcast layering of component
     socket.on('layer_component', function(objectData) {
       socket.to(board).emit('layer_component', objectData);
     });
 
-    socket.on('user_position', function(objectData) {
+    // Broadcast user cursor positions
+    socket.on('user_cursor_position', function(objectData) {
       socket.to(board).emit('user_position', objectData);
     });
+
+    // Update db with change in background color and broadcast
     socket.on('set_background_color', function(objectData) {
       boards.updateBackgroundColor(board, objectData);
       socket.to(board).emit('set_background_color', objectData);
