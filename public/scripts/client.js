@@ -34,36 +34,6 @@ $(document).ready(() => {
 
   const socket = io.connect();
   let DEBUG = false;
-<<<<<<< HEAD
-
-  ////////////////////////////////////////////
-  //             CLIENT INFO                //
-  ////////////////////////////////////////////
-
-  function listUsers(users) {
-    $users = $('#users');
-    users.forEach(function(user) {
-      user = user[Object.keys(user)[0]];
-      if (user.name) {
-        $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
-      }
-    });
-  }
-
-  function getCursors(users) {
-    $container = $("div.container");
-    users.forEach(function(user) {
-      user = user[Object.keys(user)[0]];
-      if (user.name) {
-        $(`<span id="${user.id}" class="user-cursor">`).text(user.name).appendTo($container);
-      }
-    });
-  }
-=======
-  console.log("URL", $(location).attr('href'));
-  // _clipboard =  $(location).attr('href')
->>>>>>> ab56e829655268d919e623e4e3c2135a61b3744d
-
 
   ////////////////////////////////////////////
   //               USER INFO                //
@@ -303,10 +273,8 @@ function toggleVideo() {
       offsetX: 0,
       offsetY: 0,
       affectStroke: true,
-      color: currentColor,
+      color: currentColor
     });
-
-    console.log("Shadow", shadowSize)
   }
   // Add Image Tool
   $('#add-image').on('change', function(e) {
