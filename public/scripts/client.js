@@ -222,14 +222,6 @@ $(document).ready(() => {
     $('#delete').addClass('selected');
   });
 
-
-     // Brush Tool
-  $('#brush-mode').on('input', function(e) {
-    console.log("changing brush mode to: ", this.value + 'Brush')
-    canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
-    updateCanvasBrush()
-  });
-
   // Delete Board Tool
   $('#delete-board').on('click', function(e) {
     if (roomURL === '8ec5lhlh') { return }
