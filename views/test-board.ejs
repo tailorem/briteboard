@@ -22,24 +22,30 @@
 
 <div class="main">
   <header class="nav-top">
-    <a href="/">
-      <div class="logo-wrapper">
-        <div id="icon-outline"></div>
-        <img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" />
-      </div>
-    </a>
 
-    <p id="template-id"><%= board.template %></p>
+    <div style="display:flex;">
 
-    <div style="display:flex; flex-direction: row;">
-      <button id="url-to-clipboard" title="Copy URL to Clipboard"><i class="fas fa-link"></i></button>
-      <button id="save-image" title="Save As Image"><i class="fas fa-save"></i></button>
-      <button id="delete-board" title="Delete Board"><i class="fas fa-trash-alt"></i></button>
-      <div class="tool-text" style="display:flex; flex-direction: column;">
-        Canvas
-        <input id="background-color-picker" title="Background Color" />
+      <a href="/">
+        <div class="logo-wrapper">
+          <div id="icon-outline"></div>
+          <img src="../img/briteboard-logo.svg" class="navbar-logo-text" alt="Briteboard Logo Text" />
+        </div>
+      </a>
+
+      <p id="template-id"><%= board.template %></p>
+
+      <div style="display:flex; flex-direction:row; margin-left:2em;">
+        <div class="tool-text" style="display:flex; flex-direction: column; margin-top: .5em; margin-left: .5em;">
+          Canvas
+          <input id="background-color-picker" title="Background Color" />
+        </div>
+        <button id="url-to-clipboard" title="Copy URL to Clipboard"><i class="fas fa-link"></i></button>
+        <button id="save-image" title="Save As Image"><i class="fas fa-save"></i></button>
+        <button id="delete-board" title="Delete Board"><i class="fas fa-trash-alt"></i></button>
       </div>
+
     </div>
+
 
     <!-- <h2 style="color:#333; font-weight:400; display:inline;">&nbsp| <%= board.name %></h2> -->
     <div id="users"></div>
