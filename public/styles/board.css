@@ -270,6 +270,31 @@ label.brush-size {
   padding-bottom: 4px;
 }
 
+.image-nav {
+  display: none;
+  flex-wrap: wrap;
+  width: 167px;
+  position: fixed;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  top: 440px;
+  left: 64px;
+  z-index: 2;
+  /* box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16); */
+}
+
+.image-nav button {
+  width: 55px;
+}
+
+.image-nav label {
+  width: 55px;
+}
+
+.image-nav img {
+  width: 18px;
+}
+
 /* ======================================
               CANVAS
 ======================================= */

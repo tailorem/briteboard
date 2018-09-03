@@ -430,6 +430,26 @@ $(document).ready(() => {
     }
   });
 
+
+  // Show Images Menu On Hover
+
+  $('#image-menu').hover(
+    function() {
+      $('.image-nav').show().css('display', 'flex');
+    }, function() {
+      $('.image-nav').hide();
+    }
+  );
+
+  $('.image-nav').hover(
+    function() {
+      $(this).show().css('display', 'flex');
+    }, function() {
+      $(this).hide();
+    }
+  );
+
+
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
