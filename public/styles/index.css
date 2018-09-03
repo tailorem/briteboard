@@ -210,7 +210,7 @@ input.new-board {
   transition: all 100ms;
   margin-top: 10px;
   box-sizing: border-box;
-  border-radius: .5em;
+  border-radius: .56em;
   background-clip: padding-box;
 }
 
@@ -280,23 +280,6 @@ footer {
               MEDIA QUERIES
 ======================================= */
 
-@media (min-width: 768px) {
-  #background {
-    background: url(../img/background3.jpg);
-    background-size: auto 100%;
-    background-position: 50% 50%;
-  }
-}
-
-@media (min-width: 992px) {
-
-  #background {
-    background: url(../img/background3.jpg);
-    background-size: 100vw;
-    background-position: 50% 50%;
-  }
-}
-
 @media (max-width: 480px) {
   .jumbotron {
     height: 580px;
@@ -327,3 +310,4 @@ footer {
     display: none;
   }
 }
+
