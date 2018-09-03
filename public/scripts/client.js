@@ -464,6 +464,7 @@ $(document).ready(() => {
       }).scale(0.2);
       addComponent(image);
     }
+    enableSelectMode();
   }
 
   $("#sticky-note").on("click", function() {
