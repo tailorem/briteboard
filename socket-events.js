@@ -99,6 +99,8 @@ module.exports = (io, boards) => {
     let myBoard = boards.getBoard(board);
     if(myBoard)
       socket.emit('set_background_color', {color: myBoard.backgroundColor});
+
+    socket.emit('finalize_setup', {}) 
     
 
     // add handler for broadcast of component creation
@@ -149,7 +151,7 @@ module.exports = (io, boards) => {
 
     // Broadcast user cursor positions
     socket.on('user_cursor_position', function(objectData) {
-      socket.to(board).emit('user_position', objectData);
+      socket.to(board).emit('user_cursor_position', objectData);
     });
 
     // Update db with change in background color and broadcast
