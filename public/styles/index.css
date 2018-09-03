@@ -271,12 +271,6 @@ footer {
                 MEDIA QUERIES
 ======================================= */
 
-@media (min-width: 576px) {
-  .jumbotron {
-
-  }
-}
-
 @media (min-width: 992px) {
   body {
     padding-top: 56px;
@@ -305,5 +299,11 @@ footer {
   }
   .btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  ul.navbar-nav {
+    display: none;
   }
 }
