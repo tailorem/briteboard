@@ -32,15 +32,15 @@
   </nav>
 
     <!-- Jumbotron Header -->
-    <header class="jumbotron jumbotron-fluid my-4 text-center homepage-main">
+    <header class="jumbotron jumbotron-fluid text-center homepage-main">
       <video id="video-background" preload muted autoplay loop>
         <source src="../video/bg-video.mp4" type="video/mp4">
       </video>
 
       <div class="container home-content">
 
-        <div class="clearfix" style="padding-top:1em; width:100%;">
-          <section style="position: relative; left: -32px;">
+        <div class="logo-container">
+          <section>
             <img src="../img/logo.svg" id="logo-pulse" alt="Briteboard Icon"/>
             <img src="../img/logo-bright.svg" id="logo-pulse-bright" alt="Briteboard Icon"/>
           </section>
@@ -52,19 +52,19 @@
           Briteboard is an online collaborative whiteboard for creative sketching, diagramming, and planning. Bring your ideas to light in real time and get immediate feedback from your team with voice and video chat.
         </p>
 
-      <div class="new-board">
-        <div class="container__item-new">
-          <form class="form" action="/boards/new" method="POST">
-            <input type="text" name="boardName" class="form__field-new" placeholder="Enter a board name" />
-            <input type="text" name="templateId" class="template-input" value="0" />
-            <button id="create" class="btn btn--primary btn--inside">CREATE</button>
-          </form>
+        <div class="new-board">
+          <div class="container__item-new">
+            <form class="form" action="/boards/new" method="POST">
+              <input type="text" name="boardName" class="form__field-new" placeholder="Enter a board name" />
+              <input type="text" name="templateId" class="template-input" value="0" />
+              <button id="create" class="btn btn--primary btn--inside">CREATE</button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-
-
     </header>
+
+    <div id="background">
 
     <!-- Page Content -->
     <div class="container">
@@ -118,6 +118,9 @@
 
     </div>
     <!-- /.container -->
+
+    </div>
+    <!-- /.background -->
 
     <!-- Footer -->
     <footer class="bg-dark">
