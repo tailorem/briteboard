@@ -185,7 +185,6 @@ a {
   text-transform: uppercase;
   font-size: 8px;
   font-weight: 700;
-  background-color: #eee;
   text-align: center;
 }
 
@@ -270,6 +269,9 @@ label.brush-size {
   padding-bottom: 4px;
 }
 
+
+/* Images hover menu */
+
 .image-nav {
   display: none;
   flex-wrap: wrap;
@@ -280,7 +282,6 @@ label.brush-size {
   top: 404px;
   left: 64px;
   z-index: 2;
-  /* box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16); */
 }
 
 .image-nav button {
@@ -293,6 +294,26 @@ label.brush-size {
 
 .image-nav img {
   width: 18px;
+}
+
+/* Brushes hover menu  */
+
+.brush-nav {
+  display: none;
+  flex-wrap: wrap;
+  width: 112px;
+  position: fixed;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  top: 152px;
+  left: 64px;
+  z-index: 2;
+}
+
+.brush-nav button {
+  width: 55px;
+  padding-top: 13px;
+  padding-bottom: 14px;
 }
 
 /* ======================================
