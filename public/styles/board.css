@@ -269,6 +269,19 @@ label.brush-size {
   padding-bottom: 4px;
 }
 
+.image-menu {
+  display: flex;
+  flex-direction: column;
+  width: 55px;
+  position: fixed;
+  border: 1px solid #aaa;
+  background-color: #eee;
+  top: 446px;
+  left: 64px;
+  z-index: 2;
+  /* box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16); */
+}
+
 /* ======================================
               CANVAS
 ======================================= */
