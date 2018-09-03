@@ -34,26 +34,32 @@ module.exports = function(DataHelpers) {
       .then(board => { res.redirect(`/boards/${id}`) });
 
     //console.log('New board added to db:', JSON.stringify(board));
-
 });
-
-
 
   // GET SPECIFIC BOARD
   routes.get('/:boardId', function(req, res) {
     const boardId = req.params.boardId;
     Board.findOne({ 'id': boardId }, function(err, board) {
       if (err) console.log(err);
-      console.log('Loading board from db:'/*, board*/);
       if (board) {
+        console.log('Loading board from db:');
         res.render('test-board', { board: board });
       } else {
         res.render('404');
       }
     });
+  });
 
-    // let user = null;
-
+  // DELETE SPECIFIC BOARD
+  routes.delete('/:boardId', function(req, res) {
+    const boardId = req.params.boardId;
+    Board.deleteOne({ 'id': boardId }, function(err, board) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/");
+      }
+    });
   });
 
 // // DELETE SPECIFIC BOARD
