@@ -9,13 +9,6 @@ $(document).ready(() => {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
 
-  // canvas.setBackgroundImage('/img/grid.png', canvas.renderAll.bind(canvas), {
-  //   width: canvas.width,
-  //   height: canvas.height,
-  //   originX: 'left',
-  //   originY: 'top'
-  // });
-
   // Set default canvas values
   const ERASE = 0;
   const LINE = 1;
@@ -41,6 +34,7 @@ $(document).ready(() => {
 
   const socket = io.connect();
   let DEBUG = false;
+<<<<<<< HEAD
 
   ////////////////////////////////////////////
   //             CLIENT INFO                //
@@ -65,24 +59,20 @@ $(document).ready(() => {
       }
     });
   }
+=======
+  console.log("URL", $(location).attr('href'));
+  // _clipboard =  $(location).attr('href')
+>>>>>>> ab56e829655268d919e623e4e3c2135a61b3744d
 
-  function addUser(user) {
-    $users = $('#users');
-    $(`<span class="user-name ${user.id}">`).text(user.name).appendTo($users);
-  }
 
-  function addCursor(user) {
-    $container = $("div.container");
-    $(`<span id="${user.id}" class="user-cursor ${user.id}">`).text(user.name).appendTo($container);
-  }
+  ////////////////////////////////////////////
+  //               USER INFO                //
+  ////////////////////////////////////////////
 
-  function removeUser(user) {
-    $(`span.${user.id}`).remove();
-    $(`span#${user.id}`).remove();
-  }
-
-  // Store client object
+  const roomURL = window.location.pathname.split('/')[2];
   let client;
+  let webrtc;
+  let videoOn = true;
 
   // On connection, user is prompted to select a username
     $(`<div id="username-form">
@@ -114,7 +104,24 @@ $(document).ready(() => {
   socket.on('connection established', (user) => {
     client = user;
     addUser(user);
-    getVideo();
+
+    // Get video
+    webrtc = new SimpleWebRTC({
+      localVideoEl: 'localVideo',
+      remoteVideosEl: 'remoteVideos',
+      autoRequestMedia: true,
+      localVideo: {
+        autoplay: true,
+        muted: true
+      },
+      media: {audio: true, video: true},
+      autoRemoveVideos: true
+    })
+
+    // Join video room
+    webrtc.on('readyToCall', function () {
+      webrtc.joinRoom(roomURL);
+    });
   });
 
   socket.on('new connection', (user) => {
@@ -125,6 +132,40 @@ $(document).ready(() => {
   socket.on('user disconnected', (user) => {
     removeUser(user);
   });
+
+  $('#localVideo').on('click', (e) => {
+    toggleVideo();
+  });
+
+
+////////////////////////////////////////////
+//             VIDEO HELPERS              //
+////////////////////////////////////////////
+
+function toggleVideo() {
+  if (videoOn === true) {
+    webrtc.pause();
+    videoOn = false;
+  } else {
+    webrtc.resume();
+    videoOn = true;
+  }
+}
+
+  // toggleVideo = () => {
+  //   if (this.state.videoOn) {
+  //     this.webrtc.pauseVideo()
+  //     this.setState({
+  //       videoOn: false
+  //     })
+  //   } else {
+  //     this.webrtc.resumeVideo()
+  //     this.setState({
+  //       videoOn: true
+  //     })
+  //   }
+  // }
+
 
   ////////////////////////////////////////////
   //             TOOL HELPERS               //
@@ -164,15 +205,16 @@ $(document).ready(() => {
     mode = newMode
   }
 
-  ////////////////////////////////////////////
-  //             TOOL BUTTONS               //
-  ////////////////////////////////////////////
-
   // Select Tool
   function enableSelectMode() {
     setupForMode(SELECT);
     $('#select').addClass('selected');
   }
+
+  ////////////////////////////////////////////
+  //             TOOL BUTTONS               //
+  ////////////////////////////////////////////
+
   $('#select').on('click', function(e) { enableSelectMode() });
 
   // Hand Tool (Move canvas)
@@ -826,7 +868,8 @@ $(document).ready(() => {
         fontSize: 30,
         fixedWidth: 300,
         fixedFontSize: 30,
-        fill: currentColor
+        fill: currentColor,
+        fontFamily: 'Open Sans'
       });
       canvas.add(textbox).setActiveObject(textbox);
       addComponent(textbox, true);

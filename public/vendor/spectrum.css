@@ -265,8 +265,8 @@
 
 .sp-container {
   border-radius: 0;
-  background-color: #ececec;
-  border: solid 1px #f0c49b;
+  background-color: #eee;
+  border: solid 1px #aaa;
   padding: 0
 }
 
@@ -326,11 +326,10 @@
 
 .sp-picker-container {
   width: 172px;
-  border-left: solid 1px #fff
 }
 
 .sp-palette-container {
-  border-right: solid 1px #ccc
+  padding-right: 0;
 }
 
 .sp-palette-only .sp-palette-container {
@@ -432,7 +431,8 @@
 }
 
 .sp-container {
-  padding-bottom: 0
+  padding-bottom: 0;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
 .sp-choose:hover {
@@ -447,20 +447,20 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   text-align: center;
-  background: #FF4136;
-  border-radius: 10px;
+  background: #7f8ff4;
+  border-radius: 2px;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   outline: 0;
 }
 
 .sp-container button:hover {
-  background: #E03A3A;
+  background: #6c7ff2;
 }
 
 .sp-cancel {
   font-size: 11px;
-  color: #d93f3f !important;
+  color: #7f8ff4 !important;
   margin: 0;
   padding: 2px;
   margin-right: 5px;
@@ -469,7 +469,7 @@
 }
 
 .sp-cancel:hover {
-  color: #d93f3f !important;
+  color: #6c7ff2 !important;
   text-decoration: underline
 }
 
