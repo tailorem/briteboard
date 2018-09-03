@@ -259,22 +259,10 @@ function toggleVideo() {
     updateCanvasBrush()
   });
 
-  $('#shadow-size').on('input', function(e) {
-    updateCanvasBrush()
-  });
-
   function updateCanvasBrush() {
-    let shadowSize = parseInt($('#shadow-size').val(), 10) || 0;
     let brushSize = parseInt($('#brush-size').val(), 10) * 2
     borderSize = brushSize;
     canvas.freeDrawingBrush.width = brushSize + 1;
-    canvas.freeDrawingBrush.shadow = new fabric.Shadow({
-      blur: (shadowSize * 3) || 0,
-      offsetX: 0,
-      offsetY: 0,
-      affectStroke: true,
-      color: currentColor
-    });
   }
   // Add Image Tool
   $('#add-image').on('change', function(e) {
