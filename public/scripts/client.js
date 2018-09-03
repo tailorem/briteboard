@@ -44,27 +44,36 @@ $(document).ready(() => {
   let webrtc;
   let videoOn = true;
 
-  // On connection, user is prompted to select a username
-    $(`<div id="username-form">
-        <div class="username-box">
-        <p>Select a username</p>
-          <form id="select-username">
-            <input type="text" placeholder="Enter a username" autofocus onfocus="this.select()" />
-            <button>GO</button>
-          </form>
-        </div>
-      </div>`).prependTo(document.body);
+  // On page load, user is prompted to select a username
+  $(`<div id="username-form">
+      <div class="username-box">
+      <h3>Welcome!</h3>
+        <form id="select-username">
+          <input type="text" placeholder="Enter a username" autofocus onfocus="this.select()" /><button>GO</button>
+        </form>
+      </div>
+    </div>`).prependTo(document.body);
 
-    // Once username is selected, the username is sent to the server and the username form/div is removed
-    $("#select-username").on('submit', (e) => {
-      e.preventDefault();
-      $username = $('#select-username input').val();
-      if ($username.trim().length < 1) return;
+  // Once username is selected, the username is sent to the server and the username form/div is removed
+  $("#select-username").on('submit', (e) => {
+    e.preventDefault();
+    $username = $('#select-username input').val();
+    if ($username.trim().length < 1) { return; }
 
-      // Send username to server
-      socket.emit('username selected', $username);
-      $('#username-form').remove();
-    });
+    // Send username to server
+    socket.emit('username selected', $username);
+    $('#username-form').remove();
+  });
+
+  function toggleVideo() {
+    if (videoOn === true) {
+      webrtc.pause();
+      videoOn = false;
+    } else {
+      webrtc.resume();
+      videoOn = true;
+    }
+  }
 
   socket.on('connected', (msg) => {
     listUsers(msg.currentUsers);
@@ -94,6 +103,10 @@ $(document).ready(() => {
     });
   });
 
+  $('#localVideo').on('click', (e) => {
+    toggleVideo();
+  });
+
   socket.on('new connection', (user) => {
     addUser(user);
     addCursor(user);
@@ -103,38 +116,9 @@ $(document).ready(() => {
     removeUser(user);
   });
 
-  $('#localVideo').on('click', (e) => {
-    toggleVideo();
+  socket.on('board deleted', () => {
+    window.location = "/";
   });
-
-
-////////////////////////////////////////////
-//             VIDEO HELPERS              //
-////////////////////////////////////////////
-
-function toggleVideo() {
-  if (videoOn === true) {
-    webrtc.pause();
-    videoOn = false;
-  } else {
-    webrtc.resume();
-    videoOn = true;
-  }
-}
-
-  // toggleVideo = () => {
-  //   if (this.state.videoOn) {
-  //     this.webrtc.pauseVideo()
-  //     this.setState({
-  //       videoOn: false
-  //     })
-  //   } else {
-  //     this.webrtc.resumeVideo()
-  //     this.setState({
-  //       videoOn: true
-  //     })
-  //   }
-  // }
 
 
   ////////////////////////////////////////////
@@ -252,12 +236,41 @@ function toggleVideo() {
     $('#delete').addClass('selected');
    });
 
+
+
+
   // Delete Board Tool
   $('#delete-board').on('click', function(e) {
-    $('body').prepend('<div class="confirm">CONFIRM</div>')
-    result = confirm("Are you sure you want to delete this board? It'll be gone forever!");
-    console.log(result);
-   });
+    if (roomURL === '8ec5lhlh') { return }
+
+    $container = $('<div id="confirm-delete">');
+    $box = $('<div id="confirm-delete-box">').append(`<p>
+        <strong>Are you sure you want to delete this board?</strong>
+        There's no going back!
+      </p>`);
+    $cancel = $('<button id="delete-cancel">').text("CANCEL").on('click', (e) => {
+      $('#confirm-delete').remove();
+    });
+    $confirmForm = $(`<form action="/boards/${roomURL}?_method=DELETE" method="POST" style="display:inline;">
+        <button>CONFIRM</button></form>`)
+      .on('submit', (e) => {
+        socket.emit('delete board', roomURL);
+      });
+
+    $box.append($cancel);
+    $box.append($confirmForm);
+    $container.append($box);
+    $('body').prepend($container);
+  });
+
+  // // Delete Board Tool
+  // $('#delete-cancel').on('click', function(e) {
+  //   console.log("CANCEL");
+  //   $('#confirm-delete').remove();
+  //  });
+
+
+
 
   $('#brush-size').on('input', function(e) {
     // let pixelSize = parseInt($('#brush-size').val(), 10) * 2
@@ -419,6 +432,73 @@ console.log("drop event", e)
       canvas.renderAll();
       socket.emit("set_background_color", {color: canvas.backgroundColor})
     }
+  });
+
+
+  ////////////////////////////////////////////
+  //           EMOJIS / STICKERS            //
+  ////////////////////////////////////////////
+
+  $('#image-menu').hover(
+    function() {
+      $('.image-nav').show().css('display', 'flex');
+    }, function() {
+      $('.image-nav').hide();
+    }
+  );
+
+  $('.image-nav').hover(
+    function() {
+      $(this).show().css('display', 'flex');
+    }, function() {
+      $(this).hide();
+    }
+  );
+
+  function addSticker (url) {
+    let imgObj = new Image();
+    imgObj.src = url;
+    imgObj.onload = function() {
+      let image = new fabric.Image(imgObj);
+      image.set({
+        left: 200,
+        top: 200,
+      }).scale(0.2);
+      addComponent(image);
+    }
+    enableSelectMode();
+  }
+
+  $("#sticky-note").on("click", function() {
+    addSticker("/img/sticky-note.png");
+  });
+
+  $("#speech-bubble").on("click", function() {
+    addSticker("/img/speech-bubble.svg");
+  });
+
+  $("#arrow-emoji").on("click", function() {
+    addSticker("/img/arrow.svg");
+  });
+
+  $("#smile-emoji").on("click", function() {
+    addSticker("/img/happy.svg");
+  });
+
+  $("#frown-emoji").on("click", function() {
+    addSticker("/img/sad.svg");
+  });
+
+  $("#poop-emoji").on("click", function() {
+    addSticker("/img/poo.svg");
+  });
+
+  $("#doge-emoji").on("click", function() {
+    addSticker("/img/doge-emoji.png");
+  });
+
+  $("#heart-emoji").on("click", function() {
+    addSticker("/img/heart-emoji.svg");
   });
 
   ////////////////////////////////////////////
