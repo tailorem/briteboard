@@ -12,10 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "canvas": "^1.6.11",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "fabric": "^2.3.6",
     "method-override": "^3.0.0",
     "mongoose": "^5.2.9",
     "socket.io": "^2.1.1",

@@ -141,7 +141,7 @@ a {
   margin:0 auto;
   width:45px;
   height:38px;
-  transition: background-image .5s ease-in-out;
+  transition: background-image .25s ease-in-out;
   background-image:url(../img/logo.svg);
   background-size: 45px 38px;
   /*background-color: black;*/
