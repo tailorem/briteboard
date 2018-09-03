@@ -97,6 +97,12 @@ module.exports = (io, boards) => {
       socket.emit('create_component', data);
     }
 
+    // Set initial background color to new client
+    let myBoard = boards.getBoard(board);
+    if(myBoard)
+      socket.emit('set_background_color', {color: myBoard.backgroundColor});
+    
+
     // add handler for broadcast new component
     socket.on('create_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
@@ -147,6 +153,7 @@ module.exports = (io, boards) => {
       socket.to(board).emit('user_position', objectData);
     });
     socket.on('set_background_color', function(objectData) {
+      boards.updateBackgroundColor(board, objectData);
       socket.to(board).emit('set_background_color', objectData);
     });
   });
