@@ -254,9 +254,9 @@ $(document).ready(() => {
     let brushSize = parseInt($('#brush-size').val(), 10) * 2
     borderSize = brushSize;
     canvas.freeDrawingBrush.width = brushSize + 1;
-    let color = $("#colorPicker").spectrum("get").toHexString();
-    canvas.freeDrawingBrush.color = color;
-    canvas.freeDrawingBrush.shadow = color;
+    currentColor = $("#colorPicker").spectrum("get").toHexString();
+    canvas.freeDrawingBrush.color = currentColor;
+    canvas.freeDrawingBrush.shadow = currentColor;
   }
 
   // Add Image Tool
@@ -292,9 +292,6 @@ $(document).ready(() => {
       ['#795548', '#939393'],
     ],
     change: function(color) {
-      // currentColor = color.toHexString()
-      // canvas.freeDrawingBrush.color = currentColor;
-      // canvas.freeDrawingBrush.shadow = currentColor;
       updateCanvasBrush()
     }
   });
