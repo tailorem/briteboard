@@ -14,6 +14,10 @@ const BoardSchema = new Schema({
     type: Number,
     required: true
   },
+  backgroundColor: {
+    type: String,
+    required: false
+  },
   componentHistory: {
     type: Array,
     required: true
