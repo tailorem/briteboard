@@ -3,8 +3,8 @@ $(document).ready(() => {
   const canvas = new fabric.Canvas('whiteboard');
   const templateId = $('#template-id').text();
   const templates = ['','/img/calendar.svg','/img/mockup.svg','/img/graph.svg'];
-  canvas.setHeight(1600);
-  canvas.setWidth(2400);
+  canvas.setHeight(1000);
+  canvas.setWidth(1800);
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
@@ -245,11 +245,18 @@ function toggleVideo() {
     copyUrlToClipboard();
    });
 
-     // Delete Tool
+  // Erase Tool
   $('#delete').on('click', function(e) {
     setupForMode(ERASE);
     canvas.discardActiveObject();
     $('#delete').addClass('selected');
+   });
+
+  // Delete Board Tool
+  $('#delete-board').on('click', function(e) {
+    $('body').prepend('<div class="confirm">CONFIRM</div>')
+    result = confirm("Are you sure you want to delete this board? It'll be gone forever!");
+    console.log(result);
    });
 
   $('#brush-size').on('input', function(e) {
@@ -325,7 +332,7 @@ function toggleVideo() {
   $('#save-image').on('click', function(e) {
     canvas.discardActiveObject();
     $('#whiteboard').get(0).toBlob(function(blob) {
-      saveAs(blob, 'whiteboard.svg');
+      saveAs(blob, 'whiteboard.png');
     });
   });
 
