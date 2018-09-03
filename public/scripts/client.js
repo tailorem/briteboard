@@ -1,31 +1,19 @@
 $(document).ready(() => {
+  let DEBUG = false;
 
   const canvas = new fabric.Canvas('whiteboard');
   const templateId = $('#template-id').text();
   const templates = ['','/img/calendar.svg','/img/mockup.svg','/img/graph.svg'];
+
+  // Setup canvas and its defaults
   canvas.setHeight(1000);
   canvas.setWidth(1800);
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
-
-  // Set default canvas values
-  const SELECT = 1;
-  const HAND = 2;
-  const DRAW = 3;
-  const LINE = 4;
-  const CIRCLE = 5;
-  const TRIANGLE = 6;
-  const RECT = 7;
-  const TEXTBOX = 8;
-  const ERASE = 9;
-  let mode = SELECT;
-  enableSelectMode();
-  let buttonIDs = ['select', 'hand', 'draw', 'line', 'circle', 'triangle', 'draw-rect', 'textbox', 'delete'];
   canvas.freeDrawingBrush.color = '#000000';
   canvas.freeDrawingBrush.width = 15;
-  let currentColor = '#000000';
-  let currentBorderColor = '#000000';
+
   let borderSize = 4;
   canvas.freeDrawingBrush.width = borderSize + 1;
   canvas.zoomToPoint({
@@ -33,13 +21,12 @@ $(document).ready(() => {
     y: 0
   }, 0.78);
 
+  // Socket IO
   const socket = io.connect();
-  let DEBUG = false;
 
   ////////////////////////////////////////////
   //               USER INFO                //
   ////////////////////////////////////////////
-
   const roomURL = window.location.pathname.split('/')[2];
   let client;
   let webrtc;
@@ -125,6 +112,15 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //             TOOL HELPERS               //
   ////////////////////////////////////////////
+  const SELECT = 1, HAND = 2, DRAW = 3, LINE = 4, CIRCLE = 5, TRIANGLE = 6, RECT = 7, TEXTBOX = 8, ERASE = 9;
+  let mode = SELECT;
+  enableSelectMode();
+
+  let buttonIDs = ['select', 'hand', 'draw', 'line', 'circle', 'triangle', 'draw-rect', 'textbox', 'delete'];
+  let currentColor = '#000000';
+  let currentBorderColor = '#000000';
+
+
   function makeObjectsSelectable(boolean) {
     canvas.forEachObject(function(object) {
       object.set({
@@ -159,7 +155,6 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //             TOOL BUTTONS               //
   ////////////////////////////////////////////
-
   $('#select').on('click', function(e) { enableSelectMode() });
 
   // Hand Tool (Move canvas)
@@ -259,16 +254,17 @@ $(document).ready(() => {
     $('body').prepend($container);
   });
 
-
   // Bush Size Selection
   $('#brush-size').on('input', function(e) {
     updateCanvasBrush()
   });
-
   function updateCanvasBrush() {
     let brushSize = parseInt($('#brush-size').val(), 10) * 2
     borderSize = brushSize;
     canvas.freeDrawingBrush.width = brushSize + 1;
+    let color = $("#colorPicker").spectrum("get").toHexString();
+    canvas.freeDrawingBrush.color = color;
+    canvas.freeDrawingBrush.shadow = color;
   }
 
   // Add Image Tool
@@ -304,9 +300,10 @@ $(document).ready(() => {
       ['#795548', '#939393'],
     ],
     change: function(color) {
-      currentColor = color.toHexString()
-      canvas.freeDrawingBrush.color = currentColor;
-      canvas.freeDrawingBrush.shadow = currentColor;
+      // currentColor = color.toHexString()
+      // canvas.freeDrawingBrush.color = currentColor;
+      // canvas.freeDrawingBrush.shadow = currentColor;
+      updateCanvasBrush()
     }
   });
 
@@ -327,7 +324,6 @@ $(document).ready(() => {
       }
     });
 
-
   // Save canvas to image
   $('#save-image').on('click', function(e) {
     canvas.discardActiveObject();
@@ -336,26 +332,21 @@ $(document).ready(() => {
     });
   });
 
-
   // Drag and drop to add image
   $('.board').on('drop', function(e) {
     let xpos = e.offsetX;
     let ypos = e.offsetY;
     e = e || window.event;
-    // if (e.preventDefault) {
-      // e.preventDefault();
-    // }
+
     let dt = e.dataTransfer || (e.originalEvent && e.originalEvent.dataTransfer);
     let files = e.target.files || (dt && dt.files);
     for (let i = 0; i < files.length; i++) {
       let file = files[i];
       let reader = new FileReader();
 
-      //attach event handlers here...
-      reader.onload = function(e) {
-        if (DEBUG) console.log('second event:', e);
+      reader.onload = function(event) {
         let img = new Image();
-        img.src = e.target.result;
+        img.src = event.target.result;
 
         let image = new fabric.Image(img);
         image.set({
@@ -405,6 +396,7 @@ $(document).ready(() => {
       canvas.backgroundColor = color.toHexString();
       canvas.renderAll();
       socket.emit("set_background_color", {color: canvas.backgroundColor})
+      console.log("set background image", {color: canvas.backgroundColor})
     }
   });
 
@@ -412,7 +404,6 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //           EMOJIS / STICKERS            //
   ////////////////////////////////////////////
-
   $('#image-menu').hover(
     function() {
       $('.image-nav').show().css('display', 'flex');
@@ -478,26 +469,32 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
   ////////////////////////////////////////////
+  // UNDO / REDO
   var inRedo = false;
-  let componentHistory = [], historyIndex = 0;
+  let componentHistory = [], undoHistory = [];
   function trackComponentChanges(target, eventType) {
     if(inRedo) return;
     componentHistory.push({type: eventType, target: target});
   }
   function Undo() {
-    if(componentHistory.length > 0)
-      redoHistory(componentHistory.pop())
+    if(componentHistory.length > 0) {
+      let target = componentHistory.pop();
+      redoHistory(target, true);
+      undoHistory.push(target);
+    }
   }
-
   function Redo() {
-    // TBD
+    if(undoHistory.length > 0) {
+      let target = undoHistory.pop();
+      redoHistory(target, false);
+      componentHistory.push(target);
+    }
   }
-
-  function redoHistory(lastAction) {
+  function redoHistory(lastAction, isUndo) {
     inRedo = true;
-    if (DEBUG) console.log("redo history", lastAction)
-    if(lastAction.type === "add") {
-      removeComponents([lastAction.target]);
+    if(isUndo && lastAction.type === "add" ||
+        !isUndo && lastAction.type === "remove") {
+          removeComponents([lastAction.target]);
     } else {
       addComponent(lastAction.target, false);
     }
@@ -563,7 +560,8 @@ $(document).ready(() => {
   //                LAYERING                //
   ////////////////////////////////////////////
   // reposition cursor received from server
-  socket.on('user_position', function(data) {
+  socket.on('user_cursor_position', function(data) {
+    if(!data.client) return;
     let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
     let boundaries = canvas.calcViewportBoundaries();
     topPos = (((data.pos.y - boundaries.tl.y )) * canvas.getZoom())  + canvas._offset.top;
@@ -600,9 +598,10 @@ $(document).ready(() => {
   // Broadcast Mouse Position
   canvas.on('mouse:move', throttled(100, function(event) {
     let pointer = canvas.getPointer(event.e);
-    socket.emit("user_position", {client: client, pos: pointer})
+    socket.emit("user_cursor_position", {client: client, pos: pointer})
   }));
 
+  // Show Selection
   canvas.on('mouse:over', function(event) {
     if(event.target) {
       event.target.set('opacity', 0.7);
@@ -615,8 +614,6 @@ $(document).ready(() => {
       canvas.renderAll();
     }
   });
-
-
 
   /// MOUSE DOWN EVENT
   canvas.on('mouse:down', function(event) {
@@ -665,6 +662,7 @@ $(document).ready(() => {
       if(event.shiftKey) {
         Redo() } else { Undo()} ;
 
+    // CTL 1 - 9 for tool selection
     if(event.ctrlKey && char >= 49 && char <= 57) {
       console.log("button id", buttonIDs[char - 49])
       $(`#${buttonIDs[char - 49]}`).trigger('click');
@@ -696,7 +694,6 @@ $(document).ready(() => {
   /////////////
   /// Tools ///
   /////////////
-
   // DRAW RECTANGLE
   function handleDrawRect(event) {
     if(mode !== RECT) return;
@@ -725,6 +722,7 @@ $(document).ready(() => {
       canvas.add(rect)
     }
     if(event.e.type === "mousemove" || event.e.type === "touchmove") {
+      console.log("rect event", event)
       if (!isMouseDown) return;
 
       let pointer = canvas.getPointer(event.e);
@@ -902,27 +900,6 @@ $(document).ready(() => {
         context.requestRenderAll();
         context.lastPosX = e.clientX;
         context.lastPosY = e.clientY;
-
-        // panning code added by Aaron:
-        // let delta = new fabric.Point(event.e.movementX, event.e.movementY);
-        // canvas.relativePan(delta);
-
-        // let canvasViewPort = canvas.viewportTransform;
-
-        // let imageHeight = canvas.height * canvasViewPort[0];
-        // let imageWidth = canvas.width * canvasViewPort[0];
-
-        // let bottomEndPoint = canvas.height * (canvasViewPort[0] - 1);
-        // if (canvasViewPort[5] >= 0 || -bottomEndPoint > canvasViewPort[5]) {
-        //   canvasViewPort[5] = (canvasViewPort[5] >= 0) ? 0 : -bottomEndPoint;
-        // }
-
-        // let rightEndPoint = canvas.width * (canvasViewPort[0] - 1);
-        // if (canvasViewPort[4] >= 0 || -rightEndPoint > canvasViewPort[4]) {
-        //   canvasViewPort[4] = (canvasViewPort[4] >= 0) ? 0 : -rightEndPoint;
-        // }
-        /// End of code added by Aaron
-
       }
     }
     if(event.e.type === "mouseup") {
@@ -934,7 +911,6 @@ $(document).ready(() => {
   // Zoom in/out with mousewheel
   canvas.on('mouse:wheel', function(event) {
     var delta = event.e.deltaY;
-    var pointer = canvas.getPointer(event.e);
     var zoom = canvas.getZoom();
     zoom = zoom - delta / 400;
     if (zoom > 3) zoom = 3;
@@ -957,6 +933,7 @@ $(document).ready(() => {
     }
   }
 
+  // grouped components changed
   function groupUpdate(group, method, isFinal) {
     var ids = group.getObjects().map(e => e.id);
     group.clone(function(clonedObj) {
@@ -1087,9 +1064,8 @@ $(document).ready(() => {
 
 
   //////////////////////////////////////////
-  //              COPY PASTE              //
+  //            COPY  & PASTE             //
   //////////////////////////////////////////
-
   $('#duplicate').on('click', function(e) {
     if (canvas.getActiveObject())
       Copy();
