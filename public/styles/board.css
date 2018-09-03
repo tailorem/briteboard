@@ -142,13 +142,13 @@ a {
   width:45px;
   height:38px;
   transition: background-image .5s ease-in-out;
-  background-image:url(../img/logo-outline.svg);
+  background-image:url(../img/logo.svg);
   background-size: 45px 38px;
   /*background-color: black;*/
 }
 
 .logo-wrapper:hover #icon-outline {
-  background-image:url("../img/logo.svg");
+  background-image:url("../img/logo-bright.svg");
   background-size: 45px 38px;
 }
 

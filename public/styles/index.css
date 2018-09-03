@@ -1,8 +1,62 @@
 body {
-  padding-top: 54px;
-  font-family: 'Open Sans', sans-serif;
+  background-color: #fdfdfd;
   box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+  padding-top: 54px;
 }
+
+a, a:hover {
+  color: #6c757d;
+}
+
+a:hover {
+  color: #495057;
+  text-decoration: none;
+}
+
+section img {
+  position: absolute;
+}
+
+.clearfix:after {
+   content: ".";
+   visibility: hidden;
+   display: block;
+   height: 3.75em;
+   clear: both;
+}
+
+#logo-pulse-bright {
+  animation-name: fade;
+  animation-timing-function: ease-in-out;
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*#logo-pulse {
+  margin:0 auto;
+  width: 65px;
+  height: 65px;
+  transition: background-image .5s ease-in-out;
+  background-image:url(../img/logo.svg);
+  background-size: 65px 65px;
+}*/
 
 .jumbotron {
   padding: 0;
@@ -152,7 +206,7 @@ input.new-board {
 }
 
 .selected-card {
-  box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 4px 4px rgba(126, 143, 244, 0.81);
+  box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 8px 3px rgba(126, 143, 244, 0.81);
 }
 
 .card {

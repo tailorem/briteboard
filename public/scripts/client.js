@@ -259,13 +259,6 @@ $(document).ready(() => {
     $('body').prepend($container);
   });
 
-  // // Delete Board Tool
-  // $('#delete-cancel').on('click', function(e) {
-  //   console.log("CANCEL");
-  //   $('#confirm-delete').remove();
-  //  });
-
-
 
   // Bush Size Selection
   $('#brush-size').on('input', function(e) {
