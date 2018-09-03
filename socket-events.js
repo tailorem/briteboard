@@ -146,6 +146,9 @@ module.exports = (io, boards) => {
     socket.on('user_position', function(objectData) {
       socket.to(board).emit('user_position', objectData);
     });
+    socket.on('set_background_color', function(objectData) {
+      socket.to(board).emit('set_background_color', objectData);
+    });
   });
 
 
