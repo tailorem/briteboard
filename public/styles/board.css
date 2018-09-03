@@ -57,6 +57,10 @@ button:hover {
   transform: scaleY(2.9) scaleX(1.8);
 }
 
+.fa-eraser {
+  transform: scaleY(1.2) scaleX(1.1);
+}
+
 .nav-top {
   align-items: center;
   background-color: #f2f2f2;
@@ -209,16 +213,9 @@ label.brush-size {
 #brush-size {
   display: block;
   width: 100%;
-}
-label.shadow-size {
-  background-color: #eee;
-  padding: 5px 5px 5px;
+  padding-bottom: 4px;
 }
 
-#shadow-size {
-  display: block;
-  width: 100%;
-}
 /* USERNAME INPUT POPUP */
 
 #username-form {
