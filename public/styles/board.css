@@ -316,6 +316,10 @@ label.brush-size {
   padding-bottom: 14px;
 }
 
+.brush-selected, .brush-selected:hover {
+  background: #c0c7f3;
+}
+
 /* ======================================
               CANVAS
 ======================================= */

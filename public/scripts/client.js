@@ -229,11 +229,11 @@ $(document).ready(() => {
 
 
      // Brush Tool
-  $('#brush-mode').on('input', function(e) {
-    console.log("changing brush mode to: ", this.value + 'Brush')
-    canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
-    updateCanvasBrush()
-  });
+  // $('#brush-mode').on('input', function(e) {
+  //   console.log("changing brush mode to: ", this.value + 'Brush')
+  //   canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+  //   updateCanvasBrush()
+  // });
 
   // Delete Board Tool
   $('#delete-board').on('click', function(e) {
@@ -495,36 +495,33 @@ $(document).ready(() => {
     }
   );
 
-  $("#pen-brush").on("click", function() {
+  function changeBrush(style) {
     setupForMode(DRAW);
     canvas.isDrawingMode = true;
     $('#draw').addClass('selected');
-    canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas);
+    $('.brush-selected').removeClass('brush-selected');
+    canvas.freeDrawingBrush = new fabric[style](canvas);
     updateCanvasBrush();
+  }
+
+  $("#pen-brush").on("click", function() {
+    changeBrush('PencilBrush');
+    $(this).addClass('brush-selected');
   });
 
   $("#circle-brush").on("click", function() {
-    setupForMode(DRAW);
-    canvas.isDrawingMode = true;
-    $('#draw').addClass('selected');
-    canvas.freeDrawingBrush = new fabric['CircleBrush'](canvas);
-    updateCanvasBrush();
+    changeBrush('CircleBrush');
+    $(this).addClass('brush-selected');
   });
 
   $("#spray-brush").on("click", function() {
-    setupForMode(DRAW);
-    canvas.isDrawingMode = true;
-    $('#draw').addClass('selected');
-    canvas.freeDrawingBrush = new fabric['SprayBrush'](canvas);
-    updateCanvasBrush();
+    changeBrush('SprayBrush');
+    $(this).addClass('brush-selected');
   });
 
   $("#pattern-brush").on("click", function() {
-    setupForMode(DRAW);
-    canvas.isDrawingMode = true;
-    $('#draw').addClass('selected');
-    canvas.freeDrawingBrush = new fabric['PatternBrush'](canvas);
-    updateCanvasBrush();
+    changeBrush('PatternBrush');
+    $(this).addClass('brush-selected');
   });
 
   ////////////////////////////////////////////
