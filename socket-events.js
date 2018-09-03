@@ -76,6 +76,11 @@ module.exports = (io, boards) => {
       delete clients[socket.id];
     });
 
+    socket.on('delete board', (boardId) => {
+      console.log(boardId, "DELETED");
+      socket.to(board).emit('board deleted');
+    });
+
 
   ////////////////////////////////////////////
   //             CAVAS EVENTS               //
@@ -116,7 +121,7 @@ module.exports = (io, boards) => {
       boardHistory = boards.getBoardHistory(board);
       updateboardHistory(boardHistory, objectData);
       socket.to(board).emit('modify_component', objectData);
-    console.log("modify_component", objectData)
+      if (DEBUG) console.log("modify_component", objectData)
     });
 
     // broadcast and update db when movement has stopped

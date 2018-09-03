@@ -11,11 +11,6 @@ function rando() {
 
 module.exports = function(DataHelpers) {
 
-  // GET TEST BOARD (development only)
-  // routes.get('/test', function(req, res) {
-  //   res.render('test-board');
-  // });
-
   // CREATE NEW BOARD
   routes.post('/new', function(req, res) {
     const id = rando();
@@ -34,34 +29,34 @@ module.exports = function(DataHelpers) {
       .then(board => { res.redirect(`/boards/${id}`) });
 
     //console.log('New board added to db:', JSON.stringify(board));
-
 });
-
-
 
   // GET SPECIFIC BOARD
   routes.get('/:boardId', function(req, res) {
     const boardId = req.params.boardId;
     Board.findOne({ 'id': boardId }, function(err, board) {
       if (err) console.log(err);
-      console.log('Loading board from db:'/*, board*/);
       if (board) {
+        console.log('Loading board from db:');
         res.render('test-board', { board: board });
       } else {
         res.render('404');
       }
     });
-
-    // let user = null;
-
   });
 
-// // DELETE SPECIFIC BOARD
-// routes.delete('/:boardId', function(req, res) {
-//   console.log('Delete /boards/new');
-//   // delete board
-//   // redirect to home
-// });
+  // DELETE SPECIFIC BOARD
+  routes.delete('/:boardId', function(req, res) {
+    const boardId = req.params.boardId;
+    if (boardId === '8ec5lhlh') { res.sendStatus("401"); }
+    Board.deleteOne({ 'id': boardId }, function(err, board) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/");
+      }
+    });
+  });
 
   return routes;
 

@@ -15,6 +15,9 @@ io.set('heartbeat interval', 2000);
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
 // Set view engine
 app.set('view engine', 'ejs');
 
