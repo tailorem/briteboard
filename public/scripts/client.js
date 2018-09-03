@@ -3,8 +3,8 @@ $(document).ready(() => {
   const canvas = new fabric.Canvas('whiteboard');
   const templateId = $('#template-id').text();
   const templates = ['','/img/calendar.svg','/img/mockup.svg','/img/graph.svg'];
-  canvas.setHeight(800);
-  canvas.setWidth(1400);
+  canvas.setHeight(1000);
+  canvas.setWidth(1800);
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
