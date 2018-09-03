@@ -37,6 +37,7 @@
   text-align: center;
   z-index: 1;
   padding: 1em 3em;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
 }
 
 
