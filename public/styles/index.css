@@ -1,7 +1,8 @@
 body {
-  padding-top: 54px;
-  font-family: 'Open Sans', sans-serif;
+  background-color: #fdfdfd;
   box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+  padding-top: 54px;
 }
 
 a, a:hover {
@@ -12,6 +13,49 @@ a:hover {
   color: rgba(0,0,0,.7);
   text-decoration: none;
 }
+
+section img {
+  position: absolute;
+}
+
+.clearfix:after {
+   content: ".";
+   visibility: hidden;
+   display: block;
+   height: 3.75em;
+   clear: both;
+}
+
+#logo-pulse-bright {
+  animation-name: fade;
+  animation-timing-function: ease-in;
+  animation-iteration-count: 1;
+  animation-duration: 4s;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*#logo-pulse {
+  margin:0 auto;
+  width: 65px;
+  height: 65px;
+  transition: background-image .5s ease-in-out;
+  background-image:url(../img/logo.svg);
+  background-size: 65px 65px;
+}*/
 
 .jumbotron {
   padding: 0;

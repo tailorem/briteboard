@@ -148,7 +148,7 @@ a {
 }
 
 .logo-wrapper:hover #icon-outline {
-  background-image:url("../img/logo.svg");
+  background-image:url("../img/logo-bright.svg");
   background-size: 45px 38px;
 }
 
