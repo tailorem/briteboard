@@ -241,6 +241,8 @@ $(document).ready(() => {
 
   // Delete Board Tool
   $('#delete-board').on('click', function(e) {
+    if (roomURL === '8ec5lhlh') { return }
+
     $container = $('<div id="confirm-delete">');
     $box = $('<div id="confirm-delete-box">').append(`<p>
         <strong>Are you sure you want to delete this board?</strong>

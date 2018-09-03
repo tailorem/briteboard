@@ -11,11 +11,6 @@ function rando() {
 
 module.exports = function(DataHelpers) {
 
-  // GET TEST BOARD (development only)
-  // routes.get('/test', function(req, res) {
-  //   res.render('test-board');
-  // });
-
   // CREATE NEW BOARD
   routes.post('/new', function(req, res) {
     const id = rando();
@@ -53,6 +48,7 @@ module.exports = function(DataHelpers) {
   // DELETE SPECIFIC BOARD
   routes.delete('/:boardId', function(req, res) {
     const boardId = req.params.boardId;
+    if (boardId === '8ec5lhlh') { res.sendStatus("401"); }
     Board.deleteOne({ 'id': boardId }, function(err, board) {
       if (err) {
         console.log(err);
@@ -61,13 +57,6 @@ module.exports = function(DataHelpers) {
       }
     });
   });
-
-// // DELETE SPECIFIC BOARD
-// routes.delete('/:boardId', function(req, res) {
-//   console.log('Delete /boards/new');
-//   // delete board
-//   // redirect to home
-// });
 
   return routes;
 
