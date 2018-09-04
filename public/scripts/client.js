@@ -487,20 +487,20 @@ $(document).ready(() => {
     $(this).addClass('brush-selected');
   });
 
-  $("#circle-brush").on("click", function() {
-    changeBrush('CircleBrush');
-    $(this).addClass('brush-selected');
-  });
+  // $("#circle-brush").on("click", function() {
+  //   changeBrush('CircleBrush');
+  //   $(this).addClass('brush-selected');
+  // });
 
-  $("#spray-brush").on("click", function() {
-    changeBrush('SprayBrush');
-    $(this).addClass('brush-selected');
-  });
+  // $("#spray-brush").on("click", function() {
+  //   changeBrush('SprayBrush');
+  //   $(this).addClass('brush-selected');
+  // });
 
-  $("#pattern-brush").on("click", function() {
-    changeBrush('PatternBrush');
-    $(this).addClass('brush-selected');
-  });
+  // $("#pattern-brush").on("click", function() {
+  //   changeBrush('PatternBrush');
+  //   $(this).addClass('brush-selected');
+  // });
 
   ////////////////////////////////////////////
   //             CANVAS EVENTS              //
