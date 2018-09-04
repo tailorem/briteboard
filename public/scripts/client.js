@@ -82,6 +82,13 @@ $(document).ready(() => {
     console.log("DISCONNECTED");
 
     // SHOW DISCONNECT ERROR
+    $(`<div class="reconnect-form">
+        <div class="reconnect-box">
+        <h3>Oops! Something went wrong...</h3>
+        <p>Please reconnect to keep working.</p>
+          <button id="reconnect" onclick="window.location.reload()">Reconnect</button>
+        </div>
+      </div>`).prependTo(document.body);
 
     // $('#users').empty();
     // window.location.reload();
