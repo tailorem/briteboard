@@ -1035,7 +1035,6 @@ $(document).ready(() => {
   // notify component that is being modified
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
-    if(!isFinal) return
     if (DEBUG) console.log("modifying component", isFinal, componentParams(component))
     let msg_type = isFinal ? "modified_component" : "modify_component";
     socket.emit(msg_type, componentParams(component))
@@ -1095,6 +1094,13 @@ $(document).ready(() => {
     return canvas.getObjects().find((each) => each.id === id)
   }
 
+  function hasSelectionOn(component) {
+    let activeObj = canvas.getActiveObject();
+    return (activeObj === "activeSelection") ?
+      activeObj.getObjects().includes(component) :
+      activeObj === component
+  }
+
   // modify component received from server
   socket.on('modify_component', function(data) {
     if (DEBUG) console.log("receiving modifying data", data)
@@ -1107,6 +1113,8 @@ $(document).ready(() => {
       targetComponent.angle = data.angle;
       targetComponent.set("text",data.text);
       canvas.renderAll();
+      console.log("has selection on component", hasSelectionOn(targetComponent));
+      if(hasSelectionOn(targetComponent)) canvas.discardActiveObject();
       if(mode === SELECT)
         targetComponent.set({ selectable: true }).setCoords();
     } else {
