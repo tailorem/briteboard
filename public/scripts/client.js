@@ -6,8 +6,8 @@ $(document).ready(() => {
   const templates = ['','/img/calendar.svg','/img/mockup.svg','/img/graph.svg'];
 
   // Setup canvas and its defaults
-  canvas.setHeight(1000);
-  canvas.setWidth(1800);
+  canvas.setHeight(1400);
+  canvas.setWidth(2520);
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
@@ -21,8 +21,6 @@ $(document).ready(() => {
     y: 0
   }, 0.78);
 
-  // Socket IO
-  const socket = io.connect();
 
   ////////////////////////////////////////////
   //               USER INFO                //
@@ -32,58 +30,26 @@ $(document).ready(() => {
   let webrtc;
   let videoOn = true;
 
+
+  // Establish socket connection
+  const socket = io.connect();
+
   // On page load, user is prompted to select a username
-  $(`<div id="username-form">
-      <div class="username-box">
-      <h3>Welcome!</h3>
-        <form id="select-username">
-          <input type="text" placeholder="Enter a username" autofocus onfocus="this.select()" /><button>GO</button>
-        </form>
-      </div>
-    </div>`).prependTo(document.body);
+  getUsername(socket);
 
-  // Once username is selected, the username is sent to the server and the username form/div is removed
-  $("#select-username").on('submit', (e) => {
-    e.preventDefault();
-    $username = $('#select-username input').val();
-    if ($username.trim().length < 1) { return; }
-
-    // Send username to server
-    socket.emit('username selected', $username);
-    $('#username-form').remove();
-  });
-
-  function toggleVideo() {
-    if (videoOn === true) {
-      webrtc.pause();
-      videoOn = false;
-    } else {
-      webrtc.resume();
-      videoOn = true;
-    }
-  }
-
+  // After server receives socket connection, other connected clients' names and cursors are added to the page
   socket.on('connected', (msg) => {
     listUsers(msg.currentUsers);
     getCursors(msg.currentUsers);
   });
 
+  // After server receives selected username, client's username is added to their page and they join the video room
   socket.on('connection established', (user) => {
     client = user;
     addUser(user);
 
-    // Get video
-    webrtc = new SimpleWebRTC({
-      localVideoEl: 'localVideo',
-      remoteVideosEl: 'remoteVideos',
-      autoRequestMedia: true,
-      localVideo: {
-        autoplay: true,
-        muted: true
-      },
-      media: {audio: true, video: true},
-      autoRemoveVideos: true
-    })
+    // Get local video
+    webrtc = getVideo(webrtc);
 
     // Join video room
     webrtc.on('readyToCall', function () {
@@ -91,21 +57,38 @@ $(document).ready(() => {
     });
   });
 
-  $('#localVideo').on('click', (e) => {
-    toggleVideo();
-  });
-
+  // When a new user connects, their name and cursor are added to the page
   socket.on('new connection', (user) => {
     addUser(user);
     addCursor(user);
   });
 
+  // Toggles local video/audio stream
+  $('#localVideo').on('click', (e) => {
+    videoOn = toggleVideo(webrtc, videoOn);
+  });
+
+  // When a user disconnects, that user and cursor are removed from list of users
   socket.on('user disconnected', (user) => {
     removeUser(user);
   });
 
+  // When current board is deleted, all users are redirected to home page
   socket.on('board deleted', () => {
     window.location = "/";
+  });
+
+  socket.on('disconnect', (e) => {
+    $('#users').empty();
+
+    // SHOW DISCONNECT ERROR
+    $(`<div class="reconnect-form">
+        <div class="reconnect-box">
+        <h3>Oops, you've been disconnected!</h3>
+        <p>Please reconnect to keep working.</p>
+          <button id="reconnect" onclick="window.location.reload()">Reconnect</button>
+        </div>
+      </div>`).prependTo(document.body);
   });
 
 
@@ -1075,7 +1058,7 @@ $(document).ready(() => {
         canvas.add(p);
       })
     });
-    if(DEBUG) console.log("Create CO\omponent", data)
+    if(DEBUG) console.log("Create Component", data)
   });
 
   // delete component request from server
@@ -1195,4 +1178,3 @@ $(document).ready(() => {
   }
 
 });
-

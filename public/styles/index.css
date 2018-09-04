@@ -200,20 +200,33 @@ input.new-board {
 
 .templates-area {
   margin-top: 3em;
-  margin-bottom: 1em;
+  margin-bottom: 4em;
 }
 
 .card {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  transition: all 100ms;
+  transition: all 200ms;
   margin-top: 10px;
   box-sizing: border-box;
   border-radius: .56em;
   background-clip: padding-box;
 }
 
+.card-body {
+  border-radius: 0 0 0.56em 0.56em;
+  transition: all 200ms;
+}
+
 .selected-card {
   box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 8px 3px rgba(126, 143, 244, 0.81);
+}
+
+.selected-card .card-body {
+  background: #c0c8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #c0c8ef 0%, #feffff 130%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #c0c8ef 0%,#feffff 130%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #c0c8ef 0%, #feffff 130%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#c0c8ef',GradientType=0 ); /* IE6-9 */
 }
 
 .card span.card-title {
@@ -268,10 +281,9 @@ header, footer {
 
 footer {
   padding: 1em 1em;
-/*  position: fixed;
-  bottom: 0;*/
+  position: fixed;
+  bottom: 0;
   width: 100%;
-  /*z-index: 1;*/
 }
 
 /* ======================================
@@ -308,4 +320,3 @@ footer {
     display: none;
   }
 }
-
