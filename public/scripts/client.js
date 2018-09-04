@@ -657,7 +657,7 @@ $(document).ready(() => {
     orderCanvas();
     canvas.renderAll();
     // enableSelectMode()
-    console.log("here")
+    if(DEBUG) console.log("here")
   });
 
 
@@ -705,7 +705,7 @@ $(document).ready(() => {
 
     // CTL 1 - 9 for tool selection
     if(event.ctrlKey && char >= 49 && char <= 57) {
-      console.log("button id", buttonIDs[char - 49])
+      if(DEBUG) console.log("button id", buttonIDs[char - 49])
       $(`#${buttonIDs[char - 49]}`).trigger('click');
     }
 
@@ -763,7 +763,7 @@ $(document).ready(() => {
       canvas.add(rect)
     }
     if(event.e.type === "mousemove" || event.e.type === "touchmove") {
-      console.log("rect event", event)
+      if(DEBUG) console.log("rect event", event)
       if (!isMouseDown) return;
 
       let pointer = canvas.getPointer(event.e);
@@ -1056,7 +1056,7 @@ $(document).ready(() => {
         canvas.add(p);
       })
     });
-    console.log("Create COmponent", data)
+    if(DEBUG) console.log("Create COmponent", data)
   });
 
   // delete component request from server
@@ -1082,7 +1082,7 @@ $(document).ready(() => {
       orderCanvas();
       canvas.renderAll();
     });
-  
+
 
   function findComonent(id) {
     return canvas.getObjects().find((each) => each.id === id)
@@ -1164,3 +1164,4 @@ $(document).ready(() => {
   }
 
 });
+
