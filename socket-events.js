@@ -100,9 +100,6 @@ module.exports = (io, boards) => {
     if(myBoard)
       socket.emit('set_background_color', {color: myBoard.backgroundColor});
 
-    socket.emit('finalize_setup', {}) 
-    
-
     // add handler for broadcast of component creation
     socket.on('create_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
