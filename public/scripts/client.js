@@ -597,11 +597,13 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   // reposition cursor received from server
   socket.on('user_cursor_position', function(data) {
-    let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
-    let boundaries = canvas.calcViewportBoundaries();
-    topPos = (((data.pos.y - boundaries.tl.y )) * canvas.getZoom())  + canvas._offset.top;
-    leftPos = (((data.pos.x - boundaries.tl.x )) * canvas.getZoom()) + canvas._offset.left;
-    $(`#${data.client.id}`).css({top: topPos, left: leftPos});
+    if(data.client) {
+      let absX = parseInt(data.pos.x), absY = parseInt(data.pos.y);
+      let boundaries = canvas.calcViewportBoundaries();
+      topPos = (((data.pos.y - boundaries.tl.y )) * canvas.getZoom())  + canvas._offset.top;
+      leftPos = (((data.pos.x - boundaries.tl.x )) * canvas.getZoom()) + canvas._offset.left;
+      $(`#${data.client.id}`).css({top: topPos, left: leftPos});
+    }
   });
 
   // throttle async functions
@@ -1056,7 +1058,7 @@ $(document).ready(() => {
         canvas.add(p);
       })
     });
-    if(DEBUG) console.log("Create COmponent", data)
+    if(DEBUG) console.log("Create CO\omponent", data)
   });
 
   // delete component request from server
@@ -1076,12 +1078,16 @@ $(document).ready(() => {
     canvas.renderAll();
   });
 
-    // background color request from server
-    socket.on('finalize_setup', function(data) {
-      console.log("finalize setup")
-      orderCanvas();
-      canvas.renderAll();
-    });
+
+
+  // DUBUGGING ONLY
+  // background color request from server
+  socket.on('finalize_setup', function(data) {
+    console.log("finalize setup")
+    orderCanvas();
+    canvas.renderAll();
+  });
+
 
 
   function findComonent(id) {

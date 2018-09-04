@@ -102,12 +102,11 @@ module.exports = (io, boards) => {
 
     socket.emit('finalize_setup', {})
 
-
     // add handler for broadcast of component creation
     socket.on('create_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
       boardHistory.push(objectData);
-      // boards.updateBoard(board, objectData, boardHistory);
+      boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('create_component', objectData);
     });
 
@@ -122,7 +121,7 @@ module.exports = (io, boards) => {
     socket.on('modified_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
       updateboardHistory(boardHistory, objectData);
-      // boards.updateBoard(board, objectData, boardHistory);
+      boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('modify_component', objectData);
     });
 
@@ -140,7 +139,7 @@ module.exports = (io, boards) => {
     socket.on('path_created', function(objectData) {
       boardHistory = boards.getBoardHistory(board)
       boardHistory.push(objectData);
-      // boards.updateBoard(board, objectData, boardHistory);
+      boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('path_created', objectData);
     });
 
