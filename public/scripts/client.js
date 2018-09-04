@@ -705,6 +705,10 @@ $(document).ready(() => {
       if(event.shiftKey) {
         Redo() } else { Undo()} ;
 
+    // MULTI-SELECTION MODE
+    if(event.ctrlKey && event.metaKey && event.altKey && char === 77)
+      multiSelectionEnabled = !multiSelectionEnabled;
+
     // CTL 1 - 9 for tool selection
     if(event.ctrlKey && char >= 49 && char <= 57) {
       if(DEBUG) console.log("button id", buttonIDs[char - 49])
@@ -726,6 +730,19 @@ $(document).ready(() => {
     }
   });
 
+  // disable multi selection
+  var multiSelectionEnabled = false;
+  canvas.on('selection:created', (event) => {
+    if(!multiSelectionEnabled && event.target.type === 'activeSelection') {
+      canvas.discardActiveObject();
+    }
+  });
+  canvas.on('mouse:down', (event) => {
+    if(!multiSelectionEnabled && canvas.getActiveObject() !== null && event.e.shiftKey) {
+      canvas.discardActiveObject();
+    }
+  })
+  
   // MOUSE UP EVENT
   canvas.on('mouse:up', function(event) {
     isMouseDown = false;
