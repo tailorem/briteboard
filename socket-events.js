@@ -42,7 +42,7 @@ module.exports = (io, boards) => {
 
 
   // SOCKET CONNECTION RECEIVED
-  io.on('connection', function(socket) {
+  io.on('connect', function(socket) {
     console.log("client connected")
 
     const board = (socket.request.headers.referer).split('/').reverse()[0];
@@ -100,7 +100,12 @@ module.exports = (io, boards) => {
     if(myBoard)
       socket.emit('set_background_color', {color: myBoard.backgroundColor});
 
+
+
+    // DEBUGGING: happens on connection...
     socket.emit('finalize_setup', {})
+
+
 
     // add handler for broadcast of component creation
     socket.on('create_component', function(objectData) {
