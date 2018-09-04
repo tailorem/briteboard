@@ -31,7 +31,7 @@ a {
 }
 
 .username-box, #confirm-delete-box {
-  background-color: #fff;
+  background-color: #fdfdfd;
   border: 1px solid #aaa;
   border-radius: .5em;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
@@ -59,14 +59,14 @@ a {
   transition: background 200ms ease-in;
   /*cursor: pointer;*/
   background: #7f8ff4;
-  color: #fff;
+  color: #feffff;
   border-radius: .25em;
   padding: 12px 20px;
   margin: 0 .25em;
 }
 
 .username-box button:hover, #confirm-delete-box button:hover {
-  background: #6c7ff2;
+  background: #7e83f3;
 }
 
 .username-box button:active, #confirm-delete-box button:active {
@@ -77,7 +77,7 @@ a {
 .username-box input {
   padding: 50px 10px 25px;
   width: 225px;
-  background: #fff;
+  background: #feffff;
   color: #222;
   border: 1px solid #6f6f6f;
   border-radius: .25em;
@@ -90,7 +90,7 @@ a {
 }
 
 .user-name {
-  background-color: white;
+  background-color: #feffff;
   border: 1px solid #aaa;
   border-radius: .5em 0 .5em 0;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
@@ -326,7 +326,7 @@ label.brush-size {
 ======================================= */
 
 .main {
-  background-color: white;
+  background-color: #feffff;
   height: 100%;
   width: 100%;
 }
