@@ -205,15 +205,24 @@ input.new-board {
 
 .card {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  transition: all 100ms;
+  transition: all 200ms;
   margin-top: 10px;
   box-sizing: border-box;
   border-radius: .56em;
   background-clip: padding-box;
 }
 
+.card-body {
+  transition: all 200ms;
+}
+
 .selected-card {
   box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.16), 0 0px 8px 3px rgba(126, 143, 244, 0.81);
+}
+
+.selected-card .card-body {
+  background-color: #c0c8ef;
+  border-radius: 0 0 0.56em 0.56em;
 }
 
 .card span.card-title {
@@ -308,4 +317,3 @@ footer {
     display: none;
   }
 }
-
