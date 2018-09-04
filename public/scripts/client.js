@@ -21,6 +21,7 @@ $(document).ready(() => {
     y: 0
   }, 0.78);
 
+
   ////////////////////////////////////////////
   //               USER INFO                //
   ////////////////////////////////////////////
@@ -80,7 +81,7 @@ $(document).ready(() => {
   socket.on('disconnect', (e) => {
     console.log("DISCONNECTED");
 
-
+    // SHOW DISCONNECT ERROR
 
     // $('#users').empty();
     // window.location.reload();

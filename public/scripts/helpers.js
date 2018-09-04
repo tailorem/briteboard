@@ -2,7 +2,6 @@
 //             USER HELPERS               //
 ////////////////////////////////////////////
 
-
   function getUsername(socket) {
 
     $(`<div id="username-form">
@@ -26,7 +25,6 @@
     });
 
   }
-
 
   function listUsers(users) {
     $users = $('#users');
@@ -62,7 +60,6 @@
     $(`span.${user.id}`).remove();
     $(`span#${user.id}`).remove();
   }
-
 
 ////////////////////////////////////////////
 //             VIDEO HELPERS              //
