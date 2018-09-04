@@ -558,7 +558,7 @@ $(document).ready(() => {
   ['object:rotating', 'object:moving', 'object:scaling']
     .forEach(function(eventType) {
       canvas.on(eventType, function(event) {
-        throttled(75, componentChanged(event, false))
+        throttled(25, componentChanged(event, false))
       });
     })
 
@@ -633,7 +633,7 @@ $(document).ready(() => {
   }
 
   // Broadcast Mouse Position
-  canvas.on('mouse:move', throttled(100, function(event) {
+  canvas.on('mouse:move', throttled(25, function(event) {
     let pointer = canvas.getPointer(event.e);
     socket.emit("user_cursor_position", {client: client, pos: pointer})
   }));
@@ -1077,6 +1077,18 @@ $(document).ready(() => {
     orderCanvas();
     canvas.renderAll();
   });
+
+
+
+  // DUBUGGING ONLY
+  // background color request from server
+  socket.on('finalize_setup', function(data) {
+    console.log("finalize setup")
+    orderCanvas();
+    canvas.renderAll();
+  });
+
+
 
   function findComonent(id) {
     return canvas.getObjects().find((each) => each.id === id)
