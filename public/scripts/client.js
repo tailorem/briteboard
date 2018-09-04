@@ -1035,6 +1035,7 @@ $(document).ready(() => {
   // notify component that is being modified
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
+    if(!isFinal) return
     if (DEBUG) console.log("modifying component", isFinal, componentParams(component))
     let msg_type = isFinal ? "modified_component" : "modify_component";
     socket.emit(msg_type, componentParams(component))
