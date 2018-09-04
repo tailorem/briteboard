@@ -360,7 +360,7 @@ label.brush-size {
 }
 
 video {
-  background-color: #eee;
+  /*background-color: #eee;*/
   border-radius: .5em;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
   margin-bottom: .35em;
