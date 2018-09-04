@@ -95,6 +95,10 @@ $(document).ready(() => {
     toggleVideo();
   });
 
+  socket.on('reconnect', (e) => {
+    console.log("CLIENT RECONNECT");
+  });
+
   socket.on('new connection', (user) => {
     addUser(user);
     addCursor(user);
@@ -1058,7 +1062,7 @@ $(document).ready(() => {
         canvas.add(p);
       })
     });
-    if(DEBUG) console.log("Create CO\omponent", data)
+    if(DEBUG) console.log("Create Component", data)
   });
 
   // delete component request from server
