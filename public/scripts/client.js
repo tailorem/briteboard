@@ -1078,6 +1078,18 @@ $(document).ready(() => {
     canvas.renderAll();
   });
 
+
+
+  // DUBUGGING ONLY
+  // background color request from server
+  socket.on('finalize_setup', function(data) {
+    console.log("finalize setup")
+    orderCanvas();
+    canvas.renderAll();
+  });
+
+
+
   function findComonent(id) {
     return canvas.getObjects().find((each) => each.id === id)
   }
