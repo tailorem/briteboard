@@ -221,8 +221,12 @@ input.new-board {
 }
 
 .selected-card .card-body {
-  background-color: #c0c8ef;
   border-radius: 0 0 0.56em 0.56em;
+  background: #c0c8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #c0c8ef 0%, #feffff 90%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #c0c8ef 0%,#feffff 90%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #c0c8ef 0%, #feffff 90%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#c0c8ef',GradientType=0 ); /* IE6-9 */
 }
 
 .card span.card-title {

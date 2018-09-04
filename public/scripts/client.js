@@ -6,8 +6,8 @@ $(document).ready(() => {
   const templates = ['','/img/calendar.svg','/img/mockup.svg','/img/graph.svg'];
 
   // Setup canvas and its defaults
-  canvas.setHeight(1000);
-  canvas.setWidth(1800);
+  canvas.setHeight(1400);
+  canvas.setWidth(2520);
   if (templateId !== 0) {
     canvas.setBackgroundImage(templates[templateId], canvas.renderAll.bind(canvas));
   }
@@ -1178,4 +1178,3 @@ $(document).ready(() => {
   }
 
 });
-
