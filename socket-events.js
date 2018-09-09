@@ -7,7 +7,7 @@ const clients = {};
 //             USER HELPERS               //
 ////////////////////////////////////////////
 
-getCurrentUsers = (board) => {
+const getCurrentUsers = (board) => {
   const currentUsers = [];
   for (let client in clients) {
     if (clients[client].boardId === board) {
@@ -15,7 +15,7 @@ getCurrentUsers = (board) => {
     }
   }
   return currentUsers;
-}
+};
 
 ////////////////////////////////////////////
 //            CANVAS HELPERS              //
@@ -23,7 +23,7 @@ getCurrentUsers = (board) => {
 
 // update component history with incoming changes
 // event-handler for new incoming connections
-function updateboardHistory(boardHistory, changes) {
+const updateboardHistory = (boardHistory, changes) => {
   history = boardHistory.find(each => each.id === changes.id);
   if (history) {
     history.left = changes.left;
@@ -34,17 +34,18 @@ function updateboardHistory(boardHistory, changes) {
     history.angle = changes.angle,
     history.text = changes.text
   }
-}
+};
 
 
 // Export to server.js
 module.exports = (io, boards) => {
 
 
-  // SOCKET CONNECTION RECEIVED
+  // Socket connection established
   io.on('connect', function(socket) {
-    console.log("client connected")
+    console.log("client connected");
 
+    // Join room via unique board URL
     const board = (socket.request.headers.referer).split('/').reverse()[0];
     socket.join(board);
 
@@ -75,6 +76,7 @@ module.exports = (io, boards) => {
       delete clients[socket.id];
     });
 
+    // Notify other clients the board has been deleted
     socket.on('delete board', (boardId) => {
       socket.to(board).emit('board deleted');
     });
@@ -86,9 +88,9 @@ module.exports = (io, boards) => {
     var boardHistory = boards.getBoardHistory(board);
 
 
-    function removeFromHistory(boardHistory, data) {
-      return boardHistory.filter(each => each.id !== data.id)
-    }
+    const removeFromHistory = (boardHistory, data) => {
+      return boardHistory.filter(each => each.id !== data.id);
+    };
 
     // first send the history to the new client
     for (let data of boardHistory) {
@@ -99,13 +101,6 @@ module.exports = (io, boards) => {
     let myBoard = boards.getBoard(board);
     if(myBoard)
       socket.emit('set_background_color', {color: myBoard.backgroundColor});
-
-
-
-    // DEBUGGING: happens on connection...
-    socket.emit('finalize_setup', {})
-
-
 
     // add handler for broadcast of component creation
     socket.on('create_component', function(objectData) {
@@ -133,7 +128,7 @@ module.exports = (io, boards) => {
     // Remove component from db and broadcast
     socket.on('remove_component', function(objectData) {
       boardHistory = boards.getBoardHistory(board);
-      boardHistory = boardHistory.filter(each => each.id !== objectData.id)
+      boardHistory = boardHistory.filter(each => each.id !== objectData.id);
       boardHistory = removeFromHistory(boardHistory, objectData);
       boards.deleteBoardHistory(board, objectData, boardHistory);
 
@@ -142,7 +137,7 @@ module.exports = (io, boards) => {
 
     // Update db path creation and broadcast
     socket.on('path_created', function(objectData) {
-      boardHistory = boards.getBoardHistory(board)
+      boardHistory = boards.getBoardHistory(board);
       boardHistory.push(objectData);
       boards.updateBoard(board, objectData, boardHistory);
       socket.to(board).emit('path_created', objectData);
@@ -165,5 +160,5 @@ module.exports = (io, boards) => {
     });
   });
 
+};
 
-}

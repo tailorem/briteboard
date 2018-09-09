@@ -25,6 +25,7 @@ $(document).ready(() => {
   ////////////////////////////////////////////
   //               USER INFO                //
   ////////////////////////////////////////////
+
   const roomURL = window.location.pathname.split('/')[2];
   let client;
   let webrtc;
@@ -522,7 +523,6 @@ $(document).ready(() => {
 
 
   canvas.on('object:modified', function(event) {
-    if(DEBUG) console.log("OBJECT MODIFIED")
     // debouncing/throtling not required.
     componentChanged(event, true)
   });
@@ -642,7 +642,6 @@ $(document).ready(() => {
     orderCanvas();
     canvas.renderAll();
     // enableSelectMode()
-    if(DEBUG) console.log("here")
   });
 
 
@@ -694,7 +693,6 @@ $(document).ready(() => {
 
     // CTL 1 - 9 for tool selection
     if(event.ctrlKey && char >= 49 && char <= 57) {
-      if(DEBUG) console.log("button id", buttonIDs[char - 49])
       $(`#${buttonIDs[char - 49]}`).trigger('click');
     }
 
@@ -725,7 +723,7 @@ $(document).ready(() => {
       canvas.discardActiveObject();
     }
   })
-  
+
   // MOUSE UP EVENT
   canvas.on('mouse:up', function(event) {
     isMouseDown = false;
@@ -765,7 +763,6 @@ $(document).ready(() => {
       canvas.add(rect)
     }
     if(event.e.type === "mousemove" || event.e.type === "touchmove") {
-      if(DEBUG) console.log("rect event", event)
       if (!isMouseDown) return;
 
       let pointer = canvas.getPointer(event.e);
@@ -1003,7 +1000,6 @@ $(document).ready(() => {
     })(component.toObject);
     if(!component.id) component.id = uuidv4();
     component.setCoords();
-    if(DEBUG) console.log("Create Component", component)
     if (!ignoreCanvas) canvas.add(component);
     trackComponentChanges(component, "add");
     socket.emit('create_component', component.toJSON());
@@ -1035,14 +1031,12 @@ $(document).ready(() => {
   // notify component that is being modified
   // ie: mouse continuous movement
   function modifyingComponent(component, isFinal) {
-    if (DEBUG) console.log("modifying component", isFinal, componentParams(component))
     let msg_type = isFinal ? "modified_component" : "modify_component";
     socket.emit(msg_type, componentParams(component))
   };
 
   // path created received from server
   socket.on('path_created', function(path) {
-    if (DEBUG) console.log('incoming', path);
     fabric.util.enlivenObjects([path], function(objects) {
       objects.forEach(function(each) {
         canvas.add(each);
@@ -1052,18 +1046,15 @@ $(document).ready(() => {
 
   // draw component received from server
   socket.on('create_component', function(data) {
-    if (DEBUG) console.log("incomding add", data)
     fabric.util.enlivenObjects([data], function(objects) {
       objects.forEach(function(p) {
         canvas.add(p);
       })
     });
-    if(DEBUG) console.log("Create Component", data)
   });
 
   // delete component request from server
   socket.on('remove_component', function(data) {
-    if (DEBUG) console.log("receiving data", data)
     let component = findComonent(data.id)
     if (component) {
       canvas.remove(component);
@@ -1072,7 +1063,6 @@ $(document).ready(() => {
 
   // background color request from server
   socket.on('set_background_color', function(data) {
-    if (DEBUG) console.log("receiving background color data", data)
     canvas.backgroundColor = data.color;
     orderCanvas();
     canvas.renderAll();
@@ -1083,7 +1073,6 @@ $(document).ready(() => {
   // DUBUGGING ONLY
   // background color request from server
   socket.on('finalize_setup', function(data) {
-    console.log("finalize setup")
     orderCanvas();
     canvas.renderAll();
   });
@@ -1094,16 +1083,8 @@ $(document).ready(() => {
     return canvas.getObjects().find((each) => each.id === id)
   }
 
-  // function hasSelectionOn(component) {
-  //   let activeObj = canvas.getActiveObject();
-  //   return (activeObj === "activeSelection") ?
-  //     activeObj.getObjects().includes(component) :
-  //     activeObj === compnent
-  // }
-
   // modify component received from server
   socket.on('modify_component', function(data) {
-    if (DEBUG) console.log("receiving modifying data", data)
     let targetComponent = findComonent(data.id)
     if (targetComponent) {
       targetComponent.left = data.left;

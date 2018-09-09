@@ -6,7 +6,7 @@ https://briteboard.herokuapp.com/
 
 ## Overview
 
-An online collaborative whiteboard application for creative sketching, diagramming, and planning, built as our final group project at Lighthouse Labs. Users are able to create new boards (no registration required) using provided starter templates, and then share the link to their board with friends and colleagues. Users are able to collaborate by freehand drawing, adding shapes, text and images, and communicating via voice and video chat. Boards and their current state are saved in a database so they can be revisited at any time, or deleted when no longer needed.
+An online collaborative whiteboard application for creative sketching, diagramming, and planning, built as our final group project at Lighthouse Labs. Users can new boards (no registration required) using provided starter templates, and then share the link to their board with friends and colleagues. Users collaborate by freehand drawing, adding shapes, text and images, and communicate via voice and video chat. Boards and their current state are saved in a database so they can be revisited at any time, or deleted when no longer needed.
 
 ## Getting Started
 

@@ -46,7 +46,7 @@ mongoose.connect(DB_URI, { useNewUrlParser: true })
   const boards = require('./db/boards');
 
   boards.init(() => {
-    console.log("In memory database rehydrated");
+    console.log("In memory cache re-hydrated");
 
     // start web server
     server.listen(PORT, () => {
