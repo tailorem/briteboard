@@ -2,11 +2,11 @@
 
 https://briteboard.herokuapp.com/
 
-### Main contributors: [Aaron Ford](https://github.com/aaronfordnet), [Paul Lo](https://github.com/LoPaul) & [Taylour Kroeker](https://github.com/tailorem)
+#### Main contributors: [Aaron Ford](https://github.com/aaronfordnet), [Paul Lo](https://github.com/LoPaul), [Taylour Kroeker](https://github.com/tailorem)
 
 ## Overview
 
-For our final group project at Lighthouse Labs, we built an online collaborative whiteboard application for creative sketching, diagramming, and planning. Users are able to create new boards (no registration required) using provided starter templates, and then share the link to their board with friends and colleagues. Users are able to collaborate by freehand drawing, adding shapes, text and images, and communicating via voice and video chat. Boards and their current state are saved in a database so they can be revisited at any time, or deleted when no longer needed.
+An online collaborative whiteboard application for creative sketching, diagramming, and planning, built as our final group project at Lighthouse Labs. Users are able to create new boards (no registration required) using provided starter templates, and then share the link to their board with friends and colleagues. Users are able to collaborate by freehand drawing, adding shapes, text and images, and communicating via voice and video chat. Boards and their current state are saved in a database so they can be revisited at any time, or deleted when no longer needed.
 
 ## Getting Started
 
