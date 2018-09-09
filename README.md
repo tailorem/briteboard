@@ -13,6 +13,7 @@ An online collaborative whiteboard application for creative sketching, diagrammi
 1. Make sure you have installed [Node.js & npm](https://nodejs.org/en/)
 1. Fork and clone this repository
 1. Install all dependencies in the root folder by running ``npm install``
+1. In ``db/config``, rename ``keys_example.js`` to ``keys.js`` and add your own mongoURI to connect your database
 1. Then start the server with ``npm run server``
 1. Run ``open http://localhost:3000`` OR navigate to ``http://localhost:3000/`` in your browser to see the app running
 
