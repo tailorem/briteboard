@@ -6,7 +6,7 @@ An online collaborative whiteboard for creative sketching, diagramming, and plan
 
 ## Getting Started
 
-1. Make sure you have [Node.js & npm] installed (https://nodejs.org/en/)
+1. Make sure you have installed [Node.js & npm](https://nodejs.org/en/)
 1. Clone this repository and cd into the main directory
 1. Install all dependencies by running ``npm install``
 1. Then start the server with ``npm run server``
