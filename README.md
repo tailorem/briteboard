@@ -2,7 +2,7 @@
 
 https://briteboard.herokuapp.com/
 
-An online collaborative whiteboard for creative sketching, diagramming, and planning.
+An online collaborative whiteboard for creative sketching, diagramming, and planning. Built with Node, Express, MongoDB & Mongoose, Socket.io, Fabric.js, SimpleWebRTC, EJS, FileSaver, jQuery, HTML/CSS & Bootstrap.
 
 ## Getting Started
 
@@ -14,31 +14,16 @@ An online collaborative whiteboard for creative sketching, diagramming, and plan
 
 ## Final Product
 
-!["Screenshot 1"](https://github.com/tailorem/chattyApp/blob/master/docs/Screen%20Shot%202018-08-11%20at%2012.19.40%20AM.png?raw=true)
-!["Screenshot 2"](https://github.com/tailorem/chattyApp/blob/master/docs/Screen%20Shot%202018-08-11%20at%2012.23.50%20AM.png?raw=true)
+!["Landing page"](https://github.com/LoPaul/Sketcher/blob/master/docs/landing.png?raw=true)
+!["Demo board"](https://github.com/LoPaul/Sketcher/blob/master/docs/demo.png?raw=true)
 
-## App Dependencies
-- react
-- react-dom
-
-### Dev Dependencies
-- babel-core
-- babel-loader
-- babel-preset-es2015
-- babel-preset-react
-- babel-preset-stage-0
-- css-loader
-- eslint
-- eslint-plugin-react
-- node-sass
-- sass-loader
-- sockjs-client
-- style-loader
-- webpack
-- webpack-dev-server
-
-## Server Dependencies
+## Dependencies
+- ajv
+- body-parser
+- ejs
 - express
-- ws
+- method-override
+- mongoose
+- socket.io
 - uuid
-
+- nodemon
